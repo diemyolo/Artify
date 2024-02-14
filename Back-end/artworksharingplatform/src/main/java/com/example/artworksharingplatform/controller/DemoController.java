@@ -11,7 +11,12 @@ import org.springframework.web.bind.annotation.RestController;
 public class DemoController {
     @GetMapping("api/auth/creator/getCreator")
     @PreAuthorize("hasRole('ROLE_CREATOR')")
-    public ResponseEntity<String> userEndpoint() {
+    public ResponseEntity<String> CreatorEndpoint() {
         return ResponseEntity.ok("Creator Endpoint Accessed");
+    }
+    @GetMapping("api/auth/adu")
+
+    public ResponseEntity<String> userEndpoint() {
+        return ResponseEntity.ok("aduie Endpoint Accessed");
     }
 }
