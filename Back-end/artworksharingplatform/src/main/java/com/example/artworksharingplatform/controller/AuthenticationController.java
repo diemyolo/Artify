@@ -16,13 +16,24 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class AuthenticationController {
     private final AuthenticationService service;
+
     @PostMapping("/register")
-    public ResponseEntity<AuthenticationResponse> register(@RequestBody RegisterRequest registerRequest){
+    public ResponseEntity<AuthenticationResponse> register(@RequestBody RegisterRequest registerRequest) {
         return ResponseEntity.ok(service.register(registerRequest));
     }
+
     @PostMapping("/login")
-    public ResponseEntity<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest authRequest){
-        return ResponseEntity.ok(service.authenticate(authRequest));
+
+    public ResponseEntity<?> authenticate(@RequestBody AuthenticationRequest authRequest) {
+        try {
+            return ResponseEntity.ok(service.authenticate(authRequest));
+        } catch (Exception exception) {
+            ErrorDTO errorDTO = new ErrorDTO();
+            errorDTO.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.toString());
+            errorDTO.setErrorMessage("An error occurred while processing the login request.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorDTO);
+        }
+
     }
 
 }
