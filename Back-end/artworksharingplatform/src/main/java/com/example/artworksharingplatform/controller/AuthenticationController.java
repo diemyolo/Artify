@@ -30,31 +30,31 @@ public class AuthenticationController {
             errorDTO.setErrorMessage("An error occurred while processing the login request.");
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorDTO);
         }
-
-
-  @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody RegisterRequest registerRequest) {
-        try {
-            return ResponseEntity.ok(service.register(registerRequest));
-        } catch (Exception ex) {
-            ErrorDTO errorDTO = new ErrorDTO();
-            errorDTO.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.toString());
-            errorDTO.setErrorMessage("An error occurred while processing the registration request.");
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorDTO);
         }
-    }
-
-    @PostMapping("/registerCreator")
-    public ResponseEntity<AuthenticationResponse> registerCreator(@RequestBody RegisterRequest registerRequest) {
-        return ResponseEntity.ok(service.registerCreator(registerRequest));
-    }
-
-    @PostMapping("/registerAdmin")
-    public ResponseEntity<AuthenticationResponse> registerAdmin(@RequestBody RegisterRequest registerRequest) {
-        return ResponseEntity.ok(service.registerAdmin(registerRequest));
-    }
 
 
-    }
+        @PostMapping("/register")
+        public ResponseEntity<?> register (@RequestBody RegisterRequest registerRequest){
+            try {
+                return ResponseEntity.ok(service.register(registerRequest));
+            } catch (Exception ex) {
+                ErrorDTO errorDTO = new ErrorDTO();
+                errorDTO.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.toString());
+                errorDTO.setErrorMessage("An error occurred while processing the registration request.");
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorDTO);
+            }
+        }
+
+        @PostMapping("/registerCreator")
+        public ResponseEntity<AuthenticationResponse> registerCreator (@RequestBody RegisterRequest registerRequest){
+            return ResponseEntity.ok(service.registerCreator(registerRequest));
+        }
+
+        @PostMapping("/registerAdmin")
+        public ResponseEntity<AuthenticationResponse> registerAdmin (@RequestBody RegisterRequest registerRequest){
+            return ResponseEntity.ok(service.registerAdmin(registerRequest));
+        }
 
 }
+
+
