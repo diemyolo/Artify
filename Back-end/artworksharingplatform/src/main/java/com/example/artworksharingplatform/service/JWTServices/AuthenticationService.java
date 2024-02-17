@@ -1,4 +1,5 @@
 package com.example.artworksharingplatform.service.JWTServices;
+
 import com.example.artworksharingplatform.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -35,7 +36,43 @@ public class AuthenticationService {
                 .telephone((registerRequest.getTelephone()))
                 .createdDate(Timestamp.valueOf(LocalDateTime.now()))
                 .status("1")
-                .role(Role.USER)
+                .role(Role.AUDIENCE)
+                .build();
+        _repository.save(user);
+        var jwtToken = _jwtService.generateToken(user);
+        return AuthenticationResponse.builder().Token(jwtToken).build();
+
+    }
+    public AuthenticationResponse registerCreator(RegisterRequest registerRequest) {
+        if (registerRequest.getPass() == null) {
+            throw new IllegalArgumentException("Password cannot be null");
+        }
+        var user = User.builder()
+                .userName(registerRequest.getUserName())
+                .emailAddress(registerRequest.getEmailAddress())
+                .pass(_passwordEncoder.encode(registerRequest.getPass()))
+                .telephone((registerRequest.getTelephone()))
+                .createdDate(Timestamp.valueOf(LocalDateTime.now()))
+                .status("1")
+                .role(Role.CREATOR)
+                .build();
+        _repository.save(user);
+        var jwtToken = _jwtService.generateToken(user);
+        return AuthenticationResponse.builder().Token(jwtToken).build();
+
+    }
+    public AuthenticationResponse registerAdmin(RegisterRequest registerRequest) {
+        if (registerRequest.getPass() == null) {
+            throw new IllegalArgumentException("Password cannot be null");
+        }
+        var user = User.builder()
+                .userName(registerRequest.getUserName())
+                .emailAddress(registerRequest.getEmailAddress())
+                .pass(_passwordEncoder.encode(registerRequest.getPass()))
+                .telephone((registerRequest.getTelephone()))
+                .createdDate(Timestamp.valueOf(LocalDateTime.now()))
+                .status("1")
+                .role(Role.ADMIN)
                 .build();
         _repository.save(user);
         var jwtToken = _jwtService.generateToken(user);
