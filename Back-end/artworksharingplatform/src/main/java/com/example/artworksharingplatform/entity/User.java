@@ -1,28 +1,30 @@
 package com.example.artworksharingplatform.entity;
 
 import java.sql.Timestamp;
+import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.UuidGenerator;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "Users")
-public class User {
+public class User implements UserDetails {
 
     @Id
     @UuidGenerator
@@ -35,7 +37,7 @@ public class User {
     private String emailAddress;
 
     @Column(name = "Password", nullable = false)
-    private String password;
+    private String pass;
 
     @Column(name = "Telephone", length = 10, nullable = true)
     private String telephone;
@@ -56,10 +58,14 @@ public class User {
     @OneToOne(mappedBy = "user")
     private EWallet eWallet;
 
+    @Enumerated(EnumType.STRING)
+    private Role role;
+
     @OneToMany(mappedBy = "audience", cascade = CascadeType.ALL)
     private List<Order> orders;
 
     @OneToMany(mappedBy = "creator", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Post> posts;
 
     @OneToMany(mappedBy = "preOrderCreator", cascade = CascadeType.ALL)
@@ -80,7 +86,40 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<Transaction> transactions;
 
-    @ManyToOne
-    @JoinColumn(name = "RoleID")
-    private Role role;
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        String roleNameWithPrefix = "ROLE_" + role.name();
+        return List.of(new SimpleGrantedAuthority(roleNameWithPrefix));
+    }
+
+    @Override
+    public String getPassword() {
+        return pass;
+    }
+
+    @Override
+    public String getUsername() {
+        return emailAddress;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
 }
