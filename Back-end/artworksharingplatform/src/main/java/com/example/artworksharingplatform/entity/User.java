@@ -1,7 +1,6 @@
 package com.example.artworksharingplatform.entity;
 
 import java.sql.Timestamp;
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
