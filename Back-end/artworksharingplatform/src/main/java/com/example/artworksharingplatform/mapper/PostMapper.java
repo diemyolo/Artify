@@ -13,8 +13,10 @@ public interface PostMapper {
 
 	@Mapping(source = "post.id" , target = "postId")
 	@Mapping(source = "post.description", target = "description")
+	@Mapping(source = "creator.name", target = "creatorName")
+	@Mapping(source = "creator.emailAddress", target = "emailAddress")
+
 
 	PostDTO toPostDTO(Post post);
 	List<PostDTO> toList(List<Post> postList);
-	
 } 

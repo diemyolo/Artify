@@ -30,7 +30,7 @@ public class AuthenticationService {
             throw new IllegalArgumentException("Password cannot be null");
         }
         var user = User.builder()
-                .userName(registerRequest.getUserName())
+                .name(registerRequest.getUserName())
                 .emailAddress(registerRequest.getEmailAddress())
                 .pass(_passwordEncoder.encode(registerRequest.getPass()))
                 .telephone((registerRequest.getTelephone()))
@@ -48,7 +48,7 @@ public class AuthenticationService {
             throw new IllegalArgumentException("Password cannot be null");
         }
         var user = User.builder()
-                .userName(registerRequest.getUserName())
+                .name(registerRequest.getUserName())
                 .emailAddress(registerRequest.getEmailAddress())
                 .pass(_passwordEncoder.encode(registerRequest.getPass()))
                 .telephone((registerRequest.getTelephone()))
@@ -66,7 +66,7 @@ public class AuthenticationService {
             throw new IllegalArgumentException("Password cannot be null");
         }
         var user = User.builder()
-                .userName(registerRequest.getUserName())
+                .name(registerRequest.getUserName())
                 .emailAddress(registerRequest.getEmailAddress())
                 .pass(_passwordEncoder.encode(registerRequest.getPass()))
                 .telephone((registerRequest.getTelephone()))

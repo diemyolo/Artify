@@ -46,17 +46,5 @@ public class PostController  {
 		// return posts;
 	}
 
-	@GetMapping("api/auth/creator/test")
-	@PreAuthorize("hasRole('ROLE_CREATOR')")
-	public String viewAll() {
-		List<Post> posts = postService.getAllPosts();
-		return posts.get(0).getDescription();	
-	}
-
-	@GetMapping("/test1")
-	public String viewAll1() {
-		List<Post> posts = postService.getAllPosts();
-		return "a";
-	}
 	
 }
