@@ -25,4 +25,5 @@ public class PostDTO {
 	// }       
 
 	
+	private String description;
 }

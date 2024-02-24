@@ -16,13 +16,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-
 
 @RestController
 @RequestMapping("api/auth/creator/post")
-public class PostController  {
-	
+public class PostController {
+
 	@Autowired
 	PostService postService;
 
@@ -33,12 +31,12 @@ public class PostController  {
 	@PreAuthorize("hasRole('ROLE_CREATOR')")
 	public ResponseEntity<ApiResponse> viewAllPosts() {
 		ApiResponse apiResponse = new ApiResponse();
-		try{
+		try {
 			List<Post> posts = postService.getAllPosts();
 			List<PostDTO> postDTOs = postMapper.toList(posts);
 			apiResponse.ok(postDTOs);
 			return ResponseEntity.ok(apiResponse);
-		}catch(Exception e){
+		} catch (Exception e) {
 			apiResponse.error(e);
 			return new ResponseEntity<>(apiResponse, HttpStatus.BAD_REQUEST);
 		}
@@ -47,4 +45,17 @@ public class PostController  {
 	}
 
 	
+	@GetMapping("api/auth/creator/test")
+	@PreAuthorize("hasRole('ROLE_CREATOR')")
+	public String viewAll() {
+		List<Post> posts = postService.getAllPosts();
+		return posts.get(0).getDescription();
+	}
+
+	@GetMapping("/test1")
+	public String viewAll1() {
+		List<Post> posts = postService.getAllPosts();
+		return "a";
+	}
+
 }

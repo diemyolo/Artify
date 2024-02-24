@@ -13,9 +13,7 @@ import com.example.artworksharingplatform.entity.Role;
 import com.example.artworksharingplatform.entity.User;
 
 import java.sql.Timestamp;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @Service
 @RequiredArgsConstructor
@@ -43,6 +41,7 @@ public class AuthenticationService {
         return AuthenticationResponse.builder().Token(jwtToken).build();
 
     }
+
     public AuthenticationResponse registerCreator(RegisterRequest registerRequest) {
         if (registerRequest.getPass() == null) {
             throw new IllegalArgumentException("Password cannot be null");
@@ -61,6 +60,7 @@ public class AuthenticationService {
         return AuthenticationResponse.builder().Token(jwtToken).build();
 
     }
+
     public AuthenticationResponse registerAdmin(RegisterRequest registerRequest) {
         if (registerRequest.getPass() == null) {
             throw new IllegalArgumentException("Password cannot be null");
@@ -84,9 +84,7 @@ public class AuthenticationService {
         _authMannager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         authRequest.getEmail(),
-                        authRequest.getPass()
-                )
-        );
+                        authRequest.getPass()));
         var user = _repository.findByEmailAddress(authRequest.getEmail()).orElseThrow();
         var jwtToken = _jwtService.generateToken(user);
         return AuthenticationResponse.builder().Token(jwtToken).build();
