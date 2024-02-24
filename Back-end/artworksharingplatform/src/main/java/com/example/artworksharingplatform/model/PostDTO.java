@@ -12,18 +12,8 @@ import lombok.Setter;
 @Getter
 public class PostDTO {
 	private UUID postId;
-	private String description;  
+	private String description;
 	private String creatorName;
 	private String emailAddress;
 	private User creator;
-
-
-	// public PostDTO(Post post) {
-	// 	this.postId = post.getId();
-	// 	this.description = post.getDescription();
-	// 	this.creator = post.getCreator();
-	// }       
-
-	
-	private String description;
 }
