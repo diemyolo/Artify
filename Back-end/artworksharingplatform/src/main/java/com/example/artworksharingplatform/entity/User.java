@@ -10,7 +10,10 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import org.hibernate.annotations.UuidGenerator;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -23,6 +26,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Getter
+@Setter
 @Table(name = "Users")
 public class User implements UserDetails {
 
@@ -31,7 +36,7 @@ public class User implements UserDetails {
     private UUID id;
 
     @Column(name = "UserName", length = 50, nullable = false)
-    private String userName;
+    private String name;
 
     @Column(name = "EmailAddress", unique = true, nullable = false)
     private String emailAddress;

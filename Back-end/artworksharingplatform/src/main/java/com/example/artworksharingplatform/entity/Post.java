@@ -46,7 +46,6 @@ public class Post {
 
 	@ManyToOne
 	@JoinColumn(name="CreatorID")
-	@JsonIgnoreProperties
 	private User creator;
 
 	@OneToMany(mappedBy="interactionPost", cascade = CascadeType.ALL)
