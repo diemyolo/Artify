@@ -2,7 +2,6 @@ package com.example.artworksharingplatform.model;
 
 import java.util.UUID;
 
-import com.example.artworksharingplatform.entity.Post;
 import com.example.artworksharingplatform.entity.User;
 
 import lombok.Getter;
