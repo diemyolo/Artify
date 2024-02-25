@@ -38,7 +38,6 @@ public class SecurityConfiguration {
                         .requestMatchers("api/auth/creator/**").hasRole(CREATOR.name())
                         .anyRequest()
                         .authenticated()
-
                 )
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)

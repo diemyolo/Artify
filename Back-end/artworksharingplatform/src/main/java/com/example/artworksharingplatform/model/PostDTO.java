@@ -5,9 +5,6 @@ import java.util.UUID;
 
 import com.example.artworksharingplatform.entity.Artworks;
 import com.example.artworksharingplatform.entity.Interaction;
-import com.example.artworksharingplatform.entity.Post;
-import com.example.artworksharingplatform.entity.User;
-
 import lombok.Getter;
 import lombok.Setter;
 

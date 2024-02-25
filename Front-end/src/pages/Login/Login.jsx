@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import { Checkbox, Form, Input } from "antd";
 import "./Login.scss";
 // import video from "../../assets/video_login.mp4";
@@ -13,6 +13,15 @@ const formItemCol = {
 };
 
 export default function Login() {
+  useEffect(() => {
+    fetch("http://localhost:8080/api/auth/viewAllArt") .then(response => response.json()) // Chuyển dữ liệu trả về thành JSON
+    .then(data => {
+      console.log('Response data:', data);
+    })
+    .catch(error => {
+      console.error('Error calling API:', error);
+    });
+  })
   const formik = useFormik({
     initialValues: {
       email: "",

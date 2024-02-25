@@ -17,10 +17,7 @@ import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import lombok.Data;
 
-
-
 @Entity
-@Table(name="Artworks")
 @Data
 public class Artworks {
 	

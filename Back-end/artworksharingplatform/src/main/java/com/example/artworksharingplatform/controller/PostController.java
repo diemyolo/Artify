@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @RestController
@@ -33,13 +34,14 @@ public class PostController  {
 	@Autowired
 	ArtworkService artworkService;
 
+	@CrossOrigin(origins = "http://localhost:5173")
 	@GetMapping("api/auth/viewAll")
 	public ResponseEntity<ApiResponse> viewAllPosts() {
 		ApiResponse apiResponse = new ApiResponse();
 		try {
 			List<Post> posts = postService.getAllPosts();
 			List<PostDTO> postDTOs = postMapper.toList(posts);
-			apiResponse.ok(posts);
+			apiResponse.ok(postDTOs);
 			return ResponseEntity.ok(apiResponse);
 		} catch (Exception e) {
 			apiResponse.error(e);
@@ -55,27 +57,11 @@ public class PostController  {
 		List<Artworks> artworks = new ArrayList<Artworks>();
 		try{
 			artworks = artworkService.getAllArtworks();
-			// apiResponse.ok(artworks);
 		}catch(Exception e){
 			e.printStackTrace();
-			// apiResponse.error(e);
-			// return new ResponseEntity<>(apiResponse, HttpStatus.BAD_REQUEST);
+			
 		}
 		return artworks;
-	}
-
-	
-	@GetMapping("api/auth/creator/test")
-	@PreAuthorize("hasRole('ROLE_CREATOR')")
-	public String viewAll() {
-		List<Post> posts = postService.getAllPosts();
-		return posts.get(0).getDescription();
-	}
-
-	@GetMapping("/test1")
-	public String viewAll1() {
-		List<Post> posts = postService.getAllPosts();
-		return "a";
 	}
 
 }

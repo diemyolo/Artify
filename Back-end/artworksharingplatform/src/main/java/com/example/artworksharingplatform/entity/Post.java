@@ -6,6 +6,8 @@ import java.util.UUID;
 
 import org.hibernate.annotations.UuidGenerator;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -40,14 +42,15 @@ public class Post {
 	private String description;
 
 	@OneToMany(mappedBy="posts" , cascade = CascadeType.ALL)
+	@JsonIgnore
 	private List<Artworks> artworks;
 
 	@ManyToOne
 	@JoinColumn(name="CreatorID")
-	@JsonIgnoreProperties
 	private User creator;
 
 	@OneToMany(mappedBy="interactionPost", cascade = CascadeType.ALL)
+	@JsonIgnore
 	private List<Interaction> postsInteraction;
 
 }
