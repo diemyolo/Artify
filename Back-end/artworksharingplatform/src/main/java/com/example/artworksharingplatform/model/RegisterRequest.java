@@ -16,5 +16,5 @@ public class RegisterRequest {
     private String emailAddress;
     private String pass;
     private String telephone;
-    private Timestamp createdDate;
+    //private Timestamp createdDate;
 }
