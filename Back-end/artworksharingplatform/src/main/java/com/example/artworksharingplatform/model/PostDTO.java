@@ -15,7 +15,7 @@ import lombok.Setter;
 @Getter
 public class PostDTO {
 	private UUID postId;
-	private String description;  
+	private String description;
 	private String creatorName;
 	private String emailAddress;
 	private List<Artworks> artList;     

@@ -2,7 +2,6 @@ package com.example.artworksharingplatform.entity;
 
 import java.sql.Timestamp;
 import java.util.Collection;
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -90,7 +89,6 @@ public class User implements UserDetails {
 
     @OneToMany(mappedBy = "user")
     private List<Transaction> transactions;
-
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
