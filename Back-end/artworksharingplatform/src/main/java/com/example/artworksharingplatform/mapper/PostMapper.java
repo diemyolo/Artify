@@ -11,13 +11,12 @@ import com.example.artworksharingplatform.model.PostDTO;
 @Mapper(componentModel = "spring")
 public interface PostMapper {
 
-	@Mapping(source = "post.id" , target = "postId")
+	@Mapping(source = "post.id", target = "postId")
 	@Mapping(source = "post.description", target = "description")
 	@Mapping(source = "creator.name", target = "creatorName")
 	@Mapping(source = "creator.emailAddress", target = "emailAddress")
-	@Mapping(source = "postsInteraction" ,target = "interactions")
-
 
 	PostDTO toPostDTO(Post post);
+
 	List<PostDTO> toList(List<Post> postList);
-} 
+}
