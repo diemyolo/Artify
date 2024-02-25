@@ -1,7 +1,10 @@
 package com.example.artworksharingplatform.model;
 
+import java.util.List;
 import java.util.UUID;
 
+import com.example.artworksharingplatform.entity.Artworks;
+import com.example.artworksharingplatform.entity.Interaction;
 import com.example.artworksharingplatform.entity.Post;
 import com.example.artworksharingplatform.entity.User;
 
@@ -15,14 +18,6 @@ public class PostDTO {
 	private String description;  
 	private String creatorName;
 	private String emailAddress;
-	private User creator;
-
-
-	// public PostDTO(Post post) {
-	// 	this.postId = post.getId();
-	// 	this.description = post.getDescription();
-	// 	this.creator = post.getCreator();
-	// }       
-
-	
+	private List<Artworks> artList;     
+	private List<Interaction> interactions;	
 }

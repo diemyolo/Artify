@@ -6,9 +6,6 @@ import java.util.UUID;
 
 import org.hibernate.annotations.UuidGenerator;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -20,9 +17,12 @@ import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
-@Data
+@Getter
+@Setter
 @Table(name="Posts")
 public class Post {
 	
@@ -41,7 +41,6 @@ public class Post {
 	private String description;
 
 	@OneToMany(mappedBy="posts" , cascade = CascadeType.ALL)
-	@JsonIgnore
 	private List<Artworks> artworks;
 
 	@ManyToOne
@@ -49,7 +48,6 @@ public class Post {
 	private User creator;
 
 	@OneToMany(mappedBy="interactionPost", cascade = CascadeType.ALL)
-	@JsonIgnore
 	private List<Interaction> postsInteraction;
 
 }
