@@ -18,8 +18,6 @@ import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
 @Entity
 @Data
@@ -40,15 +38,15 @@ public class Post {
 	@Column(name = "Description", columnDefinition = "nvarchar(max)")
 	private String description;
 
-	@OneToMany(mappedBy="posts" , cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "posts", cascade = CascadeType.ALL)
 	private List<Artworks> artworks;
 
 	@ManyToOne
-	@JoinColumn(name="CreatorID")
+	@JoinColumn(name = "CreatorID")
 	@JsonIgnoreProperties
 	private User creator;
 
-	@OneToMany(mappedBy="interactionPost", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "interactionPost", cascade = CascadeType.ALL)
 	private List<Interaction> postsInteraction;
 
 }
