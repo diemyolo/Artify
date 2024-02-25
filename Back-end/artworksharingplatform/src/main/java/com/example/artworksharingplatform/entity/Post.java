@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.UuidGenerator;
 
@@ -39,6 +40,7 @@ public class Post {
 	private String description;
 
 	@OneToMany(mappedBy = "posts", cascade = CascadeType.ALL)
+	@JsonIgnore
 	private List<Artworks> artworks;
 
 	@ManyToOne
@@ -47,6 +49,7 @@ public class Post {
 	private User creator;
 
 	@OneToMany(mappedBy = "interactionPost", cascade = CascadeType.ALL)
+	@JsonIgnore
 	private List<Interaction> postsInteraction;
 
 }
