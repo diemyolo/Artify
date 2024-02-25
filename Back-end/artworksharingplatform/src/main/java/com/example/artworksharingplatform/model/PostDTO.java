@@ -15,6 +15,6 @@ public class PostDTO {
 	private String description;
 	private String creatorName;
 	private String emailAddress;
-	private List<Artworks> artList;     
-	private List<Interaction> interactions;	
+	private List<Artworks> artList;
+	private List<Interaction> interactions;
 }
