@@ -13,8 +13,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import static com.example.artworksharingplatform.entity.Role.ADMIN;
-import static com.example.artworksharingplatform.entity.Role.CREATOR;
+import static com.example.artworksharingplatform.entity.Role.*;
 
 
 @Configuration
@@ -34,6 +33,7 @@ public class SecurityConfiguration {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers("/api/auth/audience/**").hasRole(AUDIENCE.name())
                         .requestMatchers("/api/auth/admin/**").hasRole(ADMIN.name())
                         .requestMatchers("api/auth/creator/**").hasRole(CREATOR.name())
                         .anyRequest()
