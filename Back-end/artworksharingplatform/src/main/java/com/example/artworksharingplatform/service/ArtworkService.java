@@ -14,6 +14,7 @@ public class ArtworkService implements ArtworkServiceImpl{
 
 	@Autowired
 	ArtworkRepository artworkRepository;
+	
 	@Override
 	public List<Artworks> getAllArtworks() {
 		// TODO Auto-generated method stub
