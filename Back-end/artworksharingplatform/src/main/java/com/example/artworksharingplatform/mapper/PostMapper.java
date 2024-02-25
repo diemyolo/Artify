@@ -15,6 +15,7 @@ public interface PostMapper {
 	@Mapping(source = "post.description", target = "description")
 	@Mapping(source = "creator.name", target = "creatorName")
 	@Mapping(source = "creator.emailAddress", target = "emailAddress")
+	@Mapping(source = "postsInteraction" ,target = "interactions")
 
 
 	PostDTO toPostDTO(Post post);
