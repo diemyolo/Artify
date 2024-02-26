@@ -13,9 +13,10 @@ import lombok.Setter;
 public class ArtworkDTO {
 	private UUID artId;
 	private String artName;
-	private Date artDate;
+	private Date createdDate;
 	private String imagePath;
 	private String status;
 	private float price;
 	private String type;
+	private UUID postId;
 }

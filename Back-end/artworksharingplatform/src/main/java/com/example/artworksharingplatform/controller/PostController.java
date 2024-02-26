@@ -2,13 +2,16 @@ package com.example.artworksharingplatform.controller;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.example.artworksharingplatform.entity.Artworks;
 import com.example.artworksharingplatform.entity.Post;
+import com.example.artworksharingplatform.mapper.ArtworkMapper;
 import com.example.artworksharingplatform.mapper.PostMapper;
 import com.example.artworksharingplatform.model.ApiResponse;
+import com.example.artworksharingplatform.model.ArtworkDTO;
 import com.example.artworksharingplatform.model.PostDTO;
 import com.example.artworksharingplatform.service.ArtworkService;
 import com.example.artworksharingplatform.service.CloudinaryService;
@@ -24,6 +27,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+
 
 @RestController
 @RequestMapping
@@ -41,13 +46,16 @@ public class PostController  {
 	@Autowired
     private CloudinaryService cloudinaryService;
 
+	@Autowired
+	ArtworkMapper artworkMapper;
+
 	@GetMapping("api/auth/viewAll")
 	public ResponseEntity<ApiResponse> viewAllPosts() {
 		ApiResponse apiResponse = new ApiResponse();
 		try {
 			List<Post> posts = postService.getAllPosts();
 			List<PostDTO> postDTOs = postMapper.toList(posts);
-			apiResponse.ok(posts);
+			apiResponse.ok(postDTOs);
 			return ResponseEntity.ok(apiResponse);
 		} catch (Exception e) {
 			apiResponse.error(e);
@@ -58,18 +66,20 @@ public class PostController  {
 	}
 
 	@GetMapping("api/auth/viewAllArt")
-	public List<Artworks> viewArts() {
+	public ResponseEntity<ApiResponse> viewArts() {
 		ApiResponse apiResponse = new ApiResponse();
 		List<Artworks> artworks = new ArrayList<Artworks>();
+		
 		try{
 			artworks = artworkService.getAllArtworks();
-			// apiResponse.ok(artworks);
+			List<ArtworkDTO>  artworkDTOs = artworkMapper.toArtworkDTOs(artworks);
+			apiResponse.ok(artworkDTOs);
+			return ResponseEntity.ok(apiResponse);
 		}catch(Exception e){
 			e.printStackTrace();
-			// apiResponse.error(e);
-			// return new ResponseEntity<>(apiResponse, HttpStatus.BAD_REQUEST);
+			apiResponse.error(e);
+			return new ResponseEntity<>(apiResponse, HttpStatus.BAD_REQUEST);
 		}
-		return artworks;
 	}
 
 	
@@ -87,8 +97,14 @@ public class PostController  {
         return  ResponseEntity.ok(url);
     }
 
-
-
-
+	@PostMapping("api/auth/addArtwork")
+	public ResponseEntity<String> addArtwork(@RequestPart("image") MultipartFile file,
+	@RequestPart("artwork") Artworks artwork){
+		Map data = cloudinaryService.upload(file);
+        String url = data.get("url").toString();
+		artwork.setImagePath(url);
+		postService.addArtwork(artwork);
+		return ResponseEntity.ok("ok");
+	}
 
 }
