@@ -1,11 +1,13 @@
 package com.example.artworksharingplatform.controller;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/auth/admin")
 @PreAuthorize("hasRole('ROLE_ADMIN')")
+//@SecurityRequirement(name = "bearerAuth")
 public class AdminController {
     @GetMapping
     public String get() {
