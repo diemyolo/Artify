@@ -9,5 +9,5 @@ import com.example.artworksharingplatform.model.InteractionDTO;
 public interface InteractionService {
     public List<Interaction> getInteractionsByPostId(UUID postId);
 
-    public Interaction addInteraction(InteractionDTO interactionDTO);
+    // public Interaction addInteraction(InteractionDTO interactionDTO);
 }

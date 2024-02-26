@@ -35,20 +35,20 @@ public class InteractionServiceImpl implements InteractionService {
         return interactionsList;
     }
 
-    @Override
-    public Interaction addInteraction(InteractionDTO interactionDTO) {
-        User user = userRepository.findById(interactionDTO.getUserId())
-                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+    // @Override
+    // public Interaction addInteraction(InteractionDTO interactionDTO) {
+    // User user = userRepository.findById(interactionDTO.getUserId())
+    // .orElseThrow(() -> new EntityNotFoundException("User not found"));
 
-        Post post = postRepository.findById(interactionDTO.getPostId())
-                .orElseThrow(() -> new EntityNotFoundException("Post not found"));
+    // Post post = postRepository.findById(interactionDTO.getPostId())
+    // .orElseThrow(() -> new EntityNotFoundException("Post not found"));
 
-        Interaction interaction = new Interaction();
-        interaction.setComment(interactionDTO.getComment());
-        interaction.setIsLiked(interactionDTO.getIsLiked());
-        interaction.setInteractionAudience(user);
-        interaction.setInteractionPost(post);
+    // Interaction interaction = new Interaction();
+    // interaction.setComment(interactionDTO.getComment());
+    // interaction.setIsLiked(interactionDTO.getIsLiked());
+    // interaction.setInteractionAudience(user);
+    // interaction.setInteractionPost(post);
 
-        return interactionRepository.save(interaction);
-    }
+    // return interactionRepository.save(interaction);
+    // }
 }

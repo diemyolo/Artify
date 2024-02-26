@@ -42,15 +42,16 @@ public class InteractionController {
         }
     }
 
-    @PostMapping("/post/addInteract")
-    public ResponseEntity<InteractionDTO> addInteraction(@RequestBody InteractionDTO interactionDTO) {
-        try {
-            Interaction interaction = interactionService.addInteraction(interactionDTO);
-            InteractionDTO interactDTO = interactionMapper.toInteractionDTO(interaction);
+    // @PostMapping("/post/addInteract")
+    // public ResponseEntity<InteractionDTO> addInteraction(@RequestBody
+    // InteractionDTO interactionDTO) {
+    // try {
+    // Interaction interaction = interactionService.addInteraction(interactionDTO);
+    // InteractionDTO interactDTO = interactionMapper.toInteractionDTO(interaction);
 
-            return new ResponseEntity<>(interactDTO, HttpStatus.CREATED);
-        } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-    }
+    // return new ResponseEntity<>(interactDTO, HttpStatus.CREATED);
+    // } catch (Exception e) {
+    // return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    // }
+    // }
 }
