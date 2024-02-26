@@ -2,7 +2,6 @@ package com.example.artworksharingplatform.config;
 
 
 import com.example.artworksharingplatform.service.JWTServices.JWTService;
-import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

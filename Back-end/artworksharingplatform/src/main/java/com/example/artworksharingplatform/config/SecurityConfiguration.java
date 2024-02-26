@@ -50,6 +50,7 @@ public class SecurityConfiguration {
                         .requestMatchers("/api/auth/audience/**").hasRole(AUDIENCE.name())
                         .requestMatchers("/api/auth/admin/**").hasRole(ADMIN.name())
                         .requestMatchers("api/auth/creator/**").hasRole(CREATOR.name())
+
                         .anyRequest()
                         .authenticated()
 

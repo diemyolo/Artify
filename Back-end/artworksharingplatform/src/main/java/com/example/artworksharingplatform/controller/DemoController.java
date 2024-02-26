@@ -14,8 +14,8 @@ public class DemoController {
     public ResponseEntity<String> CreatorEndpoint() {
         return ResponseEntity.ok("Creator Endpoint Accessed");
     }
-    @GetMapping("api/auth/adu")
+    @GetMapping("api/auth/cr_and_audie/adu")
     public ResponseEntity<String> userEndpoint() {
-        return ResponseEntity.ok("aduie Endpoint Accessed");
+        return ResponseEntity.ok("both Endpoint Accessed");
     }
 }
