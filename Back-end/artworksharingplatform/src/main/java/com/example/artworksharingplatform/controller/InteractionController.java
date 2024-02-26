@@ -21,7 +21,6 @@ import com.example.artworksharingplatform.service.InteractionService;
 
 @RestController
 @RequestMapping("api/auth/audience")
-@PreAuthorize("hasRole('ROLE_AUDIENCE')")
 public class InteractionController {
 
     @Autowired
@@ -30,7 +29,8 @@ public class InteractionController {
     @Autowired
     InteractionMapper interactionMapper;
 
-    @GetMapping("/post/{postId}")
+    @GetMapping("post/{postId}")
+    @PreAuthorize("hasRole('ROLE_AUDIENCE')")
     public ResponseEntity<List<InteractionDTO>> getInteractionByPostId(@PathVariable UUID postId) {
         try {
             List<Interaction> interactions = interactionService.getInteractionsByPostId(postId);
