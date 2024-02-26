@@ -2,7 +2,8 @@ package com.example.artworksharingplatform.model;
 
 import java.util.UUID;
 
-import com.example.artworksharingplatform.entity.User;
+import com.example.artworksharingplatform.entity.Artworks;
+import com.example.artworksharingplatform.entity.Interaction;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -14,5 +15,6 @@ public class PostDTO {
 	private String description;
 	private String creatorName;
 	private String emailAddress;
-	private User creator;
+	private List<Artworks> artList;
+	private List<Interaction> interactions;
 }

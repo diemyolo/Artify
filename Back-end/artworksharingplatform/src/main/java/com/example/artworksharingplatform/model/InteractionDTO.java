@@ -10,6 +10,7 @@ import lombok.Setter;
 public class InteractionDTO {
     private UUID postId;
     private String comment;
-    private boolean isLiked;
-    private String userName;
+    private Boolean isLiked;
+    private UUID userId;
+    private String name;
 }
