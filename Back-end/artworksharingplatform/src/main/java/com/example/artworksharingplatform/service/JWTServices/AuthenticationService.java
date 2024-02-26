@@ -1,19 +1,21 @@
 package com.example.artworksharingplatform.service.JWTServices;
 
-import com.example.artworksharingplatform.repository.UserRepository;
-import lombok.RequiredArgsConstructor;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import com.example.artworksharingplatform.model.AuthenticationRequest;
-import com.example.artworksharingplatform.model.RegisterRequest;
-import com.example.artworksharingplatform.model.AuthenticationResponse;
+
 import com.example.artworksharingplatform.entity.Role;
 import com.example.artworksharingplatform.entity.User;
+import com.example.artworksharingplatform.model.AuthenticationRequest;
+import com.example.artworksharingplatform.model.AuthenticationResponse;
+import com.example.artworksharingplatform.model.RegisterRequest;
+import com.example.artworksharingplatform.repository.UserRepository;
 
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -77,7 +79,6 @@ public class AuthenticationService {
         _repository.save(user);
         var jwtToken = _jwtService.generateToken(user);
         return AuthenticationResponse.builder().Token(jwtToken).build();
-
     }
 
     public AuthenticationResponse authenticate(AuthenticationRequest authRequest) {

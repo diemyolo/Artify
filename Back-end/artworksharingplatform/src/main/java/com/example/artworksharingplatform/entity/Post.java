@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.UuidGenerator;
 
@@ -48,15 +49,8 @@ public class Post {
 	@JoinColumn(name="CreatorID")
 	private User creator;
 
-	@OneToMany(mappedBy="interactionPost", cascade = CascadeType.ALL)
-	@JsonIgnore
-	private List<Artworks> artworks;
-
-	@ManyToOne
-	@JoinColumn(name = "CreatorID")
-	private User creator;
-
 	@OneToMany(mappedBy = "interactionPost", cascade = CascadeType.ALL)
+	@JsonIgnore
 	private List<Interaction> postsInteraction;
 
 }

@@ -12,6 +12,7 @@ public interface InteractionMapper {
     @Mapping(source = "interaction.interactionPost.id", target = "postId")
     @Mapping(source = "interaction.comment", target = "comment")
     @Mapping(source = "interaction.isLiked", target = "isLiked")
+    @Mapping(source = "interaction.interactionAudience.id", target = "userId")
     @Mapping(source = "interaction.interactionAudience.name", target = "name")
     InteractionDTO toInteractionDTO(Interaction interaction);
 
