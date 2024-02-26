@@ -9,9 +9,11 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.example.artworksharingplatform.entity.Artworks;
 import com.example.artworksharingplatform.entity.Post;
 import com.example.artworksharingplatform.mapper.PostMapper;
 import com.example.artworksharingplatform.model.ApiResponse;
@@ -94,4 +96,13 @@ public class PostController {
         return  ResponseEntity.ok(url);
     }
 
+	@PostMapping("api/auth/addArtwork")
+	public ResponseEntity<String> addArtwork(@RequestPart("image") MultipartFile file,
+	@RequestPart("artwork") Artworks artwork){
+		Map data = cloudinaryService.upload(file);
+        String url = data.get("url").toString();
+		artwork.setImagePath(url);
+		postService.addArtwork(artwork);
+		return ResponseEntity.ok("ok");
+	}
 }
