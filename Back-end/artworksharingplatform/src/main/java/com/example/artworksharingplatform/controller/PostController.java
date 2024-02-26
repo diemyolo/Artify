@@ -23,20 +23,11 @@ import com.example.artworksharingplatform.service.CloudinaryService;
 import com.example.artworksharingplatform.service.PostService;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
-
 @RestController
-@RequestMapping("api/auth/creator/post")
+@RequestMapping("api/auth")
 public class PostController {
 
 	@Autowired
@@ -51,7 +42,9 @@ public class PostController {
 
 	@Autowired
     private CloudinaryService cloudinaryService;
-	@GetMapping("api/auth/viewAll")
+
+	@GetMapping("audience/viewAll")
+	@PreAuthorize("hasRole('ROLE_AUDIENCE') or hasRole('ROLE_CREATOR')")
 	public ResponseEntity<ApiResponse> viewAllPosts() {
 		ApiResponse apiResponse = new ApiResponse();
 		try {
@@ -63,10 +56,8 @@ public class PostController {
 			apiResponse.error(e);
 			return new ResponseEntity<>(apiResponse, HttpStatus.BAD_REQUEST);
 		}
-		// List<Post> posts = postService.getAllPosts();
-		// return posts;
-	}
 
+	}
 
 	@GetMapping("api/auth/viewAllArt")
 	public List<Artworks> viewArts() {
@@ -80,7 +71,6 @@ public class PostController {
 		}
 		return artworks;
 	}
-
 
 	@GetMapping("api/auth/creator/test")
 	@PreAuthorize("hasRole('ROLE_CREATOR')")
