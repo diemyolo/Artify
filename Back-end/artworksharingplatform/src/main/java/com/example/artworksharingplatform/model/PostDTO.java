@@ -1,5 +1,6 @@
 package com.example.artworksharingplatform.model;
 
+import java.util.List;
 import java.util.UUID;
 
 import com.example.artworksharingplatform.entity.Artworks;
