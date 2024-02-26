@@ -1,6 +1,6 @@
 import React from "react";
 import { Checkbox, Form, Input } from "antd";
-// import video from "../../assets/video_login.mp4";
+import video from "../../assets/video_login.mp4";
 import { NavLink } from "react-router-dom";
 import GoogleButton from "react-google-button";
 import { useFormik } from "formik";
@@ -201,13 +201,13 @@ export default function Login() {
             Start for free and get attractive offers from the community
           </p>
         </div>
-        {/* <video
+        <video
           className="w-full h-full object-cover"
           src={video}
           autoPlay
           muted
           loop
-        ></video> */}
+        ></video>
       </div>
     </div>
   );
