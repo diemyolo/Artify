@@ -9,7 +9,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.UuidGenerator;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -42,13 +41,12 @@ public class Post {
 	@Column(name = "Description", columnDefinition = "nvarchar(max)")
 	private String description;
 
-	@OneToMany(mappedBy = "posts", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy="posts" , cascade = CascadeType.ALL)
 	@JsonIgnore
 	private List<Artworks> artworks;
 
 	@ManyToOne
-	@JoinColumn(name = "CreatorID")
-	@JsonIgnoreProperties
+	@JoinColumn(name="CreatorID")
 	private User creator;
 
 	@OneToMany(mappedBy = "interactionPost", cascade = CascadeType.ALL)
