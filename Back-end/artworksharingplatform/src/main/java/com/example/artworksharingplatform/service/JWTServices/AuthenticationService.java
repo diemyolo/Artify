@@ -1,21 +1,21 @@
 package com.example.artworksharingplatform.service.JWTServices;
 
-import com.example.artworksharingplatform.repository.UserRepository;
-import lombok.RequiredArgsConstructor;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import com.example.artworksharingplatform.model.AuthenticationRequest;
-import com.example.artworksharingplatform.model.RegisterRequest;
-import com.example.artworksharingplatform.model.AuthenticationResponse;
+
 import com.example.artworksharingplatform.entity.Role;
 import com.example.artworksharingplatform.entity.User;
+import com.example.artworksharingplatform.model.AuthenticationRequest;
+import com.example.artworksharingplatform.model.AuthenticationResponse;
+import com.example.artworksharingplatform.model.RegisterRequest;
+import com.example.artworksharingplatform.repository.UserRepository;
 
-import java.sql.Timestamp;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.Date;
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -30,7 +30,7 @@ public class AuthenticationService {
             throw new IllegalArgumentException("Password cannot be null");
         }
         var user = User.builder()
-                .userName(registerRequest.getUserName())
+                .name(registerRequest.getUserName())
                 .emailAddress(registerRequest.getEmailAddress())
                 .pass(_passwordEncoder.encode(registerRequest.getPass()))
                 .telephone((registerRequest.getTelephone()))
@@ -43,12 +43,13 @@ public class AuthenticationService {
         return AuthenticationResponse.builder().Token(jwtToken).build();
 
     }
+
     public AuthenticationResponse registerCreator(RegisterRequest registerRequest) {
         if (registerRequest.getPass() == null) {
             throw new IllegalArgumentException("Password cannot be null");
         }
         var user = User.builder()
-                .userName(registerRequest.getUserName())
+                .name(registerRequest.getUserName())
                 .emailAddress(registerRequest.getEmailAddress())
                 .pass(_passwordEncoder.encode(registerRequest.getPass()))
                 .telephone((registerRequest.getTelephone()))
@@ -61,12 +62,13 @@ public class AuthenticationService {
         return AuthenticationResponse.builder().Token(jwtToken).build();
 
     }
+
     public AuthenticationResponse registerAdmin(RegisterRequest registerRequest) {
         if (registerRequest.getPass() == null) {
             throw new IllegalArgumentException("Password cannot be null");
         }
         var user = User.builder()
-                .userName(registerRequest.getUserName())
+                .name(registerRequest.getUserName())
                 .emailAddress(registerRequest.getEmailAddress())
                 .pass(_passwordEncoder.encode(registerRequest.getPass()))
                 .telephone((registerRequest.getTelephone()))
@@ -77,16 +79,13 @@ public class AuthenticationService {
         _repository.save(user);
         var jwtToken = _jwtService.generateToken(user);
         return AuthenticationResponse.builder().Token(jwtToken).build();
-
     }
 
     public AuthenticationResponse authenticate(AuthenticationRequest authRequest) {
         _authMannager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         authRequest.getEmail(),
-                        authRequest.getPass()
-                )
-        );
+                        authRequest.getPass()));
         var user = _repository.findByEmailAddress(authRequest.getEmail()).orElseThrow();
         var jwtToken = _jwtService.generateToken(user);
         return AuthenticationResponse.builder().Token(jwtToken).build();

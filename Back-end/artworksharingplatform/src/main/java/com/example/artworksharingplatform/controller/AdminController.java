@@ -11,7 +11,6 @@ public class AdminController {
     public String get() {
         return "GET::admin controller";
     }
-
     @PostMapping
     public String post() {
         return "POST::admin controller";

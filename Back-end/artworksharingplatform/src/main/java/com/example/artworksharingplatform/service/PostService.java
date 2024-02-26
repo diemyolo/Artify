@@ -5,16 +5,20 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.artworksharingplatform.entity.Artworks;
 import com.example.artworksharingplatform.entity.Post;
-import com.example.artworksharingplatform.model.PostDTO;
+import com.example.artworksharingplatform.repository.ArtworkRepository;
 import com.example.artworksharingplatform.repository.PostRepository;
 import com.example.artworksharingplatform.service.impl.PostServiceImpl;
 
 @Service
-public class PostService implements PostServiceImpl{
+public class PostService implements PostServiceImpl {
 
 	@Autowired
 	PostRepository postRepository;
+
+	@Autowired
+	ArtworkRepository artworkRepository;
 
 	@Override
 	public List<Post> getAllPosts() {
@@ -23,5 +27,9 @@ public class PostService implements PostServiceImpl{
 		return postList;
 	}
 
-	
+	@Override
+	public void addArtwork(Artworks artwork) {
+		artworkRepository.save(artwork);	
+	}
+
 }

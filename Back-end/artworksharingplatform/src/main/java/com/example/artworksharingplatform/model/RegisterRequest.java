@@ -1,15 +1,9 @@
 package com.example.artworksharingplatform.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.sql.Timestamp;
-import java.util.Date;
 
 @Data
 @Builder
@@ -20,5 +14,5 @@ public class RegisterRequest {
     private String emailAddress;
     private String pass;
     private String telephone;
-    private Timestamp createdDate;
+    // private Timestamp createdDate;
 }

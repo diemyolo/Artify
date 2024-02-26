@@ -4,10 +4,11 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.UuidGenerator;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -23,21 +24,21 @@ import lombok.Data;
 
 @Entity
 @Data
-@Table(name="Posts")
+@Table(name = "Posts")
 public class Post {
-	
+
 	@Id
-    @UuidGenerator
-    private UUID id;
+	@UuidGenerator
+	private UUID id;
 
 	@Temporal(TemporalType.DATE)
-	@Column(name="PublishDate")
+	@Column(name = "PublishDate")
 	private Date publishDate;
 
-	@Column(name="NumberOfLikes")
+	@Column(name = "NumberOfLikes")
 	private int numberOfLikes;
 
-	@Column(name="Description", columnDefinition = "nvarchar(max)")
+	@Column(name = "Description", columnDefinition = "nvarchar(max)")
 	private String description;
 
 	@OneToMany(mappedBy="posts" , cascade = CascadeType.ALL)
@@ -46,10 +47,9 @@ public class Post {
 
 	@ManyToOne
 	@JoinColumn(name="CreatorID")
-	@JsonIgnoreProperties
 	private User creator;
 
-	@OneToMany(mappedBy="interactionPost", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "interactionPost", cascade = CascadeType.ALL)
 	@JsonIgnore
 	private List<Interaction> postsInteraction;
 
