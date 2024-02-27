@@ -7,15 +7,15 @@ import Home from "./pages/Home/Home"
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <div><Home /></div>,
+    element: <div><Login /></div>,
   },
   {
     path: "/register",
     element: <div><Register /></div>,
   },
   {
-    path: "/login",
-    element: <div><Login /></div>,
+    path: "/home",
+    element: <div><Home /></div>,
   },
 ]);
 
