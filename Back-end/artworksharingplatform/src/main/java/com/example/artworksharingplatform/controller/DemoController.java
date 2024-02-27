@@ -15,7 +15,8 @@ public class DemoController {
         return ResponseEntity.ok("Creator Endpoint Accessed");
     }
 
-    @GetMapping("api/auth/adu")
+    @GetMapping("api/auth/audience/adu")
+    @PreAuthorize("hasRole('ROLE_AUDIENCE')")
     public ResponseEntity<String> userEndpoint() {
         return ResponseEntity.ok("Audience Endpoint Accessed");
     }
