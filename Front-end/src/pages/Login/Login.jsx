@@ -1,17 +1,13 @@
 import React, { useState } from "react";
 import { Checkbox, Form, Input } from "antd";
 import "./Login.scss";
-import video from "../../assets/video_login.mp4";
 import { NavLink, useNavigate } from "react-router-dom";
 import GoogleButton from "react-google-button";
-// import { useFormik } from 'formik';
-// import { useDispatch } from "react-redux";
-// import { loginUser } from "../../redux/apiRequest";
-
+import login from "../../assets/login.jpg"
 
 const formItemCol = {
-  labelCol: { span: 100 },
-  wrapperCol: { span: 100 },
+  labelCol: { span: 24 },
+  wrapperCol: { span: 24 },
 };
 
 export default function Login() {
@@ -65,29 +61,26 @@ export default function Login() {
   };
 
   return (
-    <div className="w-full h-screen flex items-start">
+    <div className="bg-[#f5f5f5] w-full h-screen flex items-center">
       <div className="relative w-1/2 h-full flex flex-col">
-        <div className="absolute top-[20%] left-[10%] flex flex-col">
-          <h1 className="text-6xl text-white font-bold my-4">
+        <div className="absolute top-[20%] left-[10%] flex flex-col z-10">
+          <h1 className="text-7xl text-white font-bold my-5">
             Artwork Sharing Platform
           </h1>
           <p className="text-xl text-white font-normal">
             Start for free and get attractive offers from the community
           </p>
         </div>
-        <video
-          className="w-full h-full object-cover"
-          src={video}
-          autoPlay
-          muted
-          loop
-        ></video>
+        <div className="relative ml-8 mt-8 mb-8 w-100 h-full">
+          <img src={login} className="w-full h-full rounded-3xl" style={{ width: "1068px" }}/>
+          <div className="absolute rounded-3xl top-0 left-0 w-full h-full bg-black opacity-50"></div>
+        </div>
       </div>
 
-      <div className="w-1/2 h-full bg-[#f5f5f5] flex flex-col p-20 justify-between items-center">
+      <div className="w-1/2 h-full flex flex-col p-20 justify-between items-center">
         <div className="w-full flex flex-col max-w-[500px]">
           <div className="w-full flex flex-col mb-10 items-center">
-            <h3 className="text-3xl text-[#060606] font-semibold mb-4">
+            <h3 className="text-5xl text-[#060606] font-bold mb-4">
               Login
             </h3>
             <p className="text-black/60 mb-2 italic">
@@ -208,11 +201,6 @@ export default function Login() {
               <span className="font-semibold underline underline-offset-1 ml-1">
                 <NavLink to={"/register"}>
                   <button className="hover:outline-none hover:bg-black underline underline-offset-2 bg-[#f5f5f5] text-red-700 hover:text-white">Sign Up</button>
-                </NavLink>
-              </span>
-              <span className="font-semibold underline underline-offset-1 ml-1">
-                <NavLink to={"/"}>
-                  <button className="hover:outline-none hover:bg-black underline underline-offset-2 bg-[#f5f5f5] text-red-700 hover:text-white">Home</button>
                 </NavLink>
               </span>
             </p>
