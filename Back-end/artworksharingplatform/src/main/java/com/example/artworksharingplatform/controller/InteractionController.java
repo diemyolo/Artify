@@ -17,8 +17,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.artworksharingplatform.entity.Interaction;
 import com.example.artworksharingplatform.mapper.InteractionMapper;
+import com.example.artworksharingplatform.model.ApiResponse;
 import com.example.artworksharingplatform.model.InteractionDTO;
 import com.example.artworksharingplatform.service.InteractionService;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController
 @RequestMapping("api/auth/audience")
@@ -44,6 +46,14 @@ public class InteractionController {
             apiResponse.error(e);
             return new ResponseEntity<>(apiResponse, HttpStatus.BAD_REQUEST);
         }
+    }
+
+    @GetMapping("/hi")
+    @PreAuthorize("hasRole('ROLE_AUDIENCE')")
+    public String getMethodName(@PathVariable UUID postId) {
+        List<Interaction> interactions = interactionService.getInteractionsByPostId(postId);
+        List<InteractionDTO> interactionDTOs = interactionMapper.toInteractionDTOList(interactions);
+        return interactionDTOs.get(0).getName();
     }
 
     // @PostMapping("/post/addInteract")
