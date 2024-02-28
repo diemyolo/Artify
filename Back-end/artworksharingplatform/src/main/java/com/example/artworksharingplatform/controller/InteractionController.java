@@ -3,6 +3,7 @@ package com.example.artworksharingplatform.controller;
 import java.util.List;
 import java.util.UUID;
 
+import com.example.artworksharingplatform.model.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,16 +30,19 @@ public class InteractionController {
     @Autowired
     InteractionMapper interactionMapper;
 
-    @GetMapping("post/{postId}")
+    @GetMapping("/post/{postId}")
     @PreAuthorize("hasRole('ROLE_AUDIENCE')")
-    public ResponseEntity<List<InteractionDTO>> getInteractionByPostId(@PathVariable UUID postId) {
+    public ResponseEntity<ApiResponse<List<InteractionDTO>>> getInteractionByPostId(@PathVariable UUID postId) {
+        ApiResponse<List<InteractionDTO>> apiResponse = new ApiResponse<List<InteractionDTO>>();
         try {
             List<Interaction> interactions = interactionService.getInteractionsByPostId(postId);
             List<InteractionDTO> interactionDTOs = interactionMapper.toInteractionDTOList(interactions);
 
-            return new ResponseEntity<>(interactionDTOs, HttpStatus.OK);
+            apiResponse.ok(interactionDTOs);
+            return ResponseEntity.ok(apiResponse);
         } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            apiResponse.error(e);
+            return new ResponseEntity<>(apiResponse, HttpStatus.BAD_REQUEST);
         }
     }
 
