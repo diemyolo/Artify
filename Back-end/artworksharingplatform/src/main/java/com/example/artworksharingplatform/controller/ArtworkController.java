@@ -10,8 +10,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.artworksharingplatform.entity.Artworks;
 import com.example.artworksharingplatform.service.ArtworkService;
 
-
-
 @RestController
 @RequestMapping("/artwork")
 public class ArtworkController {

@@ -59,7 +59,7 @@ public class PostController {
 
 	}
 
-	@GetMapping("api/auth/viewAllArt")
+	@GetMapping("audience/viewAllArt")
 	public List<Artworks> viewArts() {
 		ApiResponse apiResponse = new ApiResponse();
 		List<Artworks> artworks = new ArrayList<Artworks>();
@@ -86,13 +86,17 @@ public class PostController {
         return  ResponseEntity.ok(url);
     }
 
-	@PostMapping("api/auth/addArtwork")
-	public ResponseEntity<String> addArtwork(@RequestPart("image") MultipartFile file,
-	@RequestPart("artwork") Artworks artwork){
-		Map data = cloudinaryService.upload(file);
-        String url = data.get("url").toString();
-		artwork.setImagePath(url);
-		postService.addArtwork(artwork);
+	@PostMapping("audience/addArtwork")
+	public ResponseEntity<String> addArtwork(@RequestPart("image") List<MultipartFile> files,
+	@RequestPart("artwork") List<Artworks> artworks){
+		for (int i = 0; i < files.size(); i++) {
+			MultipartFile file = files.get(i);
+			Artworks artwork = artworks.get(i);
+			Map<String, Object> data = cloudinaryService.upload(file);
+			String url = data.get("url").toString();
+			artwork.setImagePath(url);
+			postService.addArtwork(artwork);
+		}
 		return ResponseEntity.ok("ok");
 	}
 }
