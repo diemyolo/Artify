@@ -41,12 +41,12 @@ public class Post {
 	@Column(name = "Description", columnDefinition = "nvarchar(max)")
 	private String description;
 
-	@OneToMany(mappedBy="posts" , cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "posts", cascade = CascadeType.ALL)
 	@JsonIgnore
 	private List<Artworks> artworks;
 
 	@ManyToOne
-	@JoinColumn(name="CreatorID")
+	@JoinColumn(name = "CreatorID")
 	private User creator;
 
 	@OneToMany(mappedBy = "interactionPost", cascade = CascadeType.ALL)

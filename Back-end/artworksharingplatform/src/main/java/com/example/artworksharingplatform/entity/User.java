@@ -57,6 +57,7 @@ public class User implements UserDetails {
     private Timestamp createdDate;
 
     @OneToMany(mappedBy = "userInputs", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<MoneyInput> inputs;
 
     @OneToOne(mappedBy = "user")
@@ -66,6 +67,7 @@ public class User implements UserDetails {
     private Role role;
 
     @OneToMany(mappedBy = "audience", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Order> orders;
 
     @OneToMany(mappedBy = "creator", cascade = CascadeType.ALL)
@@ -73,12 +75,15 @@ public class User implements UserDetails {
     private List<Post> posts;
 
     @OneToMany(mappedBy = "preOrderCreator", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<PreOrder> preOrderCreators;
 
     @OneToMany(mappedBy = "preOrderAudience", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<PreOrder> preOrderAudiences;
 
     @OneToMany(mappedBy = "interactionAudience", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Interaction> interactions;
 
     @ManyToMany
@@ -88,6 +93,7 @@ public class User implements UserDetails {
     private List<User> creator;
 
     @OneToMany(mappedBy = "user")
+    @JsonIgnore
     private List<Transaction> transactions;
 
     @Override

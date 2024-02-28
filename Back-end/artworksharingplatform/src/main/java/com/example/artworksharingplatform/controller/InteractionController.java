@@ -16,8 +16,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.artworksharingplatform.entity.Interaction;
 import com.example.artworksharingplatform.mapper.InteractionMapper;
+import com.example.artworksharingplatform.model.ApiResponse;
 import com.example.artworksharingplatform.model.InteractionDTO;
 import com.example.artworksharingplatform.service.InteractionService;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController
 @RequestMapping("api/auth/audience")
@@ -29,17 +31,28 @@ public class InteractionController {
     @Autowired
     InteractionMapper interactionMapper;
 
-    @GetMapping("post/{postId}")
+    @GetMapping("/post/{postId}")
     @PreAuthorize("hasRole('ROLE_AUDIENCE')")
-    public ResponseEntity<List<InteractionDTO>> getInteractionByPostId(@PathVariable UUID postId) {
+    public ResponseEntity<ApiResponse<List<InteractionDTO>>> getInteractionByPostId(@PathVariable UUID postId) {
+        ApiResponse<List<InteractionDTO>> apiResponse = new ApiResponse<List<InteractionDTO>>();
         try {
             List<Interaction> interactions = interactionService.getInteractionsByPostId(postId);
             List<InteractionDTO> interactionDTOs = interactionMapper.toInteractionDTOList(interactions);
 
-            return new ResponseEntity<>(interactionDTOs, HttpStatus.OK);
+            apiResponse.ok(interactionDTOs);
+            return ResponseEntity.ok(apiResponse);
         } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            apiResponse.error(e);
+            return new ResponseEntity<>(apiResponse, HttpStatus.BAD_REQUEST);
         }
+    }
+
+    @GetMapping("/hi")
+    @PreAuthorize("hasRole('ROLE_AUDIENCE')")
+    public String getMethodName(@PathVariable UUID postId) {
+        List<Interaction> interactions = interactionService.getInteractionsByPostId(postId);
+        List<InteractionDTO> interactionDTOs = interactionMapper.toInteractionDTOList(interactions);
+        return interactionDTOs.get(0).getName();
     }
 
     // @PostMapping("/post/addInteract")
