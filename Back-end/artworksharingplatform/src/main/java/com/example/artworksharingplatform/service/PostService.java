@@ -29,7 +29,7 @@ public class PostService implements PostServiceImpl {
 
 	@Override
 	public void addArtwork(Artworks artwork) {
-		artworkRepository.save(artwork);	
+		artworkRepository.save(artwork);
 	}
 
 }

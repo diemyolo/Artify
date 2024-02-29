@@ -1,27 +1,21 @@
-package com.example.artworksharingplatform.service;
+package com.example.artworksharingplatform.service.impl;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.example.artworksharingplatform.entity.User;
 import com.example.artworksharingplatform.mapper.UserMapper;
 import com.example.artworksharingplatform.model.UserDTO;
 import com.example.artworksharingplatform.repository.UserRepository;
-import com.example.artworksharingplatform.service.impl.UserServiceImpl;
+import com.example.artworksharingplatform.service.AdminService;
 
 import jakarta.persistence.EntityNotFoundException;
 
-/**
- * UserService
- */
 @Service
-public class UserService implements UserServiceImpl {
-    @Autowired
-    private PasswordEncoder _passwordEncoder;
-
+public class AdminServiceImpl implements AdminService {
     @Autowired
     UserRepository userRepository;
 
@@ -33,7 +27,6 @@ public class UserService implements UserServiceImpl {
         try {
             User userToUpdate = userRepository.findByEmailAddress(updatedUser.getEmailAddress())
                     .orElseThrow(() -> new EntityNotFoundException("User not found"));
-
             if (updatedUser.getUserName() != null && !updatedUser.getUserName().isEmpty()) {
                 userToUpdate.setName(updatedUser.getUserName());
             }
@@ -43,10 +36,9 @@ public class UserService implements UserServiceImpl {
             if (updatedUser.getImagePath() != null && !updatedUser.getImagePath().isEmpty()) {
                 userToUpdate.setImagePath(updatedUser.getImagePath());
             }
-            if (updatedUser.getPassword() != null && !updatedUser.getPassword().isEmpty()) {
-                userToUpdate.setPass(_passwordEncoder.encode(updatedUser.getPassword()));
+            if (updatedUser.getStatus() != null && !updatedUser.getStatus().isEmpty()) {
+                userToUpdate.setStatus(updatedUser.getStatus());
             }
-
             userRepository.save(userToUpdate);
             return userMapper.toUserDTO(userToUpdate);
         } catch (Exception ex) {
@@ -59,6 +51,12 @@ public class UserService implements UserServiceImpl {
         User userToFind = userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("User not found"));
         return userMapper.toUserDTO(userToFind);
+    }
+
+    @Override
+    public List<UserDTO> viewAllUsers() {
+        List<User> userList = userRepository.findAll();
+        return userMapper.toList(userList);
     }
 
     @Override
