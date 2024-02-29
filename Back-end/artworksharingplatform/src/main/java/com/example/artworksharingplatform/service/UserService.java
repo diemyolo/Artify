@@ -1,6 +1,5 @@
 package com.example.artworksharingplatform.service;
 
-import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
