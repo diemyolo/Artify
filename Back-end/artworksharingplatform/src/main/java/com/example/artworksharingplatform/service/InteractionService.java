@@ -8,5 +8,5 @@ import com.example.artworksharingplatform.entity.Interaction;
 public interface InteractionService {
     public List<Interaction> getInteractionsByPostId(UUID postId);
 
-    // public Interaction addInteraction(InteractionDTO interactionDTO);
+    public Interaction likePost(UUID postId, UUID userId);
 }

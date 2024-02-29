@@ -1,5 +1,12 @@
 package com.example.artworksharingplatform.controller;
 
+import com.example.artworksharingplatform.entity.Post;
+import com.example.artworksharingplatform.entity.User;
+import com.example.artworksharingplatform.model.ApiResponse;
+import com.example.artworksharingplatform.repository.UserRepository;
+import com.example.artworksharingplatform.service.PostService;
+import com.example.artworksharingplatform.service.UserService;
+
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -12,6 +19,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
@@ -26,30 +34,17 @@ import com.example.artworksharingplatform.service.AdminService;
 import com.example.artworksharingplatform.service.CloudinaryService;
 import com.example.artworksharingplatform.service.JWTServices.AuthenticationService;
 
+import java.util.UUID;
+
 @RestController
 @RequestMapping("/api/auth/admin")
 @PreAuthorize("hasRole('ROLE_ADMIN')")
 public class AdminController {
-    @GetMapping
-    public String get() {
-        return "GET::admin controller";
-    }
 
-    @PostMapping
-    public String post() {
-        return "POST::admin controller";
-    }
-
-    @PutMapping
-    public String put() {
-        return "PUT::admin controller";
-    }
-
-    @DeleteMapping
-    public String delete() {
-        return "DELETE::admin controller";
-    }
-
+    @Autowired
+    UserService _userService;
+    @Autowired
+    PostService _postService;
     @Autowired
     UserMapper userMapper;
 
@@ -62,8 +57,32 @@ public class AdminController {
     @Autowired
     CloudinaryService cloudinaryService;
 
-    @Autowired
-    AuthenticationService authenticationService;
+    @PutMapping("changeCreatorStatus")
+    public ResponseEntity<ApiResponse<User>> ChangeCreatorStatus(@RequestHeader("CreatorEmail") String creatorEmail) {
+        ApiResponse<User> apiResponse = new ApiResponse<>();
+        try {
+            var user = _userService.ChangeCreatorStatus(creatorEmail);
+            apiResponse.ok(user);
+            return ResponseEntity.ok(apiResponse);
+
+        } catch (Exception e) {
+            apiResponse.error(e);
+            return new ResponseEntity<>(apiResponse, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @DeleteMapping("deletePost")
+    public ResponseEntity<ApiResponse<Post>> DeletePost(@RequestHeader("PostId") UUID postId) {
+        ApiResponse<Post> apiResponse = new ApiResponse<>();
+        try {
+            _postService.deleteArtwork(postId);
+            apiResponse.ok();
+            return ResponseEntity.ok(apiResponse);
+        } catch (Exception e) {
+            apiResponse.error(e);
+            return new ResponseEntity<>(apiResponse, HttpStatus.BAD_REQUEST);
+        }
+    }
 
     @PutMapping("user/profile")
     public ResponseEntity<ApiResponse<UserDTO>> updateUser(@RequestPart(value = "user") UserDTO updatedUser,
@@ -143,5 +162,4 @@ public class AdminController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(apiResponse);
         }
     }
-
 }

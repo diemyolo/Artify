@@ -11,4 +11,6 @@ import com.example.artworksharingplatform.entity.Interaction;
 @Repository
 public interface InteractionRepository extends JpaRepository<Interaction, UUID> {
     List<Interaction> findByInteractionPost_Id(UUID postId);
+
+    Interaction findByInteractionPostIdAndInteractionAudienceId(UUID postId, UUID userId);
 }

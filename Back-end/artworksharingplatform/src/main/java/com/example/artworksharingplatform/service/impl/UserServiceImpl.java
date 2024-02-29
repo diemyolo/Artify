@@ -4,6 +4,7 @@ import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 
+import com.example.artworksharingplatform.entity.User;
 import com.example.artworksharingplatform.model.UserDTO;
 
 /**
@@ -15,5 +16,8 @@ public interface UserServiceImpl {
 
     UserDTO getUserInfo(UUID userId);
 
+    User ChangeCreatorStatus(String email) throws Exception;
+
     UserDTO findByEmailAddress(String email);
+
 }
