@@ -1,6 +1,5 @@
 package com.example.artworksharingplatform.controller;
 
-
 import com.example.artworksharingplatform.entity.Post;
 import com.example.artworksharingplatform.entity.User;
 import com.example.artworksharingplatform.model.ApiResponse;
@@ -21,6 +20,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
@@ -36,7 +36,6 @@ import com.example.artworksharingplatform.service.AdminService;
 import com.example.artworksharingplatform.service.CloudinaryService;
 
 import java.util.UUID;
-
 
 @RestController
 @RequestMapping("/api/auth/admin")
@@ -85,9 +84,6 @@ public class AdminController {
             return new ResponseEntity<>(apiResponse, HttpStatus.BAD_REQUEST);
         }
     }
-
-
-
 
     @PutMapping("user/profile")
     public ResponseEntity<ApiResponse> updateUser(@RequestPart(value = "user") UserDTO updatedUser,
