@@ -1,12 +1,5 @@
 package com.example.artworksharingplatform.controller;
 
-import com.example.artworksharingplatform.entity.Post;
-import com.example.artworksharingplatform.entity.User;
-import com.example.artworksharingplatform.model.ApiResponse;
-import com.example.artworksharingplatform.repository.UserRepository;
-import com.example.artworksharingplatform.service.PostService;
-import com.example.artworksharingplatform.service.UserService;
-
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -26,15 +19,16 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.example.artworksharingplatform.entity.Post;
+import com.example.artworksharingplatform.entity.User;
 import com.example.artworksharingplatform.mapper.UserMapper;
 import com.example.artworksharingplatform.model.ApiResponse;
 import com.example.artworksharingplatform.model.UserDTO;
 import com.example.artworksharingplatform.repository.UserRepository;
 import com.example.artworksharingplatform.service.AdminService;
 import com.example.artworksharingplatform.service.CloudinaryService;
-import com.example.artworksharingplatform.service.JWTServices.AuthenticationService;
-
-import java.util.UUID;
+import com.example.artworksharingplatform.service.PostService;
+import com.example.artworksharingplatform.service.UserService;
 
 @RestController
 @RequestMapping("/api/auth/admin")

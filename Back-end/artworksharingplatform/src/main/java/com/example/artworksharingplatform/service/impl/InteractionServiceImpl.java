@@ -9,11 +9,12 @@ import org.springframework.stereotype.Service;
 import com.example.artworksharingplatform.entity.Interaction;
 import com.example.artworksharingplatform.entity.Post;
 import com.example.artworksharingplatform.entity.User;
-
 import com.example.artworksharingplatform.repository.InteractionRepository;
 import com.example.artworksharingplatform.repository.PostRepository;
 import com.example.artworksharingplatform.repository.UserRepository;
 import com.example.artworksharingplatform.service.InteractionService;
+
+import jakarta.persistence.EntityNotFoundException;
 
 @Service
 public class InteractionServiceImpl implements InteractionService {
