@@ -10,14 +10,14 @@ import com.cloudinary.Cloudinary;
 
 @Configuration
 public class CloudinaryConfig {
-	
-	@Bean
+
+    @Bean
     public Cloudinary getCloudinary() {
         Map config = new HashMap();
-        config.put("cloud_name","diak7ssve");
-        config.put("api_key","921466739317785");
-        config.put("api_secret","dZ5EZms4AjY-44krn67szJbjmSw");
-        config.put("secure",true);
+        config.put("cloud_name", "diak7ssve");
+        config.put("api_key", "921466739317785");
+        config.put("api_secret", "dZ5EZms4AjY-44krn67szJbjmSw");
+        config.put("secure", true);
 
         return new Cloudinary(config);
     }

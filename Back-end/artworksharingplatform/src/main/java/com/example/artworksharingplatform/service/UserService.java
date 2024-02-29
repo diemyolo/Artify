@@ -49,7 +49,7 @@ public class UserService implements UserServiceImpl {
             }
 
             userRepository.save(userToUpdate);
-            return userMapper.toUserDTO(userToUpdate);
+            return findByEmailAddress(userToUpdate.getEmailAddress());
         } catch (Exception ex) {
             throw new RuntimeException("Error occurred while updating user. Please try again later.");
         }

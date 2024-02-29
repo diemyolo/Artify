@@ -9,7 +9,6 @@ import com.example.artworksharingplatform.service.UserService;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,13 +26,13 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.example.artworksharingplatform.entity.User;
 import com.example.artworksharingplatform.mapper.UserMapper;
 import com.example.artworksharingplatform.model.ApiResponse;
 import com.example.artworksharingplatform.model.UserDTO;
 import com.example.artworksharingplatform.repository.UserRepository;
 import com.example.artworksharingplatform.service.AdminService;
 import com.example.artworksharingplatform.service.CloudinaryService;
+import com.example.artworksharingplatform.service.JWTServices.AuthenticationService;
 
 import java.util.UUID;
 
@@ -86,9 +85,9 @@ public class AdminController {
     }
 
     @PutMapping("user/profile")
-    public ResponseEntity<ApiResponse> updateUser(@RequestPart(value = "user") UserDTO updatedUser,
+    public ResponseEntity<ApiResponse<UserDTO>> updateUser(@RequestPart(value = "user") UserDTO updatedUser,
             @RequestPart(value = "image", required = false) MultipartFile file) {
-        ApiResponse apiResponse = new ApiResponse();
+        ApiResponse<UserDTO> apiResponse = new ApiResponse<UserDTO>();
         if (updatedUser != null) {
             try {
                 updatedUser.setImagePath(null);
@@ -114,27 +113,24 @@ public class AdminController {
     }
 
     @GetMapping("user/profile")
-    public ResponseEntity<ApiResponse> getUserInfo(@RequestParam UUID userId) {
-        ApiResponse apiResponse = new ApiResponse();
+    public ResponseEntity<ApiResponse<UserDTO>> getUserInfo(@RequestParam UUID userId) {
+        ApiResponse<UserDTO> apiResponse = new ApiResponse<UserDTO>();
         if (userId != null) {
-            Optional<User> userOptional = userRepository.findById(userId);
-            UserDTO userInfo;
-            if (userOptional.isPresent()) {
-                User user = userOptional.get();
-                userInfo = userMapper.toUserDTO(user);
+            UserDTO userInfo = adminService.getUserInfo(userId);
+            if (userInfo != null) {
+                apiResponse.ok(userInfo);
+                return ResponseEntity.ok(apiResponse);
             } else {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(apiResponse);
             }
-            apiResponse.ok(userInfo);
-            return ResponseEntity.ok(apiResponse);
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiResponse);
         }
     }
 
     @GetMapping("user/list")
-    public ResponseEntity<ApiResponse> viewAllUsers() {
-        ApiResponse apiResponse = new ApiResponse();
+    public ResponseEntity<ApiResponse<List<UserDTO>>> viewAllUsers() {
+        ApiResponse<List<UserDTO>> apiResponse = new ApiResponse<List<UserDTO>>();
         try {
             List<UserDTO> userlist = adminService.viewAllUsers();
             apiResponse.ok(userlist);
@@ -145,4 +141,25 @@ public class AdminController {
         }
     }
 
+    @PostMapping("user/add")
+    public ResponseEntity<ApiResponse<UserDTO>> addUser(@RequestPart(value = "user") UserDTO addUser,
+            @RequestPart(value = "image", required = false) MultipartFile file) {
+        ApiResponse<UserDTO> apiResponse = new ApiResponse<UserDTO>();
+        if (addUser != null) {
+            try {
+                addUser.setImagePath(null);
+                if (file != null) {
+                    addUser.setImagePath(uploadImage(file));
+                }
+                UserDTO user = adminService.addUser(addUser);
+                apiResponse.ok(user);
+                return ResponseEntity.ok(apiResponse);
+            } catch (Exception ex) {
+                apiResponse.error(ex.getMessage());
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiResponse);
+            }
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(apiResponse);
+        }
+    }
 }

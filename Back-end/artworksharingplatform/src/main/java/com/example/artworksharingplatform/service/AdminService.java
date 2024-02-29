@@ -16,4 +16,6 @@ public interface AdminService {
     List<UserDTO> viewAllUsers();
 
     UserDTO findByEmailAddress(String email);
+
+    UserDTO addUser(UserDTO userDTO);
 }
