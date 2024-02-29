@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import com.example.artworksharingplatform.entity.Interaction;
 import com.example.artworksharingplatform.entity.Post;
 import com.example.artworksharingplatform.entity.User;
-import com.example.artworksharingplatform.model.InteractionDTO;
 import com.example.artworksharingplatform.repository.InteractionRepository;
 import com.example.artworksharingplatform.repository.PostRepository;
 import com.example.artworksharingplatform.repository.UserRepository;
@@ -35,20 +34,27 @@ public class InteractionServiceImpl implements InteractionService {
         return interactionsList;
     }
 
-    // @Override
-    // public Interaction addInteraction(InteractionDTO interactionDTO) {
-    // User user = userRepository.findById(interactionDTO.getUserId())
-    // .orElseThrow(() -> new EntityNotFoundException("User not found"));
+    @SuppressWarnings("null")
+    @Override
+    public Interaction likePost(UUID postId, UUID userId) {
+        Interaction interaction = interactionRepository.findByInteractionPostIdAndInteractionAudienceId(postId, userId);
 
-    // Post post = postRepository.findById(interactionDTO.getPostId())
-    // .orElseThrow(() -> new EntityNotFoundException("Post not found"));
+        if (interaction == null) {
+            User user = userRepository.findById(userId)
+                    .orElseThrow(() -> new EntityNotFoundException("User not found"));
 
-    // Interaction interaction = new Interaction();
-    // interaction.setComment(interactionDTO.getComment());
-    // interaction.setIsLiked(interactionDTO.getIsLiked());
-    // interaction.setInteractionAudience(user);
-    // interaction.setInteractionPost(post);
+            Post post = postRepository.findById(postId)
+                    .orElseThrow(() -> new EntityNotFoundException("Post not found"));
 
-    // return interactionRepository.save(interaction);
-    // }
+            Interaction newInteraction = new Interaction();
+            newInteraction.setIsLiked(true);
+            newInteraction.setInteractionAudience(user);
+            newInteraction.setInteractionPost(post);
+
+            return interactionRepository.save(newInteraction);
+        } else {
+            interaction.setIsLiked(!interaction.getIsLiked());
+            return interactionRepository.save(interaction);
+        }
+    }
 }

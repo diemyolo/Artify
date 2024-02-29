@@ -7,7 +7,7 @@ import org.mapstruct.Mapping;
 import com.example.artworksharingplatform.entity.Interaction;
 import com.example.artworksharingplatform.model.InteractionDTO;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = CommentMapper.class)
 public interface InteractionMapper {
     @Mapping(source = "interaction.interactionPost.id", target = "postId")
     @Mapping(source = "interaction.comments", target = "comments")
