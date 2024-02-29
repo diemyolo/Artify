@@ -15,5 +15,13 @@ public interface UserServiceImpl {
 
     UserDTO getUserInfo(UUID userId);
 
+
+    User findUserByJwt(String jwt);
+
+    String extractBearerToken(String bearerToken);
+
+    User ChangeCreatorStatus(String email) throws Exception;
+
     UserDTO findByEmailAddress(String email);
+
 }

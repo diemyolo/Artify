@@ -1,9 +1,6 @@
 package com.example.artworksharingplatform.controller;
 
-import com.example.artworksharingplatform.model.AuthenticationRequest;
-import com.example.artworksharingplatform.model.AuthenticationResponse;
-import com.example.artworksharingplatform.model.ErrorDTO;
-import com.example.artworksharingplatform.model.RegisterRequest;
+import com.example.artworksharingplatform.model.*;
 import com.example.artworksharingplatform.service.JWTServices.AuthenticationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -20,15 +17,18 @@ public class AuthenticationController {
     private final AuthenticationService service;
 
     @PostMapping("/login")
-
-    public ResponseEntity<?> authenticate(@RequestBody AuthenticationRequest authRequest) {
+    public ResponseEntity<ApiResponse<?>> authenticate(@RequestBody AuthenticationRequest authRequest) {
+        ApiResponse apiResponse = new ApiResponse();
         try {
-            return ResponseEntity.ok(service.authenticate(authRequest));
+            var result = service.authenticate(authRequest);
+            if(result.equals(null)){
+                apiResponse.error("you dont have permission to login");
+            }
+            apiResponse.ok(result);
+            return ResponseEntity.ok(apiResponse);
         } catch (Exception exception) {
-            ErrorDTO errorDTO = new ErrorDTO();
-            errorDTO.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.toString());
-            errorDTO.setErrorMessage("An error occurred while processing the login request.");
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorDTO);
+            apiResponse.error(exception);
+            return new ResponseEntity<>(apiResponse, HttpStatus.BAD_REQUEST);
         }
         }
 
