@@ -12,4 +12,5 @@ public class UserDTO {
     private String telephone;
     private String imagePath;
     private String password;
+    private String status;
 }
