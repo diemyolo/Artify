@@ -3,18 +3,12 @@ package com.example.artworksharingplatform.controller;
 import java.util.Map;
 import java.util.Optional;
 
-import com.example.artworksharingplatform.repository.UserRepository;
-import jakarta.persistence.EntityNotFoundException;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -39,15 +33,14 @@ public class UserController {
     UserMapper userMapper;
 
     @Autowired
-    UserServiceImpl userServiceImpl;
-    @Autowired
-    UserRepository _userRepository;
+    UserRepository userRepository;
 
     @Autowired
-    UserRepository _userRepository;
+    UserServiceImpl userServiceImpl;
 
     @Autowired
     CloudinaryService cloudinaryService;
+
     @GetMapping("user/profile")
     public ResponseEntity<ApiResponse> getUserInfo() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -55,7 +48,7 @@ public class UserController {
         if (isUserAuthenticated(authentication)) {
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
             String email = userDetails.getUsername(); // getUserName này là email
-            Optional<User> userOptional = _userRepository.findByEmailAddress(email);
+            Optional<User> userOptional = userRepository.findByEmailAddress(email);
             UserDTO userInfo;
             if (userOptional.isPresent()) {
                 User user = userOptional.get();
@@ -75,25 +68,6 @@ public class UserController {
         return authentication != null && authentication.isAuthenticated()
                 && authentication.getPrincipal() instanceof UserDetails;
     }
-
-    @GetMapping("user/profile2")
-    @PreAuthorize("hasRole('ROLE_AUDIENCE') or hasRole('ROLE_CREATOR') or hasRole('ROLE_ADMIN')")
-    public ResponseEntity<ApiResponse> getUserInfo2() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        ApiResponse apiResponse = new ApiResponse();
-        if (authentication != null && authentication.isAuthenticated() && authentication.getPrincipal() instanceof UserDetails) {
-            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-            String email = userDetails.getUsername();
-            // Now you can use the username to fetch the user details from your repository
-            var user = _userRepository.findByEmailAddress(email);
-            apiResponse.ok(user);
-             return ResponseEntity.ok(apiResponse);
-        } else {
-
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiResponse);
-        }
-    }
-
 
     @PutMapping("user/profile")
     public ResponseEntity<ApiResponse> updateUser(@RequestPart(value = "user") UserDTO updatedUser,
