@@ -15,6 +15,7 @@ import com.example.artworksharingplatform.service.impl.PostServiceImpl;
 @Service
 public class PostService implements PostServiceImpl {
 
+
     @Autowired
     PostRepository postRepository;
 
@@ -42,5 +43,6 @@ public class PostService implements PostServiceImpl {
             throw new Exception(e.getMessage());
         }
     }
+
 
 }

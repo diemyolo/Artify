@@ -35,7 +35,7 @@ public class AuthenticationService {
                 .pass(_passwordEncoder.encode(registerRequest.getPass()))
                 .telephone((registerRequest.getTelephone()))
                 .createdDate(Timestamp.valueOf(LocalDateTime.now()))
-                .status("1")
+                .status("ACTIVE")
                 .role(Role.AUDIENCE)
                 .build();
         _repository.save(user);
@@ -54,7 +54,9 @@ public class AuthenticationService {
                 .pass(_passwordEncoder.encode(registerRequest.getPass()))
                 .telephone((registerRequest.getTelephone()))
                 .createdDate(Timestamp.valueOf(LocalDateTime.now()))
-                .status("0")
+
+                .status("ACTIVE")
+
                 .role(Role.CREATOR)
                 .build();
         _repository.save(user);
@@ -73,7 +75,7 @@ public class AuthenticationService {
                 .pass(_passwordEncoder.encode(registerRequest.getPass()))
                 .telephone((registerRequest.getTelephone()))
                 .createdDate(Timestamp.valueOf(LocalDateTime.now()))
-                .status("1")
+                .status("ACTIVE")
                 .role(Role.ADMIN)
                 .build();
         _repository.save(user);
