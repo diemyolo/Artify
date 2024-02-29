@@ -4,7 +4,6 @@ import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 
-import com.example.artworksharingplatform.entity.User;
 import com.example.artworksharingplatform.model.UserDTO;
 
 /**
@@ -12,11 +11,7 @@ import com.example.artworksharingplatform.model.UserDTO;
  */
 @Service
 public interface UserServiceImpl {
-    UserDTO updateUser(String jwt, UserDTO updatedUser);
+    UserDTO updateUser(UserDTO updatedUser);
 
     UserDTO getUserInfo(UUID userId);
-
-    User findUserByJwt(String jwt);
-
-    String extractBearerToken(String bearerToken);
 }

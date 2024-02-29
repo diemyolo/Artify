@@ -33,9 +33,11 @@ public class UserService implements UserServiceImpl {
     JWTService jwtService;
 
     @Override
-    public UserDTO updateUser(String jwt, UserDTO updatedUser) {
-        User userToUpdate = findUserByJwt(jwt);
-        if (userToUpdate.getEmailAddress().equals(updatedUser.getEmailAddress())) {
+    public UserDTO updateUser(UserDTO updatedUser) {
+        try {
+            User userToUpdate = userRepository.findByEmailAddress(updatedUser.getEmailAddress())
+                    .orElseThrow(() -> new EntityNotFoundException("User not found"));
+
             if (updatedUser.getUserName() != null && !updatedUser.getUserName().isEmpty()) {
                 userToUpdate.setName(updatedUser.getUserName());
             }
@@ -48,10 +50,11 @@ public class UserService implements UserServiceImpl {
             if (updatedUser.getPassword() != null && !updatedUser.getPassword().isEmpty()) {
                 userToUpdate.setPass(_passwordEncoder.encode(updatedUser.getPassword()));
             }
+
             userRepository.save(userToUpdate);
             return userMapper.toUserDTO(userToUpdate);
-        } else {
-            throw new EntityNotFoundException("User not found");
+        } catch (Exception ex) {
+            throw new RuntimeException("Error occurred while updating user. Please try again later.");
         }
     }
 
@@ -60,22 +63,5 @@ public class UserService implements UserServiceImpl {
         User userToFind = userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("User not found"));
         return userMapper.toUserDTO(userToFind);
-    }
-
-    @Override
-    public User findUserByJwt(String jwt) {
-        String email = jwtService.GetUserEmailJWT(extractBearerToken(jwt));
-        User user = userRepository.findByEmailAddress(email)
-                .orElseThrow(() -> new EntityNotFoundException("User not found"));
-        return user;
-    }
-
-    public String extractBearerToken(String bearerToken) {
-        String[] parts = bearerToken.split(" ");
-        if (parts.length == 2) {
-            return parts[1];
-        } else {
-            throw new IllegalArgumentException("Invalid JWT string format");
-        }
     }
 }
