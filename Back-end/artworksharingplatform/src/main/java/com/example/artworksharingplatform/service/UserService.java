@@ -75,7 +75,7 @@ public class UserService implements UserServiceImpl {
             User user = userRepository.findByEmailAddress(email)
                     .orElseThrow(() -> new EntityNotFoundException("User not found"));
             if (user != null) {
-                user.setStatus("1");
+                user.setStatus("ACTIVE");
                 userRepository.save(user);
             } else {
                 return null;
