@@ -3,6 +3,7 @@ package com.example.artworksharingplatform.controller;
 import java.util.List;
 import java.util.UUID;
 
+import com.example.artworksharingplatform.model.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,12 +17,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.artworksharingplatform.entity.Interaction;
 import com.example.artworksharingplatform.mapper.InteractionMapper;
+import com.example.artworksharingplatform.model.ApiResponse;
 import com.example.artworksharingplatform.model.InteractionDTO;
 import com.example.artworksharingplatform.service.InteractionService;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController
 @RequestMapping("api/auth/audience")
-@PreAuthorize("hasRole('ROLE_AUDIENCE')")
 public class InteractionController {
 
     @Autowired
@@ -31,26 +33,39 @@ public class InteractionController {
     InteractionMapper interactionMapper;
 
     @GetMapping("/post/{postId}")
-    public ResponseEntity<List<InteractionDTO>> getInteractionByPostId(@PathVariable UUID postId) {
+    @PreAuthorize("hasRole('ROLE_AUDIENCE')")
+    public ResponseEntity<ApiResponse<List<InteractionDTO>>> getInteractionByPostId(@PathVariable UUID postId) {
+        ApiResponse<List<InteractionDTO>> apiResponse = new ApiResponse<List<InteractionDTO>>();
         try {
             List<Interaction> interactions = interactionService.getInteractionsByPostId(postId);
             List<InteractionDTO> interactionDTOs = interactionMapper.toInteractionDTOList(interactions);
 
-            return new ResponseEntity<>(interactionDTOs, HttpStatus.OK);
+            apiResponse.ok(interactionDTOs);
+            return ResponseEntity.ok(apiResponse);
         } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            apiResponse.error(e);
+            return new ResponseEntity<>(apiResponse, HttpStatus.BAD_REQUEST);
         }
     }
 
-    @PostMapping("/post/addInteract")
-    public ResponseEntity<InteractionDTO> addInteraction(@RequestBody InteractionDTO interactionDTO) {
-        try {
-            Interaction interaction = interactionService.addInteraction(interactionDTO);
-            InteractionDTO interactDTO = interactionMapper.toInteractionDTO(interaction);
-
-            return new ResponseEntity<>(interactDTO, HttpStatus.CREATED);
-        } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
+    @GetMapping("/hi")
+    @PreAuthorize("hasRole('ROLE_AUDIENCE')")
+    public String getMethodName(@PathVariable UUID postId) {
+        List<Interaction> interactions = interactionService.getInteractionsByPostId(postId);
+        List<InteractionDTO> interactionDTOs = interactionMapper.toInteractionDTOList(interactions);
+        return interactionDTOs.get(0).getName();
     }
+
+    // @PostMapping("/post/addInteract")
+    // public ResponseEntity<InteractionDTO> addInteraction(@RequestBody
+    // InteractionDTO interactionDTO) {
+    // try {
+    // Interaction interaction = interactionService.addInteraction(interactionDTO);
+    // InteractionDTO interactDTO = interactionMapper.toInteractionDTO(interaction);
+
+    // return new ResponseEntity<>(interactDTO, HttpStatus.CREATED);
+    // } catch (Exception e) {
+    // return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    // }
+    // }
 }
