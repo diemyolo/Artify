@@ -8,6 +8,7 @@ import com.example.artworksharingplatform.model.UserDTO;
 
 @Mapper(componentModel = "spring")
 public interface UserMapper {
+    @Mapping(source = "user.id", target = "userId")
     @Mapping(source = "user.name", target = "userName")
     @Mapping(source = "user.emailAddress", target = "emailAddress")
     @Mapping(source = "user.telephone", target = "telephone")
