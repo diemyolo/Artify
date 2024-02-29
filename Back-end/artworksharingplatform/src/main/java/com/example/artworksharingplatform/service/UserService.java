@@ -68,8 +68,10 @@ public class UserService implements UserServiceImpl {
                 .orElseThrow(() -> new EntityNotFoundException("User not found"));
         return userMapper.toUserDTO(user);
     }
+
+    @Override
     public User ChangeCreatorStatus(String email) throws Exception {
-        try{
+        try {
             User user = userRepository.findByEmailAddress(email)
                     .orElseThrow(() -> new EntityNotFoundException("User not found"));
             if (user != null) {
@@ -79,7 +81,7 @@ public class UserService implements UserServiceImpl {
                 return null;
             }
             return user;
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new Exception(e.getMessage());
         }
     }
