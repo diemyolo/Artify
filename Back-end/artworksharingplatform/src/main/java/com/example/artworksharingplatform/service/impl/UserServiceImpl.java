@@ -19,4 +19,6 @@ public interface UserServiceImpl {
     User findUserByJwt(String jwt);
 
     String extractBearerToken(String bearerToken);
+
+    User ChangeCreatorStatus(String email) throws Exception;
 }

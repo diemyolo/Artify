@@ -1,5 +1,6 @@
 package com.example.artworksharingplatform.service;
 
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,6 +77,21 @@ public class UserService implements UserServiceImpl {
             return parts[1];
         } else {
             throw new IllegalArgumentException("Invalid JWT string format");
+        }
+    }
+    public User ChangeCreatorStatus(String email) throws Exception {
+        try{
+            User user = userRepository.findByEmailAddress(email)
+                    .orElseThrow(() -> new EntityNotFoundException("User not found"));
+            if (user != null) {
+                user.setStatus("1");
+                userRepository.save(user);
+            } else {
+                return null;
+            }
+            return user;
+        }catch (Exception e){
+            throw new Exception(e.getMessage());
         }
     }
 }
