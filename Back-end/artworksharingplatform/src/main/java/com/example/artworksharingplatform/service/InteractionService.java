@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.UUID;
 
 import com.example.artworksharingplatform.entity.Interaction;
-import com.example.artworksharingplatform.model.InteractionDTO;
 
 public interface InteractionService {
     public List<Interaction> getInteractionsByPostId(UUID postId);

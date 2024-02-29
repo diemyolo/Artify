@@ -36,9 +36,9 @@ public class UserController {
     CloudinaryService cloudinaryService;
 
     @GetMapping("user/profile")
-    public ResponseEntity<ApiResponse> getUserInfo() {
+    public ResponseEntity<ApiResponse<UserDTO>> getUserInfo() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        ApiResponse apiResponse = new ApiResponse();
+        ApiResponse<UserDTO> apiResponse = new ApiResponse<UserDTO>();
         if (isUserAuthenticated(authentication)) {
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
             String email = userDetails.getUsername(); // getUserName này là email
@@ -61,10 +61,10 @@ public class UserController {
     }
 
     @PutMapping("user/profile")
-    public ResponseEntity<ApiResponse> updateUser(@RequestPart(value = "user") UserDTO updatedUser,
+    public ResponseEntity<ApiResponse<UserDTO>> updateUser(@RequestPart(value = "user") UserDTO updatedUser,
             @RequestPart(value = "image", required = false) MultipartFile file) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        ApiResponse apiResponse = new ApiResponse();
+        ApiResponse<UserDTO> apiResponse = new ApiResponse<UserDTO>();
         if (isUserAuthenticated(authentication)) {
             try {
                 UserDetails userDetails = (UserDetails) authentication.getPrincipal();
