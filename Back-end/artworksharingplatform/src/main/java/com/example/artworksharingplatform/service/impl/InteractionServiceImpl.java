@@ -50,11 +50,22 @@ public class InteractionServiceImpl implements InteractionService {
             newInteraction.setIsLiked(true);
             newInteraction.setInteractionAudience(user);
             newInteraction.setInteractionPost(post);
+            interactionRepository.save(newInteraction);
 
-            return interactionRepository.save(newInteraction);
+            post.setNumberOfLikes(interactionRepository.countByIsLikedTrue());
+            postRepository.save(post);
+
+            return newInteraction;
         } else {
             interaction.setIsLiked(!interaction.getIsLiked());
-            return interactionRepository.save(interaction);
+            interactionRepository.save(interaction);
+
+            Post post = postRepository.findById(postId)
+                    .orElseThrow(() -> new EntityNotFoundException("Post not found"));
+            post.setNumberOfLikes(interactionRepository.countByIsLikedTrue());
+            postRepository.save(post);
+
+            return interaction;
         }
     }
 }

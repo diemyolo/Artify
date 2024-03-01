@@ -89,10 +89,10 @@ public class AuthenticationService {
                         authRequest.getEmail(),
                         authRequest.getPass()));
         var user = _repository.findByEmailAddress(authRequest.getEmail()).orElseThrow();
-        if(user.getStatus().equals("1") ){
+        if (user.getStatus().equals("ACTIVE")) {
             var jwtToken = _jwtService.generateToken(user);
             return AuthenticationResponse.builder().Token(jwtToken).build();
-        }else {
+        } else {
             return null;
         }
     }

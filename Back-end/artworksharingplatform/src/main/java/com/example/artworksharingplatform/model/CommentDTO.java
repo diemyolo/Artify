@@ -10,5 +10,6 @@ import lombok.Setter;
 public class CommentDTO {
     private UUID commentId;
     private String comment;
+    private UUID userId;
     private String userName;
 }
