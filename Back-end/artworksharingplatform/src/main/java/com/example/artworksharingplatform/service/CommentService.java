@@ -7,7 +7,9 @@ import com.example.artworksharingplatform.entity.Comment;
 public interface CommentService {
     Comment getCommentById(UUID commentId);
 
-    Comment addOrEditComment(UUID userId);
+    Comment addComment(Comment comment, UUID postId, UUID userId);
+
+    Comment ediComment(Comment comment);
 
     void deleteComment(UUID commentId);
 }

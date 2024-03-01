@@ -13,6 +13,7 @@ public interface CommentMapper {
 
     @Mapping(source = "c.id", target = "commentId")
     @Mapping(source = "c.comment", target = "comment")
+    @Mapping(source = "c.interaction.interactionAudience.id", target = "userId")
     @Mapping(source = "c.interaction.interactionAudience.name", target = "userName")
     CommentDTO toCommentDTO(Comment c);
 
