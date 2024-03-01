@@ -55,7 +55,7 @@ public class AuthenticationService {
                 .telephone((registerRequest.getTelephone()))
                 .createdDate(Timestamp.valueOf(LocalDateTime.now()))
 
-                .status("ACTIVE")
+                .status("INACTIVE")
 
                 .role(Role.CREATOR)
                 .build();

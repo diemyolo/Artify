@@ -9,9 +9,15 @@ public class CORSConfig implements WebMvcConfigurer {
 	
 	@Override
     public void addCorsMappings(CorsRegistry registry) {
+//        registry.addMapping("/**")
+//                .allowedOrigins("http://localhost:3000") // Thay bằng URL của ứng dụng React
+//                .allowedMethods("*")
+//                .allowCredentials(true);
         registry.addMapping("/**")
-                .allowedOrigins("http://localhost:5173") // Thay bằng URL của ứng dụng React
+                .allowedOrigins("*")
+                .allowedHeaders("*")
+                .exposedHeaders("Access-Control-Allow-Origin", "Access-Control-Allow-Methods","Access-Control-Allow-Headers")
                 .allowedMethods("*")
-                .allowCredentials(true);
+                .maxAge(1440000);
     }
 }
