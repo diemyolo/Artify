@@ -11,17 +11,10 @@ const formItemCol = {
 };
 
 export default function Login() {
-  // const formik = useFormik({
-  //   initialValues: {
-  //     email: "",
-  //     password: "",
-  //   },
-  //   onSubmit: (values) => {
-  //   }
-  // });
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const handleLogin = () => {
     const myHeaders = new Headers();
@@ -53,6 +46,7 @@ export default function Login() {
         localStorage.setItem("token", result.token);
         alert("Success");
         navigate("/home");
+        setIsLoggedIn(true); 
       })
       .catch((error) => {
         console.error(error);
