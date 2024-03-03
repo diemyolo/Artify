@@ -56,7 +56,6 @@ public class PostController {
 			apiResponse.error(e);
 			return new ResponseEntity<>(apiResponse, HttpStatus.BAD_REQUEST);
 		}
-
 	}
 
 	@GetMapping("audience/viewAllArt")
@@ -70,13 +69,6 @@ public class PostController {
 			
 		}
 		return artworks;
-	}
-
-	@GetMapping("api/auth/creator/test")
-	@PreAuthorize("hasRole('ROLE_CREATOR')")
-	public String viewAll() {
-		List<Post> posts = postService.getAllPosts();
-		return posts.get(0).getDescription();
 	}
 
 	@PostMapping("api/auth/upload")

@@ -3,17 +3,20 @@ package com.example.artworksharingplatform.service.JWTServices;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.example.artworksharingplatform.entity.EWallet;
 import com.example.artworksharingplatform.entity.Role;
 import com.example.artworksharingplatform.entity.User;
 import com.example.artworksharingplatform.model.AuthenticationRequest;
 import com.example.artworksharingplatform.model.AuthenticationResponse;
 import com.example.artworksharingplatform.model.RegisterRequest;
 import com.example.artworksharingplatform.repository.UserRepository;
+import com.example.artworksharingplatform.service.EWalletService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -24,6 +27,9 @@ public class AuthenticationService {
     private final PasswordEncoder _passwordEncoder;
     private final JWTService _jwtService;
     private final AuthenticationManager _authMannager;
+    private final EWalletService walletService;
+    
+
 
     public AuthenticationResponse register(RegisterRequest registerRequest) {
         if (registerRequest.getPass() == null) {
@@ -39,6 +45,9 @@ public class AuthenticationService {
                 .role(Role.AUDIENCE)
                 .build();
         _repository.save(user);
+        EWallet wallet = new EWallet();
+        wallet.setUser(user);
+        walletService.createWallet(wallet);
         var jwtToken = _jwtService.generateToken(user);
         return AuthenticationResponse.builder().Token(jwtToken).build();
 
@@ -89,6 +98,7 @@ public class AuthenticationService {
                         authRequest.getEmail(),
                         authRequest.getPass()));
         var user = _repository.findByEmailAddress(authRequest.getEmail()).orElseThrow();
+
         if (user.getStatus().equals("ACTIVE")) {
             var jwtToken = _jwtService.generateToken(user);
             return AuthenticationResponse.builder().Token(jwtToken).build();
