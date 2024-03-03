@@ -7,7 +7,6 @@ import { AiOutlineSearch } from "react-icons/ai";
 const NavBar = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isSticky, setIsSticky] = useState(false);
-  const auth = localStorage.getItem("token")
 
 
   useEffect(() => {
@@ -33,8 +32,6 @@ const NavBar = () => {
   return (
     <header className='w-full bg-gray-100 fixed top-0 left-0 right-0'>
       <nav className='navbar px-10'>
-      {
-        auth ?
         <div className='space-x-16 h-[90px] flex justify-between items-center'>
           <a href='/home'>
             <img src={logo} className='w-[124px] h-[124px]' alt="Logo" />
@@ -92,7 +89,6 @@ const NavBar = () => {
             )}
           </div>
         </div>
-      }
       </nav>
     </header >
   )
