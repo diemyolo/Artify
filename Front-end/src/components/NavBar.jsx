@@ -5,9 +5,10 @@ import { Link } from "react-router-dom";
 import { AiOutlineSearch } from "react-icons/ai";
 
 const NavBar = () => {
-  const [active, setActive] = useState("Home");
-  // const [toggle, setToggle] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isSticky, setIsSticky] = useState(false);
+  const auth = localStorage.getItem("token")
+
 
   useEffect(() => {
     const handleScroll = () => {
@@ -23,65 +24,77 @@ const NavBar = () => {
     }
   });
 
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    setIsLoggedIn(false);
+    window.location.href = "/login";
+  };
 
   return (
-    <header className='w-full bg-purple-300 fixed top-0 left-0 right-0'>
+    <header className='w-full bg-gray-100 fixed top-0 left-0 right-0'>
       <nav className='navbar px-10'>
-        <div className='space-x-16 h-[100px] flex justify-between items-center'>
+      {
+        auth ?
+        <div className='space-x-16 h-[90px] flex justify-between items-center'>
           <a href='/home'>
             <img src={logo} className='w-[124px] h-[124px]' alt="Logo" />
           </a>
 
-          <ul className="list-none space-x-12 sm:flex hidden justify-center items-center flex-1">
+          <ul className="list-none space-x-12 sm:flex hidden justify-center items-center flex-1 font-semibold">
             {
-              navLinks.map(({link, path}) => 
+              navLinks.map(({ link, path }) =>
                 <Link to={path} key={path} className='block text-base'>{link}</Link>
               )
             }
           </ul>
-          
+
           <div className='bg-gray-200 rounded-full sm:flex hidden items-center px-4 lg:w-[350px]'>
-            <AiOutlineSearch className='cursor-pointer' size={20} />
-            <input className='bg-transparent p-2 focus:outline-none' type='text' placeholder='Search for art...'/>
+            <AiOutlineSearch className='cursor-pointer' size={20} style={{ color: '#2f6a81', fontWeight: 'bold' }}/>
+            <input
+              className=' bg-transparent p-3 lg:w-[350px] appearance-none focus:outline-none border-none'
+              type='search'
+              placeholder='Search for art...'
+              style={{ outline: 'none' }}
+            />
           </div>
 
-          <div className='space-x-12 lg:flex items-center'>
-            <a href='/' className='lg:flex items-center hover:text-red'>Login</a>
-            <button className='text-white bg-red-500 py-2 px-4 transition-all duration-300 rounded '>Sign Up</button>
+          <div className="space-x-12 lg:flex items-center">
+            {isLoggedIn ? (
+              <>
+                <Link
+                  to="/profile"
+                  className="font-semibold lg:flex items-center hover:text-[#2f6a81]"
+                >
+                  Profile
+                </Link>
+                <button
+                  className="text-white bg-[#2f6a81] py-2 px-4 transition-all duration-300 rounded-full"
+                  onClick={handleLogout}
+                >
+                  Logout
+                </button>
+              </>
+            ) : (
+              <>
+                <a
+                  href="/login"
+                  className="font-semibold lg:flex items-center hover:text-[#2f6a81]"
+                >
+                  Login
+                </a>
+                <Link
+                  to="/signup"
+                  className="text-white bg-[#2f6a81] py-2 px-4 transition-all duration-300 rounded-full"
+                >
+                  Sign Up
+                </Link>
+              </>
+            )}
           </div>
         </div>
-
-        {/* <div className="sm:hidden flex flex-1 justify-end items-center">
-        <img
-          src={toggle ? close : menu}
-          alt="menu"
-          className="w-[28px] h-[28px] object-contain"
-          onClick={() => setToggle(!toggle)}
-        />
-
-        <div
-          className={`${
-            !toggle ? "hidden" : "flex"
-          } p-6 bg-black-gradient absolute top-20 right-0 mx-4 my-2 min-w-[140px] rounded-xl sidebar`}
-        >
-          <ul className="list-none flex justify-end items-start flex-1 flex-col">
-            {navLinks.map((nav, index) => (
-              <li
-                key={nav.id}
-                className={`font-poppins font-medium cursor-pointer text-[16px] ${
-                  active === nav.title ? "text-black" : "text-red"
-                } ${index === navLinks.length - 1 ? "mb-0" : "mb-4"}`}
-                onClick={() => setActive(nav.title)}
-              >
-                <a href={`#${nav.id}`}>{nav.title}</a>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </div> */}
+      }
       </nav>
     </header >
-
   )
 }
 
