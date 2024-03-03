@@ -64,7 +64,7 @@ public class AuthenticationService {
                 .telephone((registerRequest.getTelephone()))
                 .createdDate(Timestamp.valueOf(LocalDateTime.now()))
 
-                .status("ACTIVE")
+                .status("INACTIVE")
 
                 .role(Role.CREATOR)
                 .build();
@@ -98,10 +98,11 @@ public class AuthenticationService {
                         authRequest.getEmail(),
                         authRequest.getPass()));
         var user = _repository.findByEmailAddress(authRequest.getEmail()).orElseThrow();
-        if(user.getStatus().equals("ACTIVE") ){
+
+        if (user.getStatus().equals("ACTIVE")) {
             var jwtToken = _jwtService.generateToken(user);
             return AuthenticationResponse.builder().Token(jwtToken).build();
-        }else {
+        } else {
             return null;
         }
     }

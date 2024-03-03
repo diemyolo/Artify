@@ -17,6 +17,7 @@ public interface UserMapper {
     @Mapping(source = "user.imagePath", target = "imagePath")
     @Mapping(source = "user.pass", target = "password")
     @Mapping(source = "user.status", target = "status")
+    @Mapping(expression = "java(user.getRole().name())", target = "roleName")
     UserDTO toUserDTO(User user);
 
     List<UserDTO> toList(List<User> userList);

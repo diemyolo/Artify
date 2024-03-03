@@ -1,6 +1,5 @@
 package com.example.artworksharingplatform.service;
 
-import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,7 +48,7 @@ public class UserService implements UserServiceImpl {
             }
 
             userRepository.save(userToUpdate);
-            return userMapper.toUserDTO(userToUpdate);
+            return findByEmailAddress(userToUpdate.getEmailAddress());
         } catch (Exception ex) {
             throw new RuntimeException("Error occurred while updating user. Please try again later.");
         }
@@ -75,7 +74,7 @@ public class UserService implements UserServiceImpl {
             User user = userRepository.findByEmailAddress(email)
                     .orElseThrow(() -> new EntityNotFoundException("User not found"));
             if (user != null) {
-                user.setStatus("1");
+                user.setStatus("ACTIVE");
                 userRepository.save(user);
             } else {
                 return null;
