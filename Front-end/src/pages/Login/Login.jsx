@@ -50,7 +50,7 @@ export default function Login() {
       })
       .then((result) => {
         console.log(result);
-        localStorage.setItem("token", result.token);
+        localStorage.setItem("token", result.payload.token);
         alert("Success");
         navigate("/home");
       })
@@ -130,16 +130,16 @@ export default function Login() {
               <Form.Item
                 className="mx-0 px-0 w-full pt-2.5"
                 name="password"
-                rules={[
-                  {
-                    required: true,
-                    message: "Please input your password!",
-                  },
-                  {
-                    pattern: /^.{8,}$/,
-                    message: "Password must be greater than 7 characters!",
-                  },
-                ]}
+                // rules={[
+                //   {
+                //     required: true,
+                //     message: "Please input your password!",
+                //   },
+                //   {
+                //     pattern: /^.{8,}$/,
+                //     message: "Password must be greater than 7 characters!",
+                //   },
+                // ]}
               >
                 <Input.Password
                   className="w-full px-4 py-2.5"

@@ -20,4 +20,5 @@ public interface UserServiceImpl {
 
     UserDTO findByEmailAddress(String email);
 
+    User getUser(UUID userId);
 }

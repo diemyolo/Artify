@@ -84,4 +84,13 @@ public class UserService implements UserServiceImpl {
             throw new Exception(e.getMessage());
         }
     }
+
+    @Override
+    public User getUser(UUID userId) {
+         User userToFind = userRepository.findById(userId)
+        .orElseThrow(() -> new EntityNotFoundException("User not found"));
+        return  userToFind;
+    }
+
+    
 }
