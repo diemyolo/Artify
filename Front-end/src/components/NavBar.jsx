@@ -5,9 +5,9 @@ import { Link } from "react-router-dom";
 import { AiOutlineSearch } from "react-icons/ai";
 
 const NavBar = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isSticky, setIsSticky] = useState(false);
-
+  const token = localStorage.getItem("token");
+  console.log(token)
 
   useEffect(() => {
     const handleScroll = () => {
@@ -18,6 +18,7 @@ const NavBar = () => {
       }
     }
     window.addEventListener('scroll', handleScroll);
+    
     return () => {
       window.addEventListener('scroll', handleScroll);
     }
@@ -56,8 +57,8 @@ const NavBar = () => {
           </div>
 
           <div className="space-x-12 lg:flex items-center">
-            {isLoggedIn ? (
-              <>
+              
+              {token != null ? <>
                 <Link
                   to="/profile"
                   className="font-semibold lg:flex items-center hover:text-[#2f6a81]"
@@ -71,8 +72,7 @@ const NavBar = () => {
                   Logout
                 </button>
               </>
-            ) : (
-              <>
+              :  <>
                 <a
                   href="/login"
                   className="font-semibold lg:flex items-center hover:text-[#2f6a81]"
@@ -86,7 +86,8 @@ const NavBar = () => {
                   Sign Up
                 </Link>
               </>
-            )}
+              }
+              
           </div>
         </div>
       </nav>
