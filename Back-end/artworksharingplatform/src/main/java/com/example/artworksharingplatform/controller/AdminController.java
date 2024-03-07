@@ -109,16 +109,20 @@ public class AdminController {
     @GetMapping("user/profile")
     public ResponseEntity<ApiResponse<UserDTO>> getUserInfo(@RequestParam UUID userId) {
         ApiResponse<UserDTO> apiResponse = new ApiResponse<UserDTO>();
-        if (userId != null) {
-            UserDTO userInfo = adminService.getUserInfo(userId);
-            if (userInfo != null) {
-                apiResponse.ok(userInfo);
-                return ResponseEntity.ok(apiResponse);
+        try {
+            if (userId != null) {
+                UserDTO userInfo = adminService.getUserInfo(userId);
+                if (userInfo != null) {
+                    apiResponse.ok(userInfo);
+                    return ResponseEntity.ok(apiResponse);
+                } else {
+                    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(apiResponse);
+                }
             } else {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(apiResponse);
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiResponse);
             }
-        } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiResponse);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(apiResponse);
         }
     }
 
