@@ -51,7 +51,7 @@ public class PreOrderController {
             preOrderParse.setPreOrderAudience(user);
             preOrderParse.setPreOrderCreator(creator);
             preOrderParse.setRequirement(preOrderRequest.getRequirement());
-            preOrderParse.setStatus("0");
+            preOrderParse.setStatus("Pending");
             _preOrderService.addPreOrder(preOrderParse);
             apiResponse.ok(preOrderParse);
             return ResponseEntity.ok(apiResponse);
