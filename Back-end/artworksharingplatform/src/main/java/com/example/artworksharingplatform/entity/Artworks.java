@@ -12,7 +12,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 
@@ -22,39 +21,39 @@ import lombok.Data;
 @Data
 
 public class Artworks {
-	
-	@Id
-  @UuidGenerator
-  private UUID id;
 
-	@Column(name="Type")
+	@Id
+	@UuidGenerator
+	private UUID id;
+
+	@Column(name = "Type")
 	private String type;
 
-	@Column(name="Price")
+	@Column(name = "Price")
 	private float price;
 
-	@Column(name="Name")
+	@Column(name = "Name")
 	private String artName;
 
-	@Column(name="ImagePath",nullable = false, columnDefinition = "nvarchar(max)")
+	@Column(name = "ImagePath", nullable = false, columnDefinition = "nvarchar(max)")
 	private String imagePath;
 
-	@Column(name="Status")
+	@Column(name = "Status")
 	private String status;
-	
+
 	@Temporal(TemporalType.DATE)
-	@Column(name="CreatedDate")
+	@Column(name = "CreatedDate")
 	private Date createdDate;
 
 	@OneToOne(mappedBy = "artwork", cascade = CascadeType.ALL)
 	private Order order;
 
 	@ManyToOne
-	@JoinColumn(name="PostID")
+	@JoinColumn(name = "PostID")
 	private Post posts;
 
 	@ManyToOne
-	@JoinColumn(name="WatermarkID")
+	@JoinColumn(name = "WatermarkID")
 	private Watermark watermark;
 
 }
