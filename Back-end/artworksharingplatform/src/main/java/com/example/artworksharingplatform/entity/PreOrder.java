@@ -2,6 +2,7 @@ package com.example.artworksharingplatform.entity;
 
 import java.util.UUID;
 
+import lombok.Data;
 import org.hibernate.annotations.UuidGenerator;
 
 import jakarta.persistence.Column;
@@ -14,6 +15,7 @@ import jakarta.persistence.Table;
 import lombok.Data;
 
 @Entity
+@Data
 @Table(name="PreOrders")
 @Data
 public class PreOrder {
