@@ -3,7 +3,10 @@ package com.example.artworksharingplatform.mapper;
 import java.util.List;
 
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
+import com.example.artworksharingplatform.entity.PreOrder;
+import com.example.artworksharingplatform.model.PreOrderDTO;
 
 @Mapper
 public interface PreOrderMapper {
