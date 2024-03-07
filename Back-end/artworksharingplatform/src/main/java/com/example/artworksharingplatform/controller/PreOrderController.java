@@ -2,11 +2,8 @@ package com.example.artworksharingplatform.controller;
 
 import com.example.artworksharingplatform.entity.PreOrder;
 import com.example.artworksharingplatform.entity.User;
-import com.example.artworksharingplatform.mapper.PreOrderMapper;
-import com.example.artworksharingplatform.mapper.UserMapper;
 import com.example.artworksharingplatform.model.ApiResponse;
-import com.example.artworksharingplatform.model.PreOrderDTO;
-import com.example.artworksharingplatform.model.UserDTO;
+import com.example.artworksharingplatform.model.PreOrderRequest;
 import com.example.artworksharingplatform.service.PreOrderService;
 import com.example.artworksharingplatform.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,13 +23,11 @@ public class PreOrderController {
     @Autowired
     PreOrderService _preOrderService;
     @Autowired
-    PreOrderMapper _preOrderMapper;
-    @Autowired
     UserService _userService;
 
     @PostMapping("audience/PreOrderRequest")
     @PreAuthorize("hasRole('ROLE_AUDIENCE')")
-    public ResponseEntity<?> addPreOder(PreOrderDTO preOrderRequest) {
+    public ResponseEntity<?> addPreOder(PreOrderRequest preOrderRequest) {
         ApiResponse<PreOrder> apiResponse = new ApiResponse<PreOrder>();
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         try {
