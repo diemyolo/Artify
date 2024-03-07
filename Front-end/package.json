@@ -17,6 +17,8 @@
     "axios": "^0.24.0",
     "cors": "^2.8.5",
     "express": "^4.18.2",
+    "flowbite": "^2.3.0",
+    "flowbite-react": "^0.7.2",
     "formik": "^2.4.5",
     "link-react": "^3.0.0",
     "react": "^18.2.0",

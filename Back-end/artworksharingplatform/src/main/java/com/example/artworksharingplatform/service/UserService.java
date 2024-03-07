@@ -62,11 +62,27 @@ public class UserService implements UserServiceImpl {
     }
 
     @Override
+    public User getUserById(UUID userId) {
+        User userToFind = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+        return userToFind;
+    }
+
+    @Override
     public UserDTO findByEmailAddress(String email) {
         User user = userRepository.findByEmailAddress(email)
                 .orElseThrow(() -> new EntityNotFoundException("User not found"));
         return userMapper.toUserDTO(user);
     }
+
+    @Override
+    public User findByEmail(String email) {
+        User user = userRepository.findByEmailAddress(email)
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+        return user;
+    }
+
+
 
     @Override
     public User ChangeCreatorStatus(String email) throws Exception {
@@ -84,4 +100,13 @@ public class UserService implements UserServiceImpl {
             throw new Exception(e.getMessage());
         }
     }
+
+    @Override
+    public User getUser(UUID userId) {
+         User userToFind = userRepository.findById(userId)
+        .orElseThrow(() -> new EntityNotFoundException("User not found"));
+        return  userToFind;
+    }
+
+    
 }

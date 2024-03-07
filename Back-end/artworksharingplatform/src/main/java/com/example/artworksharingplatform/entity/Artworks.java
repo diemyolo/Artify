@@ -14,7 +14,6 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
-
 import lombok.Data;
 
 @Entity
@@ -56,4 +55,6 @@ public class Artworks {
 	@JoinColumn(name = "WatermarkID")
 	private Watermark watermark;
 
+	@OneToOne(mappedBy = "preOrderArtwork", cascade = CascadeType.ALL)
+	private PreOrder preOrder;
 }

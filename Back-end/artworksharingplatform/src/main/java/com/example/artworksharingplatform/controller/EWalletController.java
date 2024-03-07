@@ -5,22 +5,39 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import com.example.artworksharingplatform.config.VnPayConfig;
+import com.example.artworksharingplatform.entity.EWallet;
+import com.example.artworksharingplatform.entity.Transaction;
+import com.example.artworksharingplatform.model.ApiResponse;
+import com.example.artworksharingplatform.model.UserDTO;
+import com.example.artworksharingplatform.service.impl.EWalletServiceImpl;
+import com.example.artworksharingplatform.service.impl.TransactionServiceImpl;
+import com.example.artworksharingplatform.service.impl.UserServiceImpl;
+
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 
 
 
@@ -29,6 +46,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 public class EWalletController {
 	
+	@Autowired
+    UserServiceImpl userServiceImpl; 
+
+	@Autowired
+	EWalletServiceImpl walletServiceImpl;
+
+    @Autowired
+    TransactionServiceImpl transactionServiceImpl;
+
 	@PostMapping("/pay")
 	public String getPay(@RequestParam("input_money") String inputMoney) throws UnsupportedEncodingException{
 		
@@ -101,8 +127,75 @@ public class EWalletController {
 	}
 
 	@GetMapping("/addEwallet")
-    public String addMoneyToEwallet(@RequestParam("vnp_Amount") String amount, 
-    @RequestParam("vnp_ResponseCode") String responseCode) {
-        return amount;
+    public ResponseEntity<ApiResponse> addMoneyToEwallet(@RequestParam("vnp_Amount") String amount, 
+    @RequestParam("vnp_ResponseCode") String responseCode) throws ParseException {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        ApiResponse apiResponse = new ApiResponse();
+        if (isUserAuthenticated(authentication)) {
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            String email = userDetails.getUsername(); // getUserName này là email
+            UserDTO userInfo = userServiceImpl.findByEmailAddress(email);
+			EWallet wallet = walletServiceImpl.getWalletByUserId(userInfo.getUserId());
+            float newAmount = wallet.getTotalAmount() + (Float.parseFloat(amount)/100);
+            wallet.setTotalAmount(newAmount);
+            walletServiceImpl.updateWallet(wallet);
+            Date date = new Date();  
+            Transaction transaction = new Transaction();
+            transaction.setUser(userServiceImpl.getUser(userInfo.getUserId()));
+            transaction.setTransactionDate(date);
+            transaction.setTotalMoney(Float.parseFloat(amount)/100);
+            transactionServiceImpl.addTransaction(transaction);
+            apiResponse.ok("ok");
+			return ResponseEntity.ok(apiResponse);
+		} else {
+			return ResponseEntity.ok(apiResponse);
+		}
+    }
+
+	private boolean isUserAuthenticated(Authentication authentication) {
+        return authentication != null && authentication.isAuthenticated()
+                && authentication.getPrincipal() instanceof UserDetails;
+    }
+
+    @GetMapping("/viewEwallet")
+    public ResponseEntity<ApiResponse> getWalletByUserId(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        ApiResponse apiResponse = new ApiResponse();
+        if (isUserAuthenticated(authentication)) {
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            String email = userDetails.getUsername(); // getUserName này là email
+            UserDTO userInfo = userServiceImpl.findByEmailAddress(email);
+			EWallet wallet = walletServiceImpl.getWalletByUserId(userInfo.getUserId());
+            if (wallet != null) {
+                apiResponse.ok(wallet);
+                return ResponseEntity.ok(apiResponse);
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(apiResponse);
+            }
+           
+        }else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiResponse);
+        }
+    }
+
+    @GetMapping("/viewTransactions")
+    public ResponseEntity<ApiResponse> getTransactionsByUserId(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        ApiResponse apiResponse = new ApiResponse();
+        if (isUserAuthenticated(authentication)) {
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            String email = userDetails.getUsername(); // getUserName này là email
+            UserDTO userInfo = userServiceImpl.findByEmailAddress(email);
+			List<Transaction> transactions = transactionServiceImpl.getTransactionsByUserId(userInfo.getUserId());
+            if (transactions != null) {
+                apiResponse.ok(transactions);
+                return ResponseEntity.ok(apiResponse);
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(apiResponse);
+            }
+           
+        }else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiResponse);
+        }
     }
 }

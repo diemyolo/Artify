@@ -15,9 +15,13 @@ public interface UserServiceImpl {
     UserDTO updateUser(UserDTO updatedUser);
 
     UserDTO getUserInfo(UUID userId);
+    User getUserById(UUID userId);
 
     User ChangeCreatorStatus(String email) throws Exception;
 
     UserDTO findByEmailAddress(String email);
+    User findByEmail(String email);
 
+
+    User getUser(UUID userId);
 }
