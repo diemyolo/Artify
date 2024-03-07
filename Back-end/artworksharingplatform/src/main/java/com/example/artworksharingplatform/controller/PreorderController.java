@@ -18,15 +18,8 @@ import com.example.artworksharingplatform.service.impl.UserServiceImpl;
 @PreAuthorize("hasRole('ROLE_CREATOR')")
 public class PreorderController {
     @Autowired
-    UserServiceImpl userServiceImpl;
 
     @Autowired
     CloudinaryService cloudinaryService;
 
-    @GetMapping("path")
-    @PreAuthorize("hasRole('ROLE_AUDIENCE') or hasRole('ROLE_CREATOR') or hasRole('ROLE_ADMIN')")
-    public String getMethodName(@RequestParam String param) {
-        return new String();
     }
-
-}
