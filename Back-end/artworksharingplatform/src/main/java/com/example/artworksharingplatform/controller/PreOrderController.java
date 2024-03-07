@@ -1,32 +1,37 @@
 package com.example.artworksharingplatform.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.artworksharingplatform.entity.PreOrder;
 import com.example.artworksharingplatform.entity.User;
 import com.example.artworksharingplatform.model.ApiResponse;
 import com.example.artworksharingplatform.model.PreOrderRequest;
+import com.example.artworksharingplatform.service.CloudinaryService;
 import com.example.artworksharingplatform.service.PreOrderService;
 import com.example.artworksharingplatform.service.UserService;
 
 @RestController
 @RequestMapping("api/auth")
 @PreAuthorize("hasRole('ROLE_CREATOR')")
-public class PreorderController {
+public class PreOrderController {
     @Autowired
     UserService _userService;
-  
+
     @Autowired
     PreOrderService _preOrderService;
-  
+
     @Autowired
     CloudinaryService cloudinaryService;
-  
+
     @PostMapping("audience/PreOrderRequest")
     @PreAuthorize("hasRole('ROLE_AUDIENCE')")
     public ResponseEntity<?> addPreOder(PreOrderRequest preOrderRequest) {
@@ -55,3 +60,4 @@ public class PreorderController {
             return new ResponseEntity<>(apiResponse, HttpStatus.BAD_REQUEST);
         }
     }
+}

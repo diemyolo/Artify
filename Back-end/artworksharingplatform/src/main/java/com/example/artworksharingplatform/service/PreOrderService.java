@@ -1,9 +1,10 @@
-package com.example.artworksharingplatform.service.impl;
+package com.example.artworksharingplatform.service;
 
-import com.example.artworksharingplatform.entity.PreOrder;
 import org.springframework.stereotype.Service;
 
+import com.example.artworksharingplatform.entity.PreOrder;
+
 @Service
-public interface PreOrderServiceImpl  {
+public interface PreOrderService {
     public void addPreOrder(PreOrder preOrderRequest) throws Exception;
 }
