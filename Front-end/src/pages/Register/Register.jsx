@@ -1,28 +1,17 @@
 import React from "react";
-import { Checkbox, Form, Input } from "antd";
+import { Form, Input } from "antd";
 import login from "../../assets/login.jpg"
-import { NavLink } from "react-router-dom";
-import { useFormik } from "formik";
+import { NavLink, useNavigate } from "react-router-dom";
 
 const formItemLayout = {
   labelCol: { span: 24 },
   wrapperCol: { span: 24 },
 };
 
-export default function Login() {
-  const formik = useFormik({
-    initialValues: {
-      userName: "",
-      email: "",
-      password: "",
-      confirmPassword: "",
-      telephone: "",
-    },
-    onSubmit: (values) => {
-      alert(JSON.stringify(values));
-    },
-  });
+export default function Register() {
+  const navigate = useNavigate();
 
+  
   
 
   return (
@@ -49,7 +38,6 @@ export default function Login() {
                 remember: true,
               }}
               autoComplete="off"
-              onSubmit={formik.handleSubmit}
             >
               <Form.Item
                 className="mx-0 px-0 w-full"
@@ -69,8 +57,8 @@ export default function Login() {
                   className="w-full px-4 py-2.5"
                   name="userName"
                   placeholder="Enter your user name"
-                  value={formik.values.userName}
-                  onChange={formik.handleChange}
+                  // value={formik.values.userName}
+                  // onChange={formik.handleChange}
                 />
               </Form.Item>
 
@@ -93,8 +81,8 @@ export default function Login() {
                   className="w-full px-4 py-2.5"
                   name="email"
                   placeholder="Enter your email"
-                  value={formik.values.email}
-                  onChange={formik.handleChange}
+                  // value={formik.values.email}
+                  // onChange={formik.handleChange}
                 />
               </Form.Item>
 
@@ -115,8 +103,8 @@ export default function Login() {
                 <Input.Password
                   className="w-full px-4 py-2.5"
                   placeholder="Enter your password"
-                  value={formik.values.password}
-                  onChange={formik.handleChange}
+                  // value={formik.values.password}
+                  // onChange={formik.handleChange}
                 />
               </Form.Item>
 
@@ -137,8 +125,8 @@ export default function Login() {
                 <Input.Password
                   className="w-full px-4 py-2.5"
                   placeholder="Enter your confirm password"
-                  value={formik.values.confirmPassword}
-                  onChange={formik.handleChange}
+                  // value={formik.values.confirmPassword}
+                  // onChange={formik.handleChange}
                 />
               </Form.Item>
 
@@ -159,15 +147,15 @@ export default function Login() {
                 <Input
                   className="w-full px-4 py-2.5"
                   placeholder="Enter your telephone number"
-                  value={formik.values.telephone}
-                  onChange={formik.handleChange}
+                  // value={formik.values.telephone}
+                  // onChange={formik.handleChange}
                 />
               </Form.Item>
               
 
               <div className="w-full flex flex-col my-3">
                 <button
-                  className="w-full bg-[#060606] text-white my-2 font-semibold rounded-md p-4 text-center flex items-center justify-center focus:outline-none hover:bg-green-600 "
+                  className="w-full bg-[#060606] text-white my-2 font-semibold rounded-md p-4 text-center flex items-center justify-center focus:outline-none hover:bg-[#2f6a81] "
                   type="submit"
                 >
                   Sign Up
@@ -180,8 +168,8 @@ export default function Login() {
             <p className="text-sm font-normal text-black/70">
               Already have an account?
               <span className="font-semibold underline underline-offset-1 ml-1">
-                <NavLink to={"/register"}>
-                  <button className="hover:outline-none hover:bg-black underline underline-offset-2 bg-[#f5f5f5] text-red-700 hover:text-white">
+                <NavLink to={"/"}>
+                  <button className="hover:outline-none hover:font-bold hover:text-[#2f6a81] underline underline-offset-2 bg-[#f5f5f5] text-red-700 ">
                     Sign In
                   </button>
                 </NavLink>

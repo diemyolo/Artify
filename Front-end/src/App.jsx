@@ -3,6 +3,8 @@ import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 import Login from "./pages/Login/Login";
 import Register from "./pages/Register/Register";
 import Home from "./pages/Home/Home"
+import ViewEwallet from "./pages/EWallet/ViewEwallet";
+import ReturnWallet from "./pages/EWallet/ReturnWallet";
 
 
 const router = createBrowserRouter([
@@ -18,6 +20,13 @@ const router = createBrowserRouter([
     path: "/home",
     element: <div><Home /></div>,
   },
+  {
+    path: "/viewEwallet",
+    element: <div><ViewEwallet /></div>,
+  },{
+    path: "/returnEwallet",
+    element: <div><ReturnWallet /></div>,
+  }
 ]);
 
 function App() {

@@ -23,4 +23,5 @@ public interface UserServiceImpl {
     User findByEmail(String email);
 
 
+    User getUser(UUID userId);
 }

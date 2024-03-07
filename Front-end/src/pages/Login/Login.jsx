@@ -4,6 +4,7 @@ import "./Login.scss";
 import { NavLink, useNavigate } from "react-router-dom";
 import GoogleButton from "react-google-button";
 import login from "../../assets/login.jpg"
+import axios from "axios";
 
 const formItemCol = {
   labelCol: { span: 24 },
@@ -17,42 +18,38 @@ export default function Login() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const handleLogin = () => {
-    const myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/json");
-
-
-    const raw = JSON.stringify({
-      email: email,
-      pass: password,
-    });
-
-    const requestOptions = {
-      method: "POST",
-      headers: myHeaders,
-      body: raw,
-      redirect: "follow",
+    const myHeaders = {
+      "Content-Type": "application/json",
     };
 
-    fetch("http://localhost:8080/api/auth/login", requestOptions)
+    const data = {
+      email: email,
+      pass: password,
+    };
+
+    axios
+      .post("http://localhost:8080/api/auth/login", data, { headers: myHeaders })
       .then((response) => {
         console.log(response);
-        if (response.ok) {
-          return response.json();
+        if (response.status === 200) {
+          return response.data.payload;
         }
         throw Error(response.statusText);
       })
       .then((result) => {
         console.log(result);
-        localStorage.setItem("token", result.token);
+        localStorage.setItem("token", result.payload.token);
         alert("Success");
         navigate("/home");
-        setIsLoggedIn(true); 
+        setIsLoggedIn(true);
+        console.log(setIsLoggedIn);
       })
       .catch((error) => {
         console.error(error);
-        alert("Email, password invalid");
+        alert("Email or password is invalid");
       });
   };
+
 
   return (
     <div className="bg-[#f5f5f5] w-full h-screen flex items-center">
@@ -117,6 +114,7 @@ export default function Login() {
                   placeholder="Enter your email"
                   // value={formik.values.email}
                   // onChange={formik.handleChange}
+                  value={email}
                   onChange={(e) => setEmail(e.target.value)}
                 />
               </Form.Item>
@@ -124,22 +122,23 @@ export default function Login() {
               <Form.Item
                 className="mx-0 px-0 w-full pt-2.5"
                 name="password"
-                rules={[
-                  {
-                    required: true,
-                    message: "Please input your password!",
-                  },
-                  {
-                    pattern: /^.{8,}$/,
-                    message: "Password must be greater than 7 characters!",
-                  },
-                ]}
+                // rules={[
+                //   {
+                //     required: true,
+                //     message: "Please input your password!",
+                //   },
+                //   {
+                //     pattern: /^.{8,}$/,
+                //     message: "Password must be greater than 7 characters!",
+                //   },
+                // ]}
               >
                 <Input.Password
                   className="w-full px-4 py-2.5"
                   placeholder="Enter your password"
                   // value={formik.values.password}
                   // onChange={formik.handleChange}
+                  value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   name="password"
                 />
@@ -155,13 +154,13 @@ export default function Login() {
                   style={{ justifyContent: "space-between", width: "100%" }}
                 >
                   <Checkbox>Remember me</Checkbox>
-                  <p className="font-bold cursor-pointer hover:text-green-600">Forgot Password</p>
+                  <p className="font-bold cursor-pointer hover:text-[#2f6a81]">Forgot Password</p>
                 </div>
               </Form.Item>
 
               <div className="w-full flex flex-col my-4">
                 <button
-                  className="w-full bg-[#060606] text-white my-2 font-semibold rounded-md p-4 text-center flex items-center justify-center focus:outline-none hover:bg-green-600 mt-3"
+                  className="w-full bg-[#060606] text-white my-2 font-semibold rounded-md p-4 text-center flex items-center justify-center focus:outline-none hover:bg-[#2f6a81] mt-3"
                   type="submit"
                   onClick={handleLogin}
                 >
@@ -194,7 +193,7 @@ export default function Login() {
               Don't have an account?
               <span className="font-semibold underline underline-offset-1 ml-1">
                 <NavLink to={"/register"}>
-                  <button className="hover:outline-none hover:bg-black underline underline-offset-2 bg-[#f5f5f5] text-red-700 hover:text-white">Sign Up</button>
+                  <button className="hover:outline-none hover:text-[#2f6a81] underline underline-offset-2 bg-[#f5f5f5] text-red-700 hover:font-bold">Sign Up</button>
                 </NavLink>
               </span>
             </p>
