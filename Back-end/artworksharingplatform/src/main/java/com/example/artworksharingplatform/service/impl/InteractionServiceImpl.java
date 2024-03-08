@@ -9,11 +9,12 @@ import org.springframework.stereotype.Service;
 import com.example.artworksharingplatform.entity.Interaction;
 import com.example.artworksharingplatform.entity.Post;
 import com.example.artworksharingplatform.entity.User;
-
 import com.example.artworksharingplatform.repository.InteractionRepository;
 import com.example.artworksharingplatform.repository.PostRepository;
 import com.example.artworksharingplatform.repository.UserRepository;
 import com.example.artworksharingplatform.service.InteractionService;
+
+import jakarta.persistence.EntityNotFoundException;
 
 @Service
 public class InteractionServiceImpl implements InteractionService {
@@ -39,22 +40,32 @@ public class InteractionServiceImpl implements InteractionService {
         Interaction interaction = interactionRepository.findByInteractionPostIdAndInteractionAudienceId(postId, userId);
 
         if (interaction == null) {
-//            User user = userRepository.findById(userId)
-//                    .orElseThrow(() -> new EntityNotFoundException("User not found"));
-//
-//            Post post = postRepository.findById(postId)
-//                    .orElseThrow(() -> new EntityNotFoundException("Post not found"));
-//
-//            Interaction newInteraction = new Interaction();
-//            newInteraction.setIsLiked(true);
-//            newInteraction.setInteractionAudience(user);
-//            newInteraction.setInteractionPost(post);
-//
-//            return interactionRepository.save(newInteraction);
-            return null;
+            User user = userRepository.findById(userId)
+                    .orElseThrow(() -> new EntityNotFoundException("User not found"));
+
+            Post post = postRepository.findById(postId)
+                    .orElseThrow(() -> new EntityNotFoundException("Post not found"));
+
+            Interaction newInteraction = new Interaction();
+            newInteraction.setIsLiked(true);
+            newInteraction.setInteractionAudience(user);
+            newInteraction.setInteractionPost(post);
+            interactionRepository.save(newInteraction);
+
+            post.setNumberOfLikes(interactionRepository.countByIsLikedTrue());
+            postRepository.save(post);
+
+            return newInteraction;
         } else {
             interaction.setIsLiked(!interaction.getIsLiked());
-            return interactionRepository.save(interaction);
+            interactionRepository.save(interaction);
+
+            Post post = postRepository.findById(postId)
+                    .orElseThrow(() -> new EntityNotFoundException("Post not found"));
+            post.setNumberOfLikes(interactionRepository.countByIsLikedTrue());
+            postRepository.save(post);
+
+            return interaction;
         }
     }
 }

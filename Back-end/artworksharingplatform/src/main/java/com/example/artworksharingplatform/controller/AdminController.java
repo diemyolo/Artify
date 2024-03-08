@@ -1,12 +1,5 @@
 package com.example.artworksharingplatform.controller;
 
-import com.example.artworksharingplatform.entity.Post;
-import com.example.artworksharingplatform.entity.User;
-import com.example.artworksharingplatform.model.ApiResponse;
-import com.example.artworksharingplatform.repository.UserRepository;
-import com.example.artworksharingplatform.service.PostService;
-import com.example.artworksharingplatform.service.UserService;
-
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -26,15 +19,16 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.example.artworksharingplatform.entity.Post;
+import com.example.artworksharingplatform.entity.User;
 import com.example.artworksharingplatform.mapper.UserMapper;
 import com.example.artworksharingplatform.model.ApiResponse;
 import com.example.artworksharingplatform.model.UserDTO;
 import com.example.artworksharingplatform.repository.UserRepository;
 import com.example.artworksharingplatform.service.AdminService;
 import com.example.artworksharingplatform.service.CloudinaryService;
-import com.example.artworksharingplatform.service.JWTServices.AuthenticationService;
-
-import java.util.UUID;
+import com.example.artworksharingplatform.service.PostService;
+import com.example.artworksharingplatform.service.UserService;
 
 @RestController
 @RequestMapping("/api/auth/admin")
@@ -115,16 +109,20 @@ public class AdminController {
     @GetMapping("user/profile")
     public ResponseEntity<ApiResponse<UserDTO>> getUserInfo(@RequestParam UUID userId) {
         ApiResponse<UserDTO> apiResponse = new ApiResponse<UserDTO>();
-        if (userId != null) {
-            UserDTO userInfo = adminService.getUserInfo(userId);
-            if (userInfo != null) {
-                apiResponse.ok(userInfo);
-                return ResponseEntity.ok(apiResponse);
+        try {
+            if (userId != null) {
+                UserDTO userInfo = adminService.getUserInfo(userId);
+                if (userInfo != null) {
+                    apiResponse.ok(userInfo);
+                    return ResponseEntity.ok(apiResponse);
+                } else {
+                    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(apiResponse);
+                }
             } else {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(apiResponse);
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiResponse);
             }
-        } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiResponse);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(apiResponse);
         }
     }
 
