@@ -3,6 +3,8 @@ import { Avatar, Card } from "flowbite-react";
 import { Link } from "react-router-dom";
 import login from "../assets/login.jpg";
 import CommentBar from './CommentBar';
+import { MdOutlineFileDownload } from "react-icons/md";
+import { AiOutlineUserAdd } from "react-icons/ai";
 
 const CardItem = () => {
     const [post, setPost] = useState([]);
@@ -63,6 +65,17 @@ const CardItem = () => {
                                             </p>
                                             <p className="text-gray-500 text-sm">5 mins ago</p>
                                         </div>
+                                        <div className='flex gap-4'>
+                                            <div className='sm:flex  gap-2 hidden items-center text-white bg-[#2f6a81] py-2 px-4 transition-all duration-300 rounded-full'>
+                                                <AiOutlineUserAdd  className='cursor-pointer' size={20} style={{ color: '#fff', fontWeight: 'bold' }} />
+                                                <button type='submit'>Follow</button>
+                                            </div>
+
+                                            <div className='sm:flex gap-2 hidden items-center text-white bg-[#2f6a81] py-2 px-4 transition-all duration-300 rounded-full'>
+                                                <MdOutlineFileDownload className='cursor-pointer' size={20} style={{ color: '#fff', fontWeight: 'bold' }} />
+                                                <button type='submit'>Download</button>
+                                            </div>
+                                        </div>
                                     </div>
 
                                     <div>
@@ -95,12 +108,14 @@ const CardItem = () => {
                                             20
                                         </button>
                                     </div>
+
                                 </div>
 
                                 <div className='flex flex-col items-center justify-start w-[35%] gap-[70px] p-10  bg-slate-200'>
                                     <CommentBar />
                                 </div>
                             </div>
+
 
                         </Card>
                     )

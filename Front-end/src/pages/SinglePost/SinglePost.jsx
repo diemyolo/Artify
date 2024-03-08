@@ -44,7 +44,6 @@ const SinglePost = () => {
                 </div>
             </div>
         </div>
-
     )
 }
 
