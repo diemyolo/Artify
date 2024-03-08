@@ -20,7 +20,7 @@ import com.example.artworksharingplatform.mapper.UserMapper;
 import com.example.artworksharingplatform.model.ApiResponse;
 import com.example.artworksharingplatform.model.UserDTO;
 import com.example.artworksharingplatform.service.CloudinaryService;
-import com.example.artworksharingplatform.service.impl.UserServiceImpl;
+import com.example.artworksharingplatform.service.UserService;
 
 @RestController
 @RequestMapping("api/auth")
@@ -30,7 +30,7 @@ public class UserController {
     UserMapper userMapper;
 
     @Autowired
-    UserServiceImpl userServiceImpl;
+    UserService userService;
 
     @Autowired
     CloudinaryService cloudinaryService;
@@ -42,7 +42,7 @@ public class UserController {
         if (isUserAuthenticated(authentication)) {
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
             String email = userDetails.getUsername(); // getUserName này là email
-            UserDTO userInfo = userServiceImpl.findByEmailAddress(email);
+            UserDTO userInfo = userService.findByEmailAddress(email);
             if (userInfo != null) {
                 apiResponse.ok(userInfo);
                 return ResponseEntity.ok(apiResponse);
@@ -74,7 +74,7 @@ public class UserController {
                     updatedUser.setImagePath(uploadImage(file));
                 }
                 updatedUser.setEmailAddress(email);
-                UserDTO user = userServiceImpl.updateUser(updatedUser);
+                UserDTO user = userService.updateUser(updatedUser);
                 apiResponse.ok(user);
                 return ResponseEntity.ok(apiResponse);
             } catch (Exception ex) {
