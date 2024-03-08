@@ -41,10 +41,10 @@ const PostCard = () => {
 
     return (
         <>
-            <div className='flex justify-center'>
+            <div className='flex flex-col justify-center items-center'>
                 {post.length > 0 ?
                     post.map((p) =>
-                        <Card key={p.postId} className="justify-center flex bg-white shadow-md shadow-gray-300 rounded-md mb-5 w-1/2">
+                        <Card key={p.postId} className="justify-center flex bg-white shadow-md shadow-gray-300 rounded-md mb-5 w-1/2 gap-1">
                             <div className="flex gap-3">
                                 <div>
                                     <Link href="">
@@ -62,14 +62,14 @@ const PostCard = () => {
                                         <span className="ml-1.5">shared a post</span>
 
                                     </p>
-                                    <p className="text-gray-500 text-sm">5 mins ago</p>
+                                    <p className="text-gray-500 text-sm">{p.artList.map(item => item.createdDate)}</p>
                                 </div>
                             </div>
 
                             <div>
                                 <p className="my-2 text-sm">{p.description}</p>
                                 <Link to={`/singlePost`}>
-                                    <img src={login} className="rounded-md w-full overflow-hidden" />
+                                    <img src={p.artList.map(item => item.imagePath)} className="rounded-md w-full overflow-hidden" />
                                 </Link>
                             </div>
 
@@ -79,7 +79,7 @@ const PostCard = () => {
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
                                             <path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
                                         </svg>
-                                        20
+                                        {p.interactions.map((interaction) => interaction.interactionPost.numberOfLikes)}
                                     </button>
                                     <button className="flex gap-2 items-center">
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">

@@ -40,7 +40,7 @@ const CardItem = () => {
 
     return (
         <>
-            <div className='flex justify-center'>
+            <div className='flex flex-col justify-center items-center'>
                 {post.length > 0 ?
                     post.map((p) =>
                         <Card key={p.postId} className="flex justify-center bg-white mb-5 w-full" >
