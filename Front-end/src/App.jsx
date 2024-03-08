@@ -25,9 +25,11 @@ const router = createBrowserRouter([
     path: "/singlePost",
     element: <div><SinglePost /></div>,
   },
+  {
     path: "/viewEwallet",
     element: <div><ViewEwallet /></div>,
-  },{
+  },
+  {
     path: "/returnEwallet",
     element: <div><ReturnWallet /></div>,
   }
