@@ -17,14 +17,14 @@ import com.example.artworksharingplatform.model.ApiResponse;
 import com.example.artworksharingplatform.model.PreOrderRequest;
 import com.example.artworksharingplatform.service.CloudinaryService;
 import com.example.artworksharingplatform.service.PreOrderService;
-import com.example.artworksharingplatform.service.UserService;
+import com.example.artworksharingplatform.service.impl.UserServiceImpl;
 
 @RestController
 @RequestMapping("api/auth")
 @PreAuthorize("hasRole('ROLE_CREATOR')")
 public class PreOrderController {
     @Autowired
-    UserService _userService;
+    UserServiceImpl _userService;
 
     @Autowired
     PreOrderService _preOrderService;

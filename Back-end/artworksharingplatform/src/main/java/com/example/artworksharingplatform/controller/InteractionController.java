@@ -3,7 +3,6 @@ package com.example.artworksharingplatform.controller;
 import java.util.List;
 import java.util.UUID;
 
-import com.example.artworksharingplatform.model.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,18 +14,18 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.artworksharingplatform.entity.Interaction;
 import com.example.artworksharingplatform.mapper.CommentMapper;
 import com.example.artworksharingplatform.mapper.InteractionMapper;
+import com.example.artworksharingplatform.model.ApiResponse;
 import com.example.artworksharingplatform.model.InteractionDTO;
 import com.example.artworksharingplatform.model.UserDTO;
 import com.example.artworksharingplatform.service.CommentService;
 import com.example.artworksharingplatform.service.InteractionService;
-import com.example.artworksharingplatform.service.UserService;
-
-import org.springframework.web.bind.annotation.RequestParam;
+import com.example.artworksharingplatform.service.impl.UserServiceImpl;
 
 @RestController
 @RequestMapping("api/auth")
@@ -36,7 +35,7 @@ public class InteractionController {
     InteractionService interactionService;
 
     @Autowired
-    UserService userService;
+    UserServiceImpl userService;
 
     @Autowired
     CommentService commentService;
