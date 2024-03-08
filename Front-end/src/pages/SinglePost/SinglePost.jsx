@@ -36,7 +36,7 @@ const SinglePost = () => {
     console.log(post);
 
     return (
-        <div className='h-screen overflow-hidden'>
+        <div className='h-screen'>
             <NavBar />
             <div className="flex flex-row justify-start w-full bg-gray-100">
                 <div className="flex flex-row justify-start w-full p-28">
