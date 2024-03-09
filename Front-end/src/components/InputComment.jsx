@@ -7,7 +7,7 @@ const InputComment = () => {
     return (
         <div className="flex mt-4 gap-3">
             <div>
-                <Avatar />
+                <Avatar rounded  />
             </div>
             <div className="grow rounded-lg border">
                 <form>
