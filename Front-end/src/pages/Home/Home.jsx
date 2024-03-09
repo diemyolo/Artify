@@ -11,11 +11,10 @@ export default function Home() {
         <div className="xl:max-w-[1280px] w-full">
           <NavBar />
           <Hero />
-          <div className='m-10 flex justify-center'>
+          <div className='m-10 flex flex-col items-center justify-center'>
             <PostCard />
           </div>
         </div>
-
       </div>
     </div>
 

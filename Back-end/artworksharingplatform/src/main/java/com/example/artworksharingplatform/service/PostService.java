@@ -1,5 +1,6 @@
 package com.example.artworksharingplatform.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -8,9 +9,15 @@ import org.springframework.stereotype.Service;
 
 import com.example.artworksharingplatform.entity.Artworks;
 import com.example.artworksharingplatform.entity.Post;
+import com.example.artworksharingplatform.mapper.ArtworkMapper;
+import com.example.artworksharingplatform.mapper.PostMapper;
+import com.example.artworksharingplatform.model.ArtworkDTO;
+import com.example.artworksharingplatform.model.PostDTO;
 import com.example.artworksharingplatform.repository.ArtworkRepository;
 import com.example.artworksharingplatform.repository.PostRepository;
 import com.example.artworksharingplatform.service.impl.PostServiceImpl;
+
+import jakarta.persistence.EntityNotFoundException;
 
 @Service
 public class PostService implements PostServiceImpl {
@@ -21,6 +28,12 @@ public class PostService implements PostServiceImpl {
 
     @Autowired
     ArtworkRepository artworkRepository;
+
+    @Autowired
+    PostMapper postMapper;
+
+    @Autowired
+    ArtworkMapper artworkMapper;
 
     @Override
     public List<Post> getAllPosts() {
@@ -42,6 +55,45 @@ public class PostService implements PostServiceImpl {
         } catch (Exception e) {
             throw new Exception(e.getMessage());
         }
+    }
+
+    @Override
+    public Post addPost(PostDTO postDTO) {
+        // TODO Auto-generated method stub
+       Post post = new Post();
+       post.setDescription(postDTO.getDescription());
+       Post result = postRepository.save(post);
+       return result;
+    }
+
+    @Override
+    public List<Artworks> convertArtList(List<ArtworkDTO> artsDTO,Post post) {
+        List<Artworks> result = new ArrayList<Artworks>();
+        for(ArtworkDTO artDTO : artsDTO) {
+            Artworks art = new Artworks();
+            art.setArtName(artDTO.getArtName());
+            art.setType(artDTO.getType());
+            art.setPrice(artDTO.getPrice());
+            art.setImagePath(artDTO.getImagePath()); 
+            art.setStatus(artDTO.getStatus());
+            art.setId(artDTO.getArtId());
+            art.setPosts(post);
+            result.add(art);
+        }
+        return result;
+    }
+
+    @Override
+    public PostDTO getPostById(UUID id) {
+        // TODO Auto-generated method stub
+       Post post = postRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Post Not Found"));
+       return postMapper.toPostDTO(post);
+    }
+
+    @Override
+    public ArtworkDTO getArtByArtId(UUID artId) {
+        Artworks art = artworkRepository.findById(artId).orElseThrow(() -> new EntityNotFoundException("Art Not Found"));
+        return artworkMapper.tArtworkDTO(art);
     }
 
 

@@ -7,7 +7,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.example.artworksharingplatform.config.VnPayConfig;
 import com.example.artworksharingplatform.entity.EWallet;
 import com.example.artworksharingplatform.entity.Transaction;
+import com.example.artworksharingplatform.mapper.TransactionMapper;
 import com.example.artworksharingplatform.model.ApiResponse;
+import com.example.artworksharingplatform.model.TransactionDTO;
 import com.example.artworksharingplatform.model.UserDTO;
 import com.example.artworksharingplatform.service.impl.EWalletServiceImpl;
 import com.example.artworksharingplatform.service.impl.TransactionServiceImpl;
@@ -16,6 +18,7 @@ import com.example.artworksharingplatform.service.impl.UserServiceImpl;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -29,6 +32,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -54,6 +58,9 @@ public class EWalletController {
 
     @Autowired
     TransactionServiceImpl transactionServiceImpl;
+
+    @Autowired
+    TransactionMapper transactionMapper;
 
 	@PostMapping("/pay")
 	public String getPay(@RequestParam("input_money") String inputMoney) throws UnsupportedEncodingException{
@@ -139,13 +146,15 @@ public class EWalletController {
             float newAmount = wallet.getTotalAmount() + (Float.parseFloat(amount)/100);
             wallet.setTotalAmount(newAmount);
             walletServiceImpl.updateWallet(wallet);
-            Date date = new Date();  
+            Timestamp date = new Timestamp(System.currentTimeMillis());
+            // Date date = new Date();  
             Transaction transaction = new Transaction();
             transaction.setUser(userServiceImpl.getUser(userInfo.getUserId()));
             transaction.setTransactionDate(date);
             transaction.setTotalMoney(Float.parseFloat(amount)/100);
             transactionServiceImpl.addTransaction(transaction);
-            apiResponse.ok("ok");
+            TransactionDTO result = transactionMapper.toTransactionDTO(transaction);
+            apiResponse.ok(result);
 			return ResponseEntity.ok(apiResponse);
 		} else {
 			return ResponseEntity.ok(apiResponse);
@@ -198,4 +207,21 @@ public class EWalletController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiResponse);
         }
     }
+
+    @GetMapping("/getTransaction")
+    public ResponseEntity<ApiResponse> getTransactionById(@RequestParam("id") String transId){
+        ApiResponse apiResponse = new ApiResponse();
+        try{
+            UUID id = UUID.fromString(transId);
+            TransactionDTO result = transactionServiceImpl.getTransactionById(id);
+            apiResponse.ok(result);
+            return ResponseEntity.ok(apiResponse);
+        }catch(Exception e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiResponse);
+        }
+    }
+    
+    
+
+    
 }

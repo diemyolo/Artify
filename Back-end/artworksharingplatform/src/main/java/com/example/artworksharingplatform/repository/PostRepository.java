@@ -9,5 +9,5 @@ import com.example.artworksharingplatform.entity.Post;
 
 @Repository
 public interface PostRepository extends JpaRepository<Post, UUID> {
-
+	
 }

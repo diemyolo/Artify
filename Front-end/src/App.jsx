@@ -5,7 +5,9 @@ import Register from "./pages/Register/Register";
 import Home from "./pages/Home/Home"
 import ViewEwallet from "./pages/EWallet/ViewEwallet";
 import ReturnWallet from "./pages/EWallet/ReturnWallet";
-
+import AddMoneyInput from "./pages/EWallet/AddMoneyInput";
+import AddSuccess from "./pages/EWallet/AddSuccess";
+import AddPost from "./pages/Post/AddPost";
 
 const router = createBrowserRouter([
   {
@@ -23,9 +25,22 @@ const router = createBrowserRouter([
   {
     path: "/viewEwallet",
     element: <div><ViewEwallet /></div>,
-  },{
+  },
+  {
     path: "/returnEwallet",
     element: <div><ReturnWallet /></div>,
+  },
+  {
+    path: "/addInputMoney",
+    element: <div><AddMoneyInput /></div>,
+  },
+  {
+    path: "/addSuccess",
+    element: <div><AddSuccess /></div>,
+  },
+  {
+    path: "/addPost",
+    element: <div><AddPost /></div>,
   }
 ]);
 

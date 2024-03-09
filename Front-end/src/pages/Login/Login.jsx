@@ -38,7 +38,7 @@ export default function Login() {
       })
       .then((result) => {
         console.log(result);
-        localStorage.setItem("token", result.payload.token);
+        localStorage.setItem("token", result.token);
         alert("Success");
         navigate("/home");
         setIsLoggedIn(true);

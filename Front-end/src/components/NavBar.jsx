@@ -60,7 +60,7 @@ const NavBar = () => {
               
               {token != null ? <>
                 <Link
-                  to="/profile"
+                  to="/viewEwallet"
                   className="font-semibold lg:flex items-center hover:text-[#2f6a81]"
                 >
                   Profile
