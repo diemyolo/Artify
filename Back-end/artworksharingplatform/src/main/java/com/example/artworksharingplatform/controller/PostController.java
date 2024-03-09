@@ -17,6 +17,7 @@ import com.example.artworksharingplatform.entity.Artworks;
 import com.example.artworksharingplatform.entity.Post;
 import com.example.artworksharingplatform.mapper.PostMapper;
 import com.example.artworksharingplatform.model.ApiResponse;
+import com.example.artworksharingplatform.model.ArtworkDTO;
 import com.example.artworksharingplatform.model.PostDTO;
 import com.example.artworksharingplatform.service.ArtworkService;
 import com.example.artworksharingplatform.service.CloudinaryService;
@@ -24,7 +25,11 @@ import com.example.artworksharingplatform.service.PostService;
 
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.UUID;
+
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+
 
 @RestController
 @RequestMapping("api/auth")
@@ -38,7 +43,6 @@ public class PostController {
 
 	@Autowired
 	ArtworkService artworkService;
-
 
 	@Autowired
     private CloudinaryService cloudinaryService;
@@ -78,9 +82,12 @@ public class PostController {
         return  ResponseEntity.ok(url);
     }
 
-	@PostMapping("audience/addArtwork")
+	@PostMapping("addPost")
 	public ResponseEntity<String> addArtwork(@RequestPart("image") List<MultipartFile> files,
-	@RequestPart("artwork") List<Artworks> artworks){
+	@RequestPart("post") PostDTO postDTO){
+		Post savedPost = postService.addPost(postDTO);
+		List<ArtworkDTO> artsDTO = postDTO.getArtList();
+		List<Artworks> artworks = postService.convertArtList(artsDTO, savedPost);
 		for (int i = 0; i < files.size(); i++) {
 			MultipartFile file = files.get(i);
 			Artworks artwork = artworks.get(i);
@@ -91,4 +98,42 @@ public class PostController {
 		}
 		return ResponseEntity.ok("ok");
 	}
+
+	@GetMapping("getPostById")
+	public ResponseEntity<ApiResponse> getPostById(@RequestParam("postId") String postId) {
+		ApiResponse apiResponse = new ApiResponse();
+		try{
+			UUID convertedPostId = UUID.fromString(postId);
+			PostDTO result = postService.getPostById(convertedPostId);
+			if(result == null){
+				return ResponseEntity.status(HttpStatus.NOT_FOUND).body(apiResponse);
+			}
+			apiResponse.ok(result);
+			return ResponseEntity.ok(apiResponse);
+		}catch(Exception e){
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiResponse);
+		}
+		
+	}
+
+	@GetMapping("getArtById")
+	public ResponseEntity<ApiResponse> getArtById(@RequestParam("artId") String artId){
+		ApiResponse apiResponse = new ApiResponse();
+		try{
+			UUID convertedArtId = UUID.fromString(artId);
+			ArtworkDTO art = postService.getArtByArtId(convertedArtId);
+			if(art == null){
+				return ResponseEntity.status(HttpStatus.NOT_FOUND).body(apiResponse);
+			}
+			apiResponse.ok(art);
+			return ResponseEntity.ok(apiResponse);
+		}catch(Exception e){
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiResponse);
+		}
+	}
+	
+	
+	
+
+
 }

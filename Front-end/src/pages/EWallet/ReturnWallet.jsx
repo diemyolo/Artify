@@ -21,9 +21,8 @@ const ReturnWallet = () => {
 		axios.get(`http://localhost:8080/api/auth/addEwallet?vnp_Amount=${amount}&vnp_bank_code=${bankCode}&vnp_ResponseCode=00`)
 		.then(response => {
 		console.log(response.data);
-    	navigate("/viewEwallet");
+    	navigate(`/addSuccess?id=${response.data.payload.transactionId}`);
 	})
-
 	})
 
   return (

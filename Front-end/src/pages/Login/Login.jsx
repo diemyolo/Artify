@@ -47,9 +47,7 @@ export default function Login() {
           });
         } else {
           throw new Error(response.statusText);
-        }
-
-      })
+        }})
       .catch((error) => {
         Swal.fire({
           icon: "error",

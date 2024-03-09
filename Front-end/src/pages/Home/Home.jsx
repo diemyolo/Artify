@@ -15,7 +15,6 @@ export default function Home() {
             <PostCard />
           </div>
         </div>
-
       </div>
     </div>
 

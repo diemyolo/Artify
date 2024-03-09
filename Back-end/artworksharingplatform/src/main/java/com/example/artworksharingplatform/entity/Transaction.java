@@ -1,5 +1,6 @@
 package com.example.artworksharingplatform.entity;
 
+import java.sql.Timestamp;
 import java.util.Date;
 import java.util.UUID;
 
@@ -29,9 +30,9 @@ public class Transaction {
 	@Column(name = "TotalMoney")
 	private float totalMoney;
 
-	@Temporal(TemporalType.DATE)
+	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "TransactionDate")
-	private Date transactionDate;
+	private Timestamp transactionDate;
 
 	@ManyToOne
 	@JoinColumn(name = "user_id")
