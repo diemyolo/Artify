@@ -5,6 +5,7 @@ import { NavLink, useNavigate } from "react-router-dom";
 import GoogleButton from "react-google-button";
 import login from "../../assets/login.jpg"
 import axios from "axios";
+import Swal from "sweetalert2";
 
 const formItemCol = {
   labelCol: { span: 24 },
@@ -15,7 +16,6 @@ export default function Login() {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const handleLogin = () => {
     const myHeaders = {
@@ -30,24 +30,39 @@ export default function Login() {
     axios
       .post("http://localhost:8080/api/auth/login", data, { headers: myHeaders })
       .then((response) => {
-        console.log(response);
+        console.log(response.data.payload);
         if (response.status === 200) {
-          return response.data.payload;
-        }
-        throw Error(response.statusText);
-      })
-      .then((result) => {
-        console.log(result);
-        localStorage.setItem("token", result.token);
-        alert("Success");
-        navigate("/home");
-        setIsLoggedIn(true);
-        console.log(setIsLoggedIn);
-      })
+          const token = response.data.payload.token;
+          localStorage.setItem("token", token);
+          setCookie("token", token, 365); // Expires in 365 days
+          Swal.fire({
+            position: "center",
+            icon: "success",
+            title: `Welcome`,
+            html: "<h3>Login Successfully</h3>",
+            showConfirmButton: false,
+            timer: 1600
+          }).then(() => {
+            navigate("/home");
+          });
+        } else {
+          throw new Error(response.statusText);
+        }})
       .catch((error) => {
-        console.error(error);
-        alert("Email or password is invalid");
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Email or password is invalid!",
+          footer: '<a href="/">Try again!</a>'
+        });
       });
+  };
+
+  const setCookie = (name, value, days) => {
+    const date = new Date();
+    date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
+    const expires = "; expires=" + date.toGMTString();
+    document.cookie = name + "=" + value + expires + "; path=/";
   };
 
 
@@ -63,7 +78,7 @@ export default function Login() {
           </p>
         </div>
         <div className="relative ml-8 mt-8 mb-8 w-100 h-full">
-          <img src={login} className="w-full h-full rounded-3xl" style={{ width: "1068px" }}/>
+          <img src={login} className="w-full h-full rounded-3xl" style={{ width: "1068px" }} />
           <div className="absolute rounded-3xl top-0 left-0 w-full h-full bg-black opacity-50"></div>
         </div>
       </div>

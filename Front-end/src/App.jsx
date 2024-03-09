@@ -3,6 +3,7 @@ import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 import Login from "./pages/Login/Login";
 import Register from "./pages/Register/Register";
 import Home from "./pages/Home/Home"
+import SinglePost from "./pages/SinglePost/SinglePost";
 import ViewEwallet from "./pages/EWallet/ViewEwallet";
 import ReturnWallet from "./pages/EWallet/ReturnWallet";
 import AddMoneyInput from "./pages/EWallet/AddMoneyInput";
@@ -21,6 +22,10 @@ const router = createBrowserRouter([
   {
     path: "/home",
     element: <div><Home /></div>,
+  },
+  {
+    path: "/singlePost",
+    element: <div><SinglePost /></div>,
   },
   {
     path: "/viewEwallet",
