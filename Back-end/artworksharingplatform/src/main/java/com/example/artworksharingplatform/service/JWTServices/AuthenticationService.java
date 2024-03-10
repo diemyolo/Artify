@@ -62,9 +62,7 @@ public class AuthenticationService {
                 .pass(_passwordEncoder.encode(registerRequest.getPass()))
                 .telephone((registerRequest.getTelephone()))
                 .createdDate(Timestamp.valueOf(LocalDateTime.now()))
-
                 .status("ACTIVE")
-
                 .role(Role.CREATOR)
                 .build();
         _repository.save(user);
