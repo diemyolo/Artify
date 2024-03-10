@@ -5,6 +5,7 @@ import InputComment from './InputComment';
 import { Spin } from "antd";
 
 import { Carousel } from 'flowbite-react';
+import { AiOutlineUserAdd } from "react-icons/ai";
 
 const PostCard = () => {
     const [post, setPost] = useState([]);
@@ -46,15 +47,19 @@ const PostCard = () => {
                 {post.length > 0 ?
                     post.map((p) =>
                         <Card key={p.postId} className="justify-center flex bg-white shadow-md shadow-gray-300 rounded-md mb-5 w-1/2">
-                            <div className="flex gap-3">
+                            <div className="flex justify-between gap-3">
                                 <Link href="">
                                     <Avatar rounded>
                                         <div className="space-y-1 dark:text-white">
-                                            <div className='font-medium'>Jese Leos</div>
+                                            <div className='font-medium'>{p.creatorName}</div>
                                             <div className="text-sm text-gray-500 dark:text-gray-400">{p.artList.map(item => item.createdDate)}</div>
                                         </div>
                                     </Avatar>
                                 </Link>
+                                <div className='cursor-pointer sm:flex gap-2 hidden items-center text-white bg-[#2f6a81] px-4 transition-all duration-300 rounded-full my-1'>
+                                    <AiOutlineUserAdd size={20} style={{ color: '#fff', fontWeight: 'bold' }} />
+                                    <button type='submit'>Follow</button>
+                                </div>
                             </div>
 
                             <div>
