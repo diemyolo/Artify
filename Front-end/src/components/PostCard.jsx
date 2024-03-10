@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import { Avatar, Card } from "flowbite-react";
 import { Link } from "react-router-dom";
-import login from "../assets/login.jpg";
 import InputComment from './InputComment';
 import { Spin } from "antd";
+
+import { Carousel } from 'flowbite-react';
+
 const PostCard = () => {
     const [post, setPost] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
@@ -43,33 +45,35 @@ const PostCard = () => {
             <div className='flex flex-col justify-center items-center'>
                 {post.length > 0 ?
                     post.map((p) =>
-                        <Card key={p.postId} className="justify-center flex bg-white shadow-md shadow-gray-300 rounded-md mb-5 w-1/2 gap-1">
+                        <Card key={p.postId} className="justify-center flex bg-white shadow-md shadow-gray-300 rounded-md mb-5 w-1/2">
                             <div className="flex gap-3">
-                                <div>
-                                    <Link href="">
-                                        <span className="cursor-pointer">
-                                            <Avatar />
-                                        </span>
-                                    </Link>
-                                </div>
-
-                                <div className="grow">
-                                    <p>
-                                        <Link>
-                                            <span className="font-semibold cursor-pointer">{p.creatorName}</span>
-                                        </Link>
-                                        <span className="ml-1.5">shared a post</span>
-                                    </p>
-                                    <p className="text-gray-500 text-sm">{p.artList.map(item => item.createdDate)}</p>
-                                    
-                                </div>
+                                <Link href="">
+                                    <Avatar rounded>
+                                        <div className="space-y-1 dark:text-white">
+                                            <div className='font-medium'>Jese Leos</div>
+                                            <div className="text-sm text-gray-500 dark:text-gray-400">{p.artList.map(item => item.createdDate)}</div>
+                                        </div>
+                                    </Avatar>
+                                </Link>
                             </div>
 
                             <div>
-                                <p className="my-2 text-sm">{p.description}</p>
-                                <Link to={`/singlePost`}>
-                                    <img src={p.artList.map(item => item.imagePath)} className="rounded-md w-2x overflow-hidden" />
-                                </Link>
+                                <p className="text-sm my-2">{p.description}</p>
+                                <div className="w-full h-screen max-h-[50vh]">
+                                    <Carousel pauseOnHover className="w-full mx-auto" infiniteLoop={true}>
+                                        {p.artList.map((item, index) => (
+                                            <div key={index}>
+                                                <Link to="/singlePost">
+                                                    <img
+                                                        src={item.imagePath}
+                                                        className="rounded-md w-full"
+                                                        alt={`Post Image - ${p.description}`}
+                                                    />
+                                                </Link>
+                                            </div>
+                                        ))}
+                                    </Carousel>
+                                </div>
                             </div>
 
                             <div className="mt-1 flex justify-between">
@@ -100,9 +104,6 @@ const PostCard = () => {
                     )
                     : null}
             </div>
-
-
-
         </>
     )
 
