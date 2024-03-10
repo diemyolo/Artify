@@ -1,13 +1,21 @@
 import React, { useState, useEffect } from 'react'
-import { Avatar, Card } from "flowbite-react";
+import { Avatar, Card, Modal } from "flowbite-react";
 import { Link } from "react-router-dom";
-import login from "../assets/login.jpg";
 import CommentBar from './CommentBar';
 import { MdOutlineFileDownload } from "react-icons/md";
 import { AiOutlineUserAdd } from "react-icons/ai";
+import { Carousel } from 'flowbite-react';
 
 const CardItem = () => {
     const [post, setPost] = useState([]);
+    const [openModal, setOpenModal] = useState(false);
+    const [selectedImage, setSelectedImage] = useState(null);
+
+
+    const handleImageClick = (imagePath) => {
+        setSelectedImage(imagePath);
+        setOpenModal(true);
+    };
 
     const myHeaders = new Headers();
     const token = localStorage.getItem("token");
@@ -19,7 +27,7 @@ const CardItem = () => {
     };
     useEffect(() => {
         const fetchFData = () => {
-            fetch("http://localhost:8080/api/auth/audience/viewAll", requestOptions)
+            fetch("http://localhost:8080/api/auth/audience/viewAllPosts", requestOptions)
                 .then((response) => {
                     if (response.ok) {
                         return response.json();
@@ -67,22 +75,27 @@ const CardItem = () => {
                                         </div>
                                         <div className='flex gap-4'>
                                             <div className='sm:flex  gap-2 hidden items-center text-white bg-[#2f6a81] py-2 px-4 transition-all duration-300 rounded-full'>
-                                                <AiOutlineUserAdd  className='cursor-pointer' size={20} style={{ color: '#fff', fontWeight: 'bold' }} />
+                                                <AiOutlineUserAdd className='cursor-pointer' size={20} style={{ color: '#fff', fontWeight: 'bold' }} />
                                                 <button type='submit'>Follow</button>
-                                            </div>
-
-                                            <div className='sm:flex gap-2 hidden items-center text-white bg-[#2f6a81] py-2 px-4 transition-all duration-300 rounded-full'>
-                                                <MdOutlineFileDownload className='cursor-pointer' size={20} style={{ color: '#fff', fontWeight: 'bold' }} />
-                                                <button type='submit'>Download</button>
                                             </div>
                                         </div>
                                     </div>
 
                                     <div>
-                                        <p className="my-2 text-sm">{p.description}</p>
-                                        <Link to={`/singlePost`}>
-                                            <img src={login} className="rounded-md w-[65%] overflow-hidden mx-auto" />
-                                        </Link>
+                                        <p className="text-sm my-2">{p.description}</p>
+                                        <div className="w-full h-screen max-h-[50vh]">
+                                            <Carousel pauseOnHover className="w-full mx-auto" infiniteLoop={true}>
+                                                {p.artList.map((item, index) => (
+                                                    <div key={index} onClick={() => handleImageClick(item.imagePath)}>
+                                                        <img
+                                                            src={item.imagePath}
+                                                            className="rounded-md w-full"
+                                                            alt={`Post Image - ${p.description}`}
+                                                        />
+                                                    </div>
+                                                ))}
+                                            </Carousel>
+                                        </div>
                                     </div>
 
                                     <div className="mt-4 flex justify-between">
@@ -116,11 +129,71 @@ const CardItem = () => {
                                 </div>
                             </div>
 
+                            {selectedImage && (
+                                <Modal dismissible className='mt-10 px-28' size={1} show={openModal} onClose={() => setOpenModal(false)}>
+                                    <Modal.Body className='flex justify-between items-start mx-10'>
+                                        <div>
+                                            <img src={selectedImage} alt="Selected Image" className="h-[480px] mx-auto"/>
 
+                                            <div className="flex justify-between gap-3 mt-5 w-[650px]">
+                                                <Link href="">
+                                                    <Avatar rounded>
+                                                        <div className="space-y-1 dark:text-white">
+                                                            <div className='font-medium'>{p.creatorName}</div>
+                                                            <div className="text-sm text-gray-500 dark:text-gray-400">{p.artList.map(item => item.createdDate)}</div>
+                                                        </div>
+                                                    </Avatar>
+                                                </Link>
+                                                <div className='flex gap-4'>
+                                                    <div className='cursor-pointer sm:flex gap-2 hidden items-center text-white bg-[#2f6a81] px-4 transition-all duration-300 rounded-full my-1'>
+                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                                                            <path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
+                                                        </svg>
+                                                        <button type='submit'>Like</button>
+                                                    </div>
+                                                    <div className='cursor-pointer sm:flex gap-2 hidden items-center text-white bg-[#2f6a81] px-4 transition-all duration-300 rounded-full my-1'>
+                                                        <AiOutlineUserAdd size={20} style={{ color: '#fff', fontWeight: 'bold' }} />
+                                                        <button type='submit'>Follow</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <Card className="max-w-sm p-6">
+                                            <h5 className="text-2xl font-semibold tracking-tight text-[#F4980A] dark:text-white">
+                                                Premium Image
+                                            </h5>
+
+                                            <p className="font-normal text-gray-700 dark:text-gray-400">
+                                                Unlock this file and get unlimited access.
+                                            </p>
+
+                                            {p.artList.map(item => item.type === "Free") ? (
+                                                <div className="flex justify-center mt-4">
+                                                    <button className="flex items-center px-4 py-2 text-white bg-[#F4980A] rounded-full transition-all duration-300">
+                                                        <MdOutlineFileDownload className="mr-2" size={20} style={{ color: '#fff', fontWeight: 'bold' }} />
+                                                        Download
+                                                    </button>
+                                                </div>
+                                            ) : (
+                                                <div className="flex justify-center mt-4">
+                                                    <button className="flex items-center px-4 py-2 text-white bg-[#2f6a81] rounded-full transition-all duration-300">
+                                                        <MdOutlineFileDownload className="mr-2" size={20} style={{ color: '#fff', fontWeight: 'bold' }} />
+                                                        Download
+                                                    </button>
+                                                </div>
+                                            )}
+                                        </Card>
+                                    </Modal.Body>
+                                </Modal>
+                            )}
                         </Card>
+
                     )
+
                     : null}
             </div>
+
         </>
     )
 };
