@@ -16,11 +16,10 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
-import lombok.Data;
 
 @Entity
 @Data
-@Table(name="PreOrders")
+@Table(name = "PreOrders")
 public class PreOrder {
 	@Id
 	@UuidGenerator

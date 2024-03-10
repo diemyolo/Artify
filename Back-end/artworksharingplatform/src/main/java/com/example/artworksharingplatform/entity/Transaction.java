@@ -1,6 +1,6 @@
 package com.example.artworksharingplatform.entity;
 
-import java.util.Date;
+import java.sql.Timestamp;
 import java.util.UUID;
 
 import org.hibernate.annotations.UuidGenerator;
@@ -29,16 +29,16 @@ public class Transaction {
 	@Column(name = "TotalMoney")
 	private float totalMoney;
 
-	@Temporal(TemporalType.DATE)
+	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "TransactionDate")
-	private Date transactionDate;
+	private Timestamp transactionDate;
 
 	@ManyToOne
 	@JoinColumn(name = "user_id")
 	private User user;
 
 	@OneToOne
-	@JoinColumn(name = "money_input_id",referencedColumnName = "id")
+	@JoinColumn(name = "money_input_id", referencedColumnName = "id")
 	private MoneyInput moneyInput;
 
 	@OneToOne(cascade = CascadeType.ALL)
