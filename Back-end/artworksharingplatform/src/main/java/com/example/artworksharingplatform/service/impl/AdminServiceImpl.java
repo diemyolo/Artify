@@ -34,18 +34,10 @@ public class AdminServiceImpl implements AdminService {
         try {
             User userToUpdate = userRepository.findByEmailAddress(updatedUser.getEmailAddress())
                     .orElseThrow(() -> new EntityNotFoundException("User not found"));
-            if (updatedUser.getUserName() != null && !updatedUser.getUserName().isEmpty()) {
-                userToUpdate.setName(updatedUser.getUserName());
-            }
-            if (updatedUser.getTelephone() != null && !updatedUser.getTelephone().isEmpty()) {
-                userToUpdate.setTelephone(updatedUser.getTelephone());
-            }
-            if (updatedUser.getImagePath() != null && !updatedUser.getImagePath().isEmpty()) {
-                userToUpdate.setImagePath(updatedUser.getImagePath());
-            }
-            if (updatedUser.getStatus() != null && !updatedUser.getStatus().isEmpty()) {
-                userToUpdate.setStatus(updatedUser.getStatus());
-            }
+            userToUpdate.setName(updatedUser.getUserName());
+            userToUpdate.setTelephone(updatedUser.getTelephone());
+            userToUpdate.setImagePath(updatedUser.getImagePath());
+            userToUpdate.setStatus(updatedUser.getStatus());
             userRepository.save(userToUpdate);
             return findByEmailAddress(userToUpdate.getEmailAddress());
         } catch (Exception ex) {

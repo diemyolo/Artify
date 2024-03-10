@@ -39,19 +39,23 @@ public class UserController {
     public ResponseEntity<ApiResponse<UserDTO>> getUserInfo() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         ApiResponse<UserDTO> apiResponse = new ApiResponse<UserDTO>();
-        if (isUserAuthenticated(authentication)) {
-            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-            String email = userDetails.getUsername(); // getUserName này là email
-            UserDTO userInfo = userService.findByEmailAddress(email);
-            if (userInfo != null) {
-                apiResponse.ok(userInfo);
-                return ResponseEntity.ok(apiResponse);
+        try {
+            if (isUserAuthenticated(authentication)) {
+                UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+                String email = userDetails.getUsername(); // getUserName này là email
+                UserDTO userInfo = userService.findByEmailAddress(email);
+                if (userInfo != null) {
+                    apiResponse.ok(userInfo);
+                    return ResponseEntity.ok(apiResponse);
+                } else {
+                    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(apiResponse);
+                }
             } else {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(apiResponse);
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(apiResponse);
             }
-        } else {
-
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiResponse);
+        } catch (Exception e) {
+            apiResponse.error(e);
+            return new ResponseEntity<>(apiResponse, HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -65,24 +69,28 @@ public class UserController {
             @RequestPart(value = "image", required = false) MultipartFile file) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         ApiResponse<UserDTO> apiResponse = new ApiResponse<UserDTO>();
-        if (isUserAuthenticated(authentication)) {
-            try {
+        try {
+            if (isUserAuthenticated(authentication)) {
                 UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-                String email = userDetails.getUsername(); // getUserName này là email
+                String email = userDetails.getUsername();
                 updatedUser.setImagePath(null);
                 if (file != null) {
                     updatedUser.setImagePath(uploadImage(file));
                 }
                 updatedUser.setEmailAddress(email);
-                UserDTO user = userService.updateUser(updatedUser);
-                apiResponse.ok(user);
-                return ResponseEntity.ok(apiResponse);
-            } catch (Exception ex) {
-                apiResponse.error(ex.getMessage());
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiResponse);
+                UserDTO userInfo = userService.updateUser(updatedUser);
+                if (userInfo != null) {
+                    apiResponse.ok(userInfo);
+                    return ResponseEntity.ok(apiResponse);
+                } else {
+                    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(apiResponse);
+                }
+            } else {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(apiResponse);
             }
-        } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(apiResponse);
+        } catch (Exception e) {
+            apiResponse.error(e);
+            return new ResponseEntity<>(apiResponse, HttpStatus.BAD_REQUEST);
         }
     }
     @PostMapping("requestBecomeCreator")
@@ -107,6 +115,7 @@ public class UserController {
     }
 
 
+    @SuppressWarnings("rawtypes")
     public String uploadImage(MultipartFile file) {
         Map data = cloudinaryService.upload(file);
         String url = data.get("url").toString();

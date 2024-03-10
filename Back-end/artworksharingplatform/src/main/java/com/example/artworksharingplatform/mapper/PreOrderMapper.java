@@ -8,7 +8,7 @@ import org.mapstruct.Mapping;
 import com.example.artworksharingplatform.entity.PreOrder;
 import com.example.artworksharingplatform.model.PreOrderDTO;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface PreOrderMapper {
 	@Mapping(source = "preOrder.id", target = "preOrderId")
 	@Mapping(source = "preOrder.status", target = "status")

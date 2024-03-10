@@ -3,7 +3,6 @@ package com.example.artworksharingplatform.service.JWTServices;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -28,7 +27,6 @@ public class AuthenticationService {
     private final JWTService _jwtService;
     private final AuthenticationManager _authMannager;
     private final EWalletService walletService;
-
 
     public AuthenticationResponse register(RegisterRequest registerRequest) {
         if (registerRequest.getPass() == null) {
