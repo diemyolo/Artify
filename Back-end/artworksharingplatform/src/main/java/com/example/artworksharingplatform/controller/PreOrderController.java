@@ -1,6 +1,9 @@
 package com.example.artworksharingplatform.controller;
 
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -11,15 +14,20 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.example.artworksharingplatform.entity.Artworks;
 import com.example.artworksharingplatform.entity.PreOrder;
 import com.example.artworksharingplatform.entity.User;
 import com.example.artworksharingplatform.mapper.PreOrderMapper;
 import com.example.artworksharingplatform.model.ApiResponse;
 import com.example.artworksharingplatform.model.PreOrderDTO;
 import com.example.artworksharingplatform.model.PreOrderRequest;
+import com.example.artworksharingplatform.service.ArtworkService;
 import com.example.artworksharingplatform.service.CloudinaryService;
 import com.example.artworksharingplatform.service.PreOrderService;
 import com.example.artworksharingplatform.service.UserService;
@@ -38,6 +46,9 @@ public class PreOrderController {
 
     @Autowired
     CloudinaryService cloudinaryService;
+
+    @Autowired
+    ArtworkService artworkService;
 
     @PostMapping("audience/PreOrderRequest")
     @PreAuthorize("hasRole('ROLE_AUDIENCE')")
@@ -68,7 +79,7 @@ public class PreOrderController {
         }
     }
 
-    @GetMapping("creator/updatePreOrderStatus")
+    @GetMapping("creator/viewAllPreOrder")
     @PreAuthorize("hasRole('ROLE_CREATOR')")
     public ResponseEntity<ApiResponse<List<PreOrderDTO>>> getCreatorPreOrderList() {
         ApiResponse<List<PreOrderDTO>> apiResponse = new ApiResponse<List<PreOrderDTO>>();
@@ -77,6 +88,10 @@ public class PreOrderController {
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
             String email = userDetails.getUsername();
             User creator = _userService.findByEmail(email);
+            if (creator == null) {
+                apiResponse.error("Creator can not be null");
+                return new ResponseEntity<>(apiResponse, HttpStatus.NOT_FOUND);
+            }
             List<PreOrder> preOrderList = _preOrderService.getCreatorPreOrderList(creator);
             List<PreOrderDTO> preOrderDTOList = _preOrderMapper.toList(preOrderList);
             apiResponse.ok(preOrderDTOList);
@@ -87,9 +102,62 @@ public class PreOrderController {
         }
     }
 
-    @GetMapping("creator/hello")
+    @GetMapping("creator/totalPreOrder")
     @PreAuthorize("hasRole('ROLE_CREATOR')")
-    public String testUser() {
-        return "Hello Creator";
+    public ResponseEntity<ApiResponse<Integer>> countCreatorPreOrder() {
+        ApiResponse<Integer> apiResponse = new ApiResponse<Integer>();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        try {
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            String email = userDetails.getUsername();
+            User creator = _userService.findByEmail(email);
+            if (creator == null) {
+                apiResponse.error("Creator can not be null");
+                return new ResponseEntity<>(apiResponse, HttpStatus.NOT_FOUND);
+            }
+            int numOfPreOrder = _preOrderService.countByPreOrderCreator(creator);
+            apiResponse.ok(numOfPreOrder);
+            return ResponseEntity.ok(apiResponse);
+        } catch (Exception e) {
+            apiResponse.error(e);
+            return new ResponseEntity<>(apiResponse, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PutMapping("creator/updatePreOrder")
+    @PreAuthorize("hasRole('ROLE_CREATOR')")
+    public ResponseEntity<ApiResponse<PreOrderDTO>> updatePreOrder(
+            @RequestPart(value = "updatedPreOrder") PreOrderDTO updatedPreOrderDTO,
+            @RequestPart(value = "preOrderArtWork", required = false) MultipartFile file) {
+        ApiResponse<PreOrderDTO> apiResponse = new ApiResponse<PreOrderDTO>();
+        try {
+            PreOrder changedPreOrder = new PreOrder();
+            if (file != null) {
+                Artworks artwork = new Artworks();
+                artwork.setCreatedDate(Timestamp.valueOf(LocalDateTime.now()));
+                artwork.setImagePath(uploadImage(file));
+                artwork.setType("PREORDER");
+                changedPreOrder = _preOrderService.updatePreOrderCreator(updatedPreOrderDTO, artwork);
+            } else {
+                changedPreOrder = _preOrderService.updatePreOrderCreator(updatedPreOrderDTO, null);
+            }
+            if (changedPreOrder == null) {
+                apiResponse.error("Cannot find PreOrder");
+                return new ResponseEntity<>(apiResponse, HttpStatus.NOT_FOUND);
+            }
+            PreOrderDTO changedPreOrderDTO = _preOrderMapper.toPreOrderDTO(changedPreOrder);
+            apiResponse.ok(changedPreOrderDTO);
+            return ResponseEntity.ok(apiResponse);
+        } catch (Exception e) {
+            apiResponse.error(e);
+            return new ResponseEntity<>(apiResponse, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @SuppressWarnings("rawtypes")
+    public String uploadImage(MultipartFile file) {
+        Map data = cloudinaryService.upload(file);
+        String url = data.get("url").toString();
+        return url;
     }
 }

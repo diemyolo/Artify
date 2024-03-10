@@ -21,6 +21,7 @@ public interface PreOrderMapper {
 	@Mapping(source = "preOrder.preOrderCreator.id", target = "creatorId")
 	@Mapping(source = "preOrder.preOrderAudience.id", target = "audienceId")
 	@Mapping(source = "preOrder.preOrderArtwork.id", target = "artworkId")
+	@Mapping(source = "preOrder.preOrderArtwork.imagePath", target = "artworkImagePath")
 	PreOrderDTO toPreOrderDTO(PreOrder preOrder);
 
 	List<PreOrderDTO> toList(List<PreOrder> preOrderList);
