@@ -27,7 +27,7 @@ const CardItem = () => {
     };
     useEffect(() => {
         const fetchFData = () => {
-            fetch("http://localhost:8080/api/auth/audience/viewAll", requestOptions)
+            fetch("http://localhost:8080/api/auth/audience/viewAllPosts", requestOptions)
                 .then((response) => {
                     if (response.ok) {
                         return response.json();

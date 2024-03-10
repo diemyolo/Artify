@@ -2,12 +2,14 @@ import React, { useState, useEffect } from 'react'
 import { Avatar, Card } from "flowbite-react";
 import { Link } from "react-router-dom";
 import InputComment from './InputComment';
+import { Spin } from "antd";
+
 import { Carousel } from 'flowbite-react';
 import { AiOutlineUserAdd } from "react-icons/ai";
 
 const PostCard = () => {
     const [post, setPost] = useState([]);
-
+    const [isLoading, setIsLoading] = useState(false);
     const myHeaders = new Headers();
     const token = localStorage.getItem("token");
     myHeaders.append("Authorization", `Bearer ${token}`);
@@ -18,7 +20,7 @@ const PostCard = () => {
     };
     useEffect(() => {
         const fetchFData = () => {
-            fetch("http://localhost:8080/api/auth/audience/viewAll", requestOptions)
+            fetch("http://localhost:8080/api/auth/audience/viewAllPosts", requestOptions)
                 .then((response) => {
                     if (response.ok) {
                         return response.json();
@@ -29,6 +31,8 @@ const PostCard = () => {
                     console.log(result.payload);
                     setPost(result.payload);
                     if (result && result.payload && result.payload.length > 0) {
+                        // setCreatorName(result.payload[0].creatorName);
+                        setIsLoading(true);
                     }
                 })
                 .catch((error) => console.error(error));
@@ -36,11 +40,9 @@ const PostCard = () => {
         fetchFData();
     }, []);
     console.log(post);
-
-
-
     return (
         <>
+        <Spin spinning={!isLoading} fullscreen />
             <div className='flex flex-col justify-center items-center'>
                 {post.length > 0 ?
                     post.map((p) =>
@@ -107,9 +109,6 @@ const PostCard = () => {
                     )
                     : null}
             </div>
-
-
-
         </>
     )
 

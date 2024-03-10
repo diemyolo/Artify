@@ -4,6 +4,7 @@ import NavBar from '../../components/NavBar'
 
 const SinglePost = () => {
 
+
     return (
         <div className='h-screen'>
             <NavBar />

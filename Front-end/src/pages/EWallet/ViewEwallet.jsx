@@ -10,6 +10,7 @@ import { Avatar } from "antd";
 import { IoMdSettings } from "react-icons/io";
 import { IoWallet } from "react-icons/io5";
 import { FaPlus } from "react-icons/fa";
+import { Pagination } from 'antd';
 const ViewEwallet = () => {
   const navigate = useNavigate();
   const [amount, setAmount] = useState(0);
@@ -17,7 +18,12 @@ const ViewEwallet = () => {
   const [customer, setCustomer] = useState({});
   const [transactions, setTransactions] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [totalPage, setTotalPage] = useState(0);
+  const [thisPage, setThisPage] = useState(1);
+  const [eWallet, setEWallet] = useState({});
   const token = localStorage.getItem("token");
+  const itemPerPage = 4;
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -35,7 +41,7 @@ const ViewEwallet = () => {
             headers: { Authorization: `Bearer ${token}` },
           }
         );
-        setAmount(ewalletResponse.data.payload.totalAmount);
+        setEWallet(ewalletResponse.data.payload);
 
         const transactionsResponse = await axios.get(
           "http://localhost:8080/api/auth/viewTransactions",
@@ -44,8 +50,13 @@ const ViewEwallet = () => {
           }
         );
         setTransactions(transactionsResponse.data.payload);
+
         if (customerResponse && ewalletResponse && transactionsResponse) {
           setIsLoading(true);
+          setTotalPage(
+            Math.ceil(transactionsResponse.data.payload.length / itemPerPage)
+          );
+          console.log(ewalletResponse);
         }
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -55,14 +66,19 @@ const ViewEwallet = () => {
     fetchData(); // Gọi hàm fetchData khi component được mount
   }, []);
 
+  const indexOfLastTransaction = thisPage * itemPerPage;
+  const indexOfFirstTransaction = indexOfLastTransaction - itemPerPage;
+  const currentTransactions = transactions.slice(indexOfFirstTransaction, indexOfLastTransaction);
   console.log(transactions);
   console.log(isLoading);
-  const handleAmountChange = (e) => {
-    setInputMoney(e.target.value);
+  console.log(totalPage);
+
+  const handlePageClick = (data) => {
+    setThisPage(data);
   };
   const stats = [
     { id: 1, name: "Number of transactions", value: transactions.length },
-    { id: 2, name: "Account Balance", value: `${amount} VND` },
+    { id: 2, name: "Account Balance", value: `${eWallet.totalAmount} VND` },
     { id: 3, name: "New users annually", value: "46,000" },
   ];
 
@@ -72,7 +88,7 @@ const ViewEwallet = () => {
       <NavBar />
 
       {isLoading && (
-        <div className="bg-gray-100 min-h-screen h-screen mx-auto max-w-screen-xl p-4">
+        <div className="bg-gray-100 mx-auto max-w-screen-xl p-4">
           <div className="bg-gray-100 mt-40">
             {/* Banner intro */}
             <div
@@ -114,9 +130,16 @@ const ViewEwallet = () => {
               </div>
             </div>
             {/* Transactions  */}
-            <div className="but-container flex items-center justify-center" style={{ marginTop : "-10px" }}>
+            <div
+              className="but-container flex items-center justify-center"
+              style={{ marginTop: "-10px" }}
+            >
               <Link to="/addInputMoney">
-                <Avatar size="large" className="bg-white text-[#2f6a81]" icon={<FaPlus />} />
+                <Avatar
+                  size="large"
+                  className="bg-white text-[#2f6a81]"
+                  icon={<FaPlus />}
+                />
               </Link>
             </div>
             <div className="flex flex-col items-center justify-center">
@@ -126,7 +149,7 @@ const ViewEwallet = () => {
                 style={{ width: "600px" }}
               >
                 {transactions.length > 0
-                  ? transactions.map((transaction) => (
+                  ? currentTransactions.map((transaction) => (
                       <li
                         key={transaction.id}
                         className="flex justify-between gap-x-6 py-5"
@@ -158,8 +181,16 @@ const ViewEwallet = () => {
                     ))
                   : null}
               </ul>
+            <Pagination 
+            defaultCurrent={1} 
+            current={thisPage}
+            pageSize={itemPerPage} 
+            total={Math.ceil(transactions.length)} 
+            onChange={handlePageClick}
+            />
             </div>
           </div>
+
         </div>
       )}
     </div>

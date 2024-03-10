@@ -8,7 +8,7 @@ import org.mapstruct.Mapping;
 import com.example.artworksharingplatform.entity.Post;
 import com.example.artworksharingplatform.model.PostDTO;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring" ,uses = ArtworkMapper.class)
 public interface PostMapper {
 
 	@Mapping(source = "post.id", target = "postId")
