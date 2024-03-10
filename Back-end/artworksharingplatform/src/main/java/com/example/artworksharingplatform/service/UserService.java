@@ -18,8 +18,6 @@ public interface UserService {
 
     User getUserById(UUID userId);
 
-    User ChangeCreatorStatus(String email) throws Exception;
-
     UserDTO findByEmailAddress(String email);
 
     User findByEmail(String email);

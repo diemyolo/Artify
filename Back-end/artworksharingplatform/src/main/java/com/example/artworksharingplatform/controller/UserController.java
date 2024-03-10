@@ -2,6 +2,8 @@ package com.example.artworksharingplatform.controller;
 
 import java.util.Map;
 
+import com.example.artworksharingplatform.entity.User;
+import com.example.artworksharingplatform.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -9,11 +11,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.example.artworksharingplatform.mapper.UserMapper;
@@ -31,6 +29,8 @@ public class UserController {
 
     @Autowired
     UserService userService;
+    @Autowired
+    UserRepository _userRepository;
 
     @Autowired
     CloudinaryService cloudinaryService;
@@ -93,6 +93,27 @@ public class UserController {
             return new ResponseEntity<>(apiResponse, HttpStatus.BAD_REQUEST);
         }
     }
+    @PostMapping("requestBecomeCreator")
+    public ResponseEntity<ApiResponse<User>> RequestBecomeCreator() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        ApiResponse<User> apiResponse = new ApiResponse<>();
+        try {
+            if (auth.isAuthenticated()) {
+                UserDetails userDetails = (UserDetails) auth.getPrincipal();
+                String email = userDetails.getUsername();
+                User userInfo = userService.findByEmail(email);
+                userInfo.setStatus("READY");
+                User user = _userRepository.save(userInfo);
+                apiResponse.ok(user);
+            }
+            return ResponseEntity.ok(apiResponse);
+
+        } catch (Exception e) {
+            apiResponse.error(e);
+            return new ResponseEntity<>(apiResponse, HttpStatus.BAD_REQUEST);
+        }
+    }
+
 
     @SuppressWarnings("rawtypes")
     public String uploadImage(MultipartFile file) {
