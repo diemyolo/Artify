@@ -39,7 +39,7 @@ public class Transaction {
 	private User user;
 
 	@OneToOne
-	@JoinColumn(name = "money_input_id",referencedColumnName = "id")
+	@JoinColumn(name = "money_input_id", referencedColumnName = "id")
 	private MoneyInput moneyInput;
 
 	@OneToOne(cascade = CascadeType.ALL)

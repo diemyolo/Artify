@@ -10,7 +10,7 @@ import com.example.artworksharingplatform.repository.EWalletRepository;
 import com.example.artworksharingplatform.service.EWalletService;
 
 @Service
-public class EWalletServiceImpl implements EWalletService{
+public class EWalletServiceImpl implements EWalletService {
 
 	@Autowired
 	EWalletRepository eWalletRepository;
@@ -18,7 +18,7 @@ public class EWalletServiceImpl implements EWalletService{
 	@Override
 	public void createWallet(EWallet eWallet) {
 		eWalletRepository.save(eWallet);
-		
+
 	}
 
 	@Override
@@ -29,9 +29,18 @@ public class EWalletServiceImpl implements EWalletService{
 	@Override
 	public void updateWallet(EWallet eWallet) {
 		// TODO Auto-generated method stub
-			eWalletRepository.save(eWallet);
-		
+		eWalletRepository.save(eWallet);
+
 	}
-	
-	
-} 
+
+	@Override
+	public boolean isEnoughMoney(UUID userId, float price) {
+		EWallet eWallet = getWalletByUserId(userId);
+		if (eWallet.getTotalAmount() >= price) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+}
