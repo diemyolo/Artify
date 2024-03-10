@@ -82,22 +82,7 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
-    @Override
-    public User ChangeCreatorStatus(String email) throws Exception {
-        try {
-            User user = userRepository.findByEmailAddress(email)
-                    .orElseThrow(() -> new EntityNotFoundException("User not found"));
-            if (user != null) {
-                user.setStatus("ACTIVE");
-                userRepository.save(user);
-            } else {
-                return null;
-            }
-            return user;
-        } catch (Exception e) {
-            throw new Exception(e.getMessage());
-        }
-    }
+
 
     @Override
     public User getUser(UUID userId) {
