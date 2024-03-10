@@ -89,17 +89,22 @@ public class AdminController {
                     updatedUser.setImagePath(uploadImage(file));
                 }
                 UserDTO user = adminService.updateUser(updatedUser);
-                apiResponse.ok(user);
-                return ResponseEntity.ok(apiResponse);
-            } catch (Exception ex) {
-                apiResponse.error(ex.getMessage());
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiResponse);
+                if (user != null) {
+                    apiResponse.ok(user);
+                    return ResponseEntity.ok(apiResponse);
+                } else {
+                    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(apiResponse);
+                }
+            } catch (Exception e) {
+                apiResponse.error(e);
+                return new ResponseEntity<>(apiResponse, HttpStatus.BAD_REQUEST);
             }
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(apiResponse);
         }
     }
 
+    @SuppressWarnings("rawtypes")
     public String uploadImage(MultipartFile file) {
         Map data = cloudinaryService.upload(file);
         String url = data.get("url").toString();
@@ -119,10 +124,11 @@ public class AdminController {
                     return ResponseEntity.status(HttpStatus.NOT_FOUND).body(apiResponse);
                 }
             } else {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiResponse);
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(apiResponse);
             }
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(apiResponse);
+            apiResponse.error(e);
+            return new ResponseEntity<>(apiResponse, HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -152,9 +158,9 @@ public class AdminController {
                 UserDTO user = adminService.addUser(addUser);
                 apiResponse.ok(user);
                 return ResponseEntity.ok(apiResponse);
-            } catch (Exception ex) {
-                apiResponse.error(ex.getMessage());
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiResponse);
+            } catch (Exception e) {
+                apiResponse.error(e);
+                return new ResponseEntity<>(apiResponse, HttpStatus.BAD_REQUEST);
             }
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(apiResponse);
