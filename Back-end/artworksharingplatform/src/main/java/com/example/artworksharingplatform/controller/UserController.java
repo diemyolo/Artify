@@ -94,7 +94,7 @@ public class UserController {
                 UserDetails userDetails = (UserDetails) auth.getPrincipal();
                 String email = userDetails.getUsername();
                 User userInfo = userService.findByEmail(email);
-                userInfo.setStatus("INACTIVE");
+                userInfo.setStatus("READY");
                 User user = _userRepository.save(userInfo);
                 apiResponse.ok(user);
             }
