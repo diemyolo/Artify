@@ -15,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.example.artworksharingplatform.entity.Artworks;
 import com.example.artworksharingplatform.entity.Post;
+import com.example.artworksharingplatform.mapper.ArtworkMapper;
 import com.example.artworksharingplatform.mapper.PostMapper;
 import com.example.artworksharingplatform.model.ApiResponse;
 import com.example.artworksharingplatform.model.ArtworkDTO;
@@ -28,6 +29,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 
@@ -45,9 +47,12 @@ public class PostController {
 	ArtworkService artworkService;
 
 	@Autowired
+	ArtworkMapper artworkMapper;
+
+	@Autowired
     private CloudinaryService cloudinaryService;
 
-	@GetMapping("audience/viewAll")
+	@GetMapping("audience/viewAllPosts")
 	@PreAuthorize("hasRole('ROLE_AUDIENCE') or hasRole('ROLE_CREATOR')")
 	public ResponseEntity<ApiResponse> viewAllPosts() {
 		ApiResponse apiResponse = new ApiResponse();
@@ -63,16 +68,19 @@ public class PostController {
 	}
 
 	@GetMapping("audience/viewAllArt")
-	public List<Artworks> viewArts() {
+	public ResponseEntity<ApiResponse> viewArts() {
 		ApiResponse apiResponse = new ApiResponse();
 		List<Artworks> artworks = new ArrayList<Artworks>();
+		
 		try{
 			artworks = artworkService.getAllArtworks();
+			List<ArtworkDTO> result = artworkMapper.toArtworkDTOs(artworks);
+			apiResponse.ok(result);
+			return ResponseEntity.ok(apiResponse);
 		}catch(Exception e){
 			e.printStackTrace();
-			
+			return ResponseEntity.ok(apiResponse);
 		}
-		return artworks;
 	}
 
 	@PostMapping("api/auth/upload")
@@ -94,6 +102,7 @@ public class PostController {
 			Map<String, Object> data = cloudinaryService.upload(file);
 			String url = data.get("url").toString();
 			artwork.setImagePath(url);
+			artwork.setStatus("Active");
 			postService.addArtwork(artwork);
 		}
 		return ResponseEntity.ok("ok");
@@ -113,7 +122,6 @@ public class PostController {
 		}catch(Exception e){
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiResponse);
 		}
-		
 	}
 
 	@GetMapping("getArtById")
@@ -126,6 +134,32 @@ public class PostController {
 				return ResponseEntity.status(HttpStatus.NOT_FOUND).body(apiResponse);
 			}
 			apiResponse.ok(art);
+			return ResponseEntity.ok(apiResponse);
+		}catch(Exception e){
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiResponse);
+		}
+	}
+
+	@PutMapping("updatePost")
+	public ResponseEntity<ApiResponse> updatePost(@RequestPart("image") List<MultipartFile> files,
+	@RequestPart("post") PostDTO postDTO){
+		ApiResponse apiResponse = new ApiResponse();
+		try{
+			Post updatedPost = postService.updatePost(postDTO);
+			List<Artworks> resultArtworks = postService.convertArtList(postDTO.getArtList(), updatedPost);
+			for (int i = 0; i < files.size(); i++) {
+				MultipartFile file = files.get(i);
+				Artworks artwork = resultArtworks.get(i);
+				Map<String, Object> data = cloudinaryService.upload(file);
+				String url = data.get("url").toString();
+				artwork.setImagePath(url);
+				postService.addArtwork(artwork);
+			}
+			if(updatedPost == null){
+				return ResponseEntity.status(HttpStatus.NOT_FOUND).body(apiResponse);
+			}
+			PostDTO result = postService.getPostById(updatedPost.getId());
+			apiResponse.ok(result);
 			return ResponseEntity.ok(apiResponse);
 		}catch(Exception e){
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiResponse);

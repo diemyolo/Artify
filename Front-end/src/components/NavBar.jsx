@@ -47,7 +47,7 @@ const NavBar = () => {
           <ul className="list-none space-x-12 sm:flex hidden justify-center items-center flex-1 font-semibold">
             {
               navLinks.map(({ link, path }) =>
-                <Link to={`/${path}`} key={path} className='block text-base'>{link}</Link>
+                <Link to={`${path}`} key={path} className='block text-base'>{link}</Link>
               )
             }
           </ul>

@@ -3,10 +3,10 @@ import { Avatar, Card } from "flowbite-react";
 import { Link } from "react-router-dom";
 import login from "../assets/login.jpg";
 import InputComment from './InputComment';
-
+import { Spin } from "antd";
 const PostCard = () => {
     const [post, setPost] = useState([]);
-
+    const [isLoading, setIsLoading] = useState(false);
     const myHeaders = new Headers();
     const token = localStorage.getItem("token");
     myHeaders.append("Authorization", `Bearer ${token}`);
@@ -17,7 +17,7 @@ const PostCard = () => {
     };
     useEffect(() => {
         const fetchFData = () => {
-            fetch("http://localhost:8080/api/auth/audience/viewAll", requestOptions)
+            fetch("http://localhost:8080/api/auth/audience/viewAllPosts", requestOptions)
                 .then((response) => {
                     if (response.ok) {
                         return response.json();
@@ -29,6 +29,7 @@ const PostCard = () => {
                     setPost(result.payload);
                     if (result && result.payload && result.payload.length > 0) {
                         // setCreatorName(result.payload[0].creatorName);
+                        setIsLoading(true);
                     }
                 })
                 .catch((error) => console.error(error));
@@ -36,11 +37,9 @@ const PostCard = () => {
         fetchFData();
     }, []);
     console.log(post);
-
-
-
     return (
         <>
+        <Spin spinning={!isLoading} fullscreen />
             <div className='flex flex-col justify-center items-center'>
                 {post.length > 0 ?
                     post.map((p) =>
@@ -60,16 +59,16 @@ const PostCard = () => {
                                             <span className="font-semibold cursor-pointer">{p.creatorName}</span>
                                         </Link>
                                         <span className="ml-1.5">shared a post</span>
-
                                     </p>
                                     <p className="text-gray-500 text-sm">{p.artList.map(item => item.createdDate)}</p>
+                                    
                                 </div>
                             </div>
 
                             <div>
                                 <p className="my-2 text-sm">{p.description}</p>
                                 <Link to={`/singlePost`}>
-                                    <img src={p.artList.map(item => item.imagePath)} className="rounded-md w-full overflow-hidden" />
+                                    <img src={p.artList.map(item => item.imagePath)} className="rounded-md w-2x overflow-hidden" />
                                 </Link>
                             </div>
 
@@ -79,7 +78,7 @@ const PostCard = () => {
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
                                             <path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
                                         </svg>
-                                        {p.interactions.map((interaction) => interaction.interactionPost.numberOfLikes)}
+                                        {/* {p.interactions.map((interaction) => interaction.interactionPost.numberOfLikes)} */}
                                     </button>
                                     <button className="flex gap-2 items-center">
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">

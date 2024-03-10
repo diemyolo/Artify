@@ -15,7 +15,8 @@ public interface PostServiceImpl {
 	public void deleteArtwork(UUID id) throws Exception;
 	public Post addPost(PostDTO post);
 	public List<Artworks> convertArtList(List<ArtworkDTO> artsDTO,Post post);
+	public List<Artworks> convertArtUpdate(List<ArtworkDTO> artsDTO);
 	public PostDTO getPostById(UUID id);
-
 	public ArtworkDTO getArtByArtId(UUID artId);
+	public Post updatePost(PostDTO postDTO);
 }
