@@ -4,10 +4,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import com.example.artworksharingplatform.entity.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -43,7 +47,7 @@ public class AdminController {
     UserMapper userMapper;
 
     @Autowired
-    UserRepository userRepository;
+    UserRepository _userRepository;
 
     @Autowired
     AdminService adminService;
@@ -51,12 +55,17 @@ public class AdminController {
     @Autowired
     CloudinaryService cloudinaryService;
 
-    @PutMapping("changeCreatorStatus")
-    public ResponseEntity<ApiResponse<User>> ChangeCreatorStatus(@RequestHeader("CreatorEmail") String creatorEmail) {
+    @PostMapping("BecomeCreator")
+    public ResponseEntity<ApiResponse<User>> BecomeCreator(@RequestHeader("AudienceEmail") String Email) {
+
         ApiResponse<User> apiResponse = new ApiResponse<>();
         try {
-            var user = _userService.ChangeCreatorStatus(creatorEmail);
+            User userInfo = _userService.findByEmail(Email);
+            userInfo.setStatus("ACTIVE");
+            userInfo.setRole(Role.CREATOR);
+            User user = _userRepository.save(userInfo);
             apiResponse.ok(user);
+
             return ResponseEntity.ok(apiResponse);
 
         } catch (Exception e) {
@@ -80,7 +89,7 @@ public class AdminController {
 
     @PutMapping("user/profile")
     public ResponseEntity<ApiResponse<UserDTO>> updateUser(@RequestPart(value = "user") UserDTO updatedUser,
-            @RequestPart(value = "image", required = false) MultipartFile file) {
+                                                           @RequestPart(value = "image", required = false) MultipartFile file) {
         ApiResponse<UserDTO> apiResponse = new ApiResponse<UserDTO>();
         if (updatedUser != null) {
             try {
@@ -89,17 +98,22 @@ public class AdminController {
                     updatedUser.setImagePath(uploadImage(file));
                 }
                 UserDTO user = adminService.updateUser(updatedUser);
-                apiResponse.ok(user);
-                return ResponseEntity.ok(apiResponse);
-            } catch (Exception ex) {
-                apiResponse.error(ex.getMessage());
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiResponse);
+                if (user != null) {
+                    apiResponse.ok(user);
+                    return ResponseEntity.ok(apiResponse);
+                } else {
+                    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(apiResponse);
+                }
+            } catch (Exception e) {
+                apiResponse.error(e);
+                return new ResponseEntity<>(apiResponse, HttpStatus.BAD_REQUEST);
             }
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(apiResponse);
         }
     }
 
+    @SuppressWarnings("rawtypes")
     public String uploadImage(MultipartFile file) {
         Map data = cloudinaryService.upload(file);
         String url = data.get("url").toString();
@@ -119,10 +133,11 @@ public class AdminController {
                     return ResponseEntity.status(HttpStatus.NOT_FOUND).body(apiResponse);
                 }
             } else {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiResponse);
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(apiResponse);
             }
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(apiResponse);
+            apiResponse.error(e);
+            return new ResponseEntity<>(apiResponse, HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -141,7 +156,7 @@ public class AdminController {
 
     @PostMapping("user/add")
     public ResponseEntity<ApiResponse<UserDTO>> addUser(@RequestPart(value = "user") UserDTO addUser,
-            @RequestPart(value = "image", required = false) MultipartFile file) {
+                                                        @RequestPart(value = "image", required = false) MultipartFile file) {
         ApiResponse<UserDTO> apiResponse = new ApiResponse<UserDTO>();
         if (addUser != null) {
             try {
@@ -152,9 +167,9 @@ public class AdminController {
                 UserDTO user = adminService.addUser(addUser);
                 apiResponse.ok(user);
                 return ResponseEntity.ok(apiResponse);
-            } catch (Exception ex) {
-                apiResponse.error(ex.getMessage());
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiResponse);
+            } catch (Exception e) {
+                apiResponse.error(e);
+                return new ResponseEntity<>(apiResponse, HttpStatus.BAD_REQUEST);
             }
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(apiResponse);

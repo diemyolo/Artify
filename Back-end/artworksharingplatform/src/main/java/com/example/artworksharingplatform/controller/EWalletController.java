@@ -6,11 +6,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.example.artworksharingplatform.config.VnPayConfig;
 import com.example.artworksharingplatform.entity.EWallet;
 import com.example.artworksharingplatform.entity.Transaction;
+import com.example.artworksharingplatform.mapper.TransactionMapper;
 import com.example.artworksharingplatform.model.ApiResponse;
+import com.example.artworksharingplatform.model.TransactionDTO;
 import com.example.artworksharingplatform.model.UserDTO;
 import com.example.artworksharingplatform.service.impl.EWalletServiceImpl;
 import com.example.artworksharingplatform.service.impl.TransactionServiceImpl;
 import com.example.artworksharingplatform.service.impl.UserServiceImpl;
+
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -27,6 +30,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -36,6 +40,18 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.example.artworksharingplatform.config.VnPayConfig;
+import com.example.artworksharingplatform.entity.EWallet;
+import com.example.artworksharingplatform.entity.Transaction;
+import com.example.artworksharingplatform.model.ApiResponse;
+import com.example.artworksharingplatform.model.UserDTO;
+import com.example.artworksharingplatform.service.UserService;
+import com.example.artworksharingplatform.service.impl.EWalletServiceImpl;
+import com.example.artworksharingplatform.service.impl.TransactionServiceImpl;
 
 @RestController
 @RequestMapping("api/auth")
@@ -46,14 +62,19 @@ public class EWalletController {
     UserServiceImpl userServiceImpl;
 
     @Autowired
+    UserService userService;
+
+    @Autowired
     EWalletServiceImpl walletServiceImpl;
 
     @Autowired
     TransactionServiceImpl transactionServiceImpl;
-
+  
+    @Autowired
+    TransactionMapper transactionMapper;
+  
     @PostMapping("/pay")
     public String getPay(@RequestParam("input_money") String inputMoney) throws UnsupportedEncodingException {
-
         String vnp_Version = "2.1.0";
         String vnp_Command = "pay";
         String orderType = "other";
@@ -130,23 +151,24 @@ public class EWalletController {
         if (isUserAuthenticated(authentication)) {
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
             String email = userDetails.getUsername(); // getUserName này là email
-            UserDTO userInfo = userServiceImpl.findByEmailAddress(email);
+            UserDTO userInfo = userService.findByEmailAddress(email);
             EWallet wallet = walletServiceImpl.getWalletByUserId(userInfo.getUserId());
             float newAmount = wallet.getTotalAmount() + (Float.parseFloat(amount) / 100);
             wallet.setTotalAmount(newAmount);
             walletServiceImpl.updateWallet(wallet);
-            // Date date = new Date();
             Timestamp date = new Timestamp(System.currentTimeMillis());
+            // Date date = new Date();  
             Transaction transaction = new Transaction();
-            transaction.setUser(userServiceImpl.getUser(userInfo.getUserId()));
+            transaction.setUser(userService.getUser(userInfo.getUserId()));
             transaction.setTransactionDate(date);
             transaction.setTotalMoney(Float.parseFloat(amount) / 100);
             transactionServiceImpl.addTransaction(transaction);
-            apiResponse.ok("ok");
-            return ResponseEntity.ok(apiResponse);
-        } else {
-            return ResponseEntity.ok(apiResponse);
-        }
+            TransactionDTO result = transactionMapper.toTransactionDTO(transaction);
+            apiResponse.ok(result);
+			return ResponseEntity.ok(apiResponse);
+		} else {
+			return ResponseEntity.ok(apiResponse);
+		}
     }
 
     private boolean isUserAuthenticated(Authentication authentication) {
@@ -161,7 +183,7 @@ public class EWalletController {
         if (isUserAuthenticated(authentication)) {
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
             String email = userDetails.getUsername(); // getUserName này là email
-            UserDTO userInfo = userServiceImpl.findByEmailAddress(email);
+            UserDTO userInfo = userService.findByEmailAddress(email);
             EWallet wallet = walletServiceImpl.getWalletByUserId(userInfo.getUserId());
             if (wallet != null) {
                 apiResponse.ok(wallet);
@@ -169,7 +191,6 @@ public class EWalletController {
             } else {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(apiResponse);
             }
-
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiResponse);
         }
@@ -182,7 +203,7 @@ public class EWalletController {
         if (isUserAuthenticated(authentication)) {
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
             String email = userDetails.getUsername(); // getUserName này là email
-            UserDTO userInfo = userServiceImpl.findByEmailAddress(email);
+            UserDTO userInfo = userService.findByEmailAddress(email);
             List<Transaction> transactions = transactionServiceImpl.getTransactionsByUserId(userInfo.getUserId());
             if (transactions != null) {
                 apiResponse.ok(transactions);
@@ -195,4 +216,18 @@ public class EWalletController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiResponse);
         }
     }
+
+    @GetMapping("/getTransaction")
+    public ResponseEntity<ApiResponse> getTransactionById(@RequestParam("id") String transId){
+        ApiResponse apiResponse = new ApiResponse();
+        try{
+            UUID id = UUID.fromString(transId);
+            TransactionDTO result = transactionServiceImpl.getTransactionById(id);
+            apiResponse.ok(result);
+            return ResponseEntity.ok(apiResponse);
+        }catch(Exception e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiResponse);
+        }
+    }
+    
 }

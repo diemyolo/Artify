@@ -13,8 +13,8 @@ public interface ArtworkMapper {
     
     @Mapping(source = "artwork.id" , target = "artId")
     @Mapping(source = "artwork.artName" , target = "artName")
-    @Mapping(source = "posts.id" , target = "postId")
+    @Mapping(source = "artwork.posts.id" , target = "postId")
     // @Mapping(source)
-    ArtworkDTO tArtworkDTO(Artworks artwork);
+    ArtworkDTO toArtworkDTO(Artworks artwork);
     List<ArtworkDTO> toArtworkDTOs(List<Artworks> artworks);
 }

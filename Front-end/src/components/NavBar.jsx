@@ -7,6 +7,8 @@ import { AiOutlineSearch } from "react-icons/ai";
 const NavBar = () => {
   const [isSticky, setIsSticky] = useState(false);
   const token = localStorage.getItem("token");
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
   console.log(token)
 
   useEffect(() => {
@@ -20,15 +22,19 @@ const NavBar = () => {
     window.addEventListener('scroll', handleScroll);
     
     return () => {
-      window.addEventListener('scroll', handleScroll);
+      window.removeEventListener('scroll', handleScroll);
     }
   });
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
+    localStorage.removeItem('token');
     setIsLoggedIn(false);
-    window.location.href = "/login";
+    window.location.href = '/';
   };
+
+  useEffect(() => {
+    setIsLoggedIn(token != null);
+  }, [token]);
 
   return (
     <header className='w-full bg-gray-100 fixed top-0 left-0 right-0'>
@@ -41,7 +47,7 @@ const NavBar = () => {
           <ul className="list-none space-x-12 sm:flex hidden justify-center items-center flex-1 font-semibold">
             {
               navLinks.map(({ link, path }) =>
-                <Link to={path} key={path} className='block text-base'>{link}</Link>
+                <Link to={`${path}`} key={path} className='block text-base'>{link}</Link>
               )
             }
           </ul>
@@ -60,7 +66,7 @@ const NavBar = () => {
               
               {token != null ? <>
                 <Link
-                  to="/profile"
+                  to="/viewEwallet"
                   className="font-semibold lg:flex items-center hover:text-[#2f6a81]"
                 >
                   Profile
@@ -74,13 +80,13 @@ const NavBar = () => {
               </>
               :  <>
                 <a
-                  href="/login"
+                  href="/"
                   className="font-semibold lg:flex items-center hover:text-[#2f6a81]"
                 >
                   Login
                 </a>
                 <Link
-                  to="/signup"
+                  to="/register"
                   className="text-white bg-[#2f6a81] py-2 px-4 transition-all duration-300 rounded-full"
                 >
                   Sign Up

@@ -2,6 +2,8 @@ package com.example.artworksharingplatform.controller;
 
 import java.util.Map;
 
+import com.example.artworksharingplatform.entity.User;
+import com.example.artworksharingplatform.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -9,18 +11,14 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.example.artworksharingplatform.mapper.UserMapper;
 import com.example.artworksharingplatform.model.ApiResponse;
 import com.example.artworksharingplatform.model.UserDTO;
 import com.example.artworksharingplatform.service.CloudinaryService;
-import com.example.artworksharingplatform.service.impl.UserServiceImpl;
+import com.example.artworksharingplatform.service.UserService;
 
 @RestController
 @RequestMapping("api/auth")
@@ -30,7 +28,9 @@ public class UserController {
     UserMapper userMapper;
 
     @Autowired
-    UserServiceImpl userServiceImpl;
+    UserService userService;
+    @Autowired
+    UserRepository _userRepository;
 
     @Autowired
     CloudinaryService cloudinaryService;
@@ -39,19 +39,23 @@ public class UserController {
     public ResponseEntity<ApiResponse<UserDTO>> getUserInfo() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         ApiResponse<UserDTO> apiResponse = new ApiResponse<UserDTO>();
-        if (isUserAuthenticated(authentication)) {
-            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-            String email = userDetails.getUsername(); // getUserName này là email
-            UserDTO userInfo = userServiceImpl.findByEmailAddress(email);
-            if (userInfo != null) {
-                apiResponse.ok(userInfo);
-                return ResponseEntity.ok(apiResponse);
+        try {
+            if (isUserAuthenticated(authentication)) {
+                UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+                String email = userDetails.getUsername(); // getUserName này là email
+                UserDTO userInfo = userService.findByEmailAddress(email);
+                if (userInfo != null) {
+                    apiResponse.ok(userInfo);
+                    return ResponseEntity.ok(apiResponse);
+                } else {
+                    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(apiResponse);
+                }
             } else {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(apiResponse);
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(apiResponse);
             }
-        } else {
-
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiResponse);
+        } catch (Exception e) {
+            apiResponse.error(e);
+            return new ResponseEntity<>(apiResponse, HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -65,27 +69,53 @@ public class UserController {
             @RequestPart(value = "image", required = false) MultipartFile file) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         ApiResponse<UserDTO> apiResponse = new ApiResponse<UserDTO>();
-        if (isUserAuthenticated(authentication)) {
-            try {
+        try {
+            if (isUserAuthenticated(authentication)) {
                 UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-                String email = userDetails.getUsername(); // getUserName này là email
+                String email = userDetails.getUsername();
                 updatedUser.setImagePath(null);
                 if (file != null) {
                     updatedUser.setImagePath(uploadImage(file));
                 }
                 updatedUser.setEmailAddress(email);
-                UserDTO user = userServiceImpl.updateUser(updatedUser);
-                apiResponse.ok(user);
-                return ResponseEntity.ok(apiResponse);
-            } catch (Exception ex) {
-                apiResponse.error(ex.getMessage());
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiResponse);
+                UserDTO userInfo = userService.updateUser(updatedUser);
+                if (userInfo != null) {
+                    apiResponse.ok(userInfo);
+                    return ResponseEntity.ok(apiResponse);
+                } else {
+                    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(apiResponse);
+                }
+            } else {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(apiResponse);
             }
-        } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(apiResponse);
+        } catch (Exception e) {
+            apiResponse.error(e);
+            return new ResponseEntity<>(apiResponse, HttpStatus.BAD_REQUEST);
+        }
+    }
+    @PostMapping("requestBecomeCreator")
+    public ResponseEntity<ApiResponse<User>> RequestBecomeCreator() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        ApiResponse<User> apiResponse = new ApiResponse<>();
+        try {
+            if (auth.isAuthenticated()) {
+                UserDetails userDetails = (UserDetails) auth.getPrincipal();
+                String email = userDetails.getUsername();
+                User userInfo = userService.findByEmail(email);
+                userInfo.setStatus("READY");
+                User user = _userRepository.save(userInfo);
+                apiResponse.ok(user);
+            }
+            return ResponseEntity.ok(apiResponse);
+
+        } catch (Exception e) {
+            apiResponse.error(e);
+            return new ResponseEntity<>(apiResponse, HttpStatus.BAD_REQUEST);
         }
     }
 
+
+    @SuppressWarnings("rawtypes")
     public String uploadImage(MultipartFile file) {
         Map data = cloudinaryService.upload(file);
         String url = data.get("url").toString();

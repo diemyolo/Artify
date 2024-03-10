@@ -17,5 +17,11 @@ public interface TransactionMapper {
     @Mapping(ignore = true, target = "description")
     TransactionDTO orderToTransactionDTO(Transaction transaction);
 
-    List<TransactionDTO> toTransactionDTOsList(List<Transaction> transactionsList);
-}
+
+	@Mapping(source = "transaction.id" ,target = "transactionId")
+	@Mapping(source = "transaction.totalMoney", target = "totalMoney")
+	@Mapping(source = "transaction.transactionDate" , target = "transactionDate")
+	TransactionDTO toTransactionDTO(Transaction transaction);
+	List<TransactionDTO> toList(List<Transaction> transactions);
+	
+} 

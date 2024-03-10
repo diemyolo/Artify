@@ -3,7 +3,6 @@ package com.example.artworksharingplatform.entity;
 import java.sql.Timestamp;
 import java.util.UUID;
 
-import lombok.Data;
 import org.hibernate.annotations.UuidGenerator;
 
 import jakarta.persistence.CascadeType;

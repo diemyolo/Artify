@@ -9,7 +9,6 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@Data
 public class ArtworkDTO {
     private UUID artId;
     private String artName;

@@ -1,6 +1,7 @@
 package com.example.artworksharingplatform.entity;
 
 import java.sql.Timestamp;
+import java.util.Date;
 import java.util.UUID;
 
 import org.hibernate.annotations.UuidGenerator;
