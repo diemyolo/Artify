@@ -15,6 +15,7 @@ public class PostDTO {
 	private String creatorName;
 	private String emailAddress;
 	private UUID creatorId;
+	private int numberOfLikes;
 	private List<ArtworkDTO> artList;
 	private List<InteractionDTO> interactions;
 }

@@ -1,6 +1,7 @@
 package com.example.artworksharingplatform.service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -62,6 +63,9 @@ public class PostService implements PostServiceImpl {
         // TODO Auto-generated method stub
        Post post = new Post();
        post.setDescription(postDTO.getDescription());
+       post.setNumberOfLikes(postDTO.getNumberOfLikes());
+       Date date = new Date();
+       post.setPublishDate(date);
        Post result = postRepository.save(post);
        return result;
     }
@@ -78,6 +82,8 @@ public class PostService implements PostServiceImpl {
             art.setStatus(artDTO.getStatus());
             art.setId(artDTO.getArtId());
             art.setPosts(post);
+            Date date = new Date();
+            art.setCreatedDate(date);
             result.add(art);
         }
         return result;
@@ -93,7 +99,34 @@ public class PostService implements PostServiceImpl {
     @Override
     public ArtworkDTO getArtByArtId(UUID artId) {
         Artworks art = artworkRepository.findById(artId).orElseThrow(() -> new EntityNotFoundException("Art Not Found"));
-        return artworkMapper.tArtworkDTO(art);
+        return artworkMapper.toArtworkDTO(art);
+    }
+
+    @Override
+    public List<Artworks> convertArtUpdate(List<ArtworkDTO> artsDTO) {
+        List<Artworks> result = new ArrayList<Artworks>();
+        for(ArtworkDTO artDTO : artsDTO) {
+            Artworks art = new Artworks();
+            art.setArtName(artDTO.getArtName());
+            art.setType(artDTO.getType());
+            art.setPrice(artDTO.getPrice());
+            art.setImagePath(artDTO.getImagePath()); 
+            art.setStatus(artDTO.getStatus());
+            art.setId(artDTO.getArtId());
+            result.add(art);
+        }
+        return result;
+    }
+
+    @Override
+    public Post updatePost(PostDTO postDTO) {
+        Post post = postRepository.findById(postDTO.getPostId()).orElseThrow(() -> new EntityNotFoundException("Post Not Found"));
+        post.setDescription(postDTO.getDescription());
+        post.setNumberOfLikes(postDTO.getNumberOfLikes());
+        Date date = new Date();
+        post.setPublishDate(date);
+        Post result = postRepository.save(post);
+        return result;
     }
 
 
