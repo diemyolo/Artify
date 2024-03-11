@@ -53,7 +53,7 @@ public class PreOrderController {
     @PostMapping("audience/PreOrderRequest")
     @PreAuthorize("hasRole('ROLE_AUDIENCE')")
     public ResponseEntity<?> addPreOder(PreOrderRequest preOrderRequest) {
-        ApiResponse<PreOrder> apiResponse = new ApiResponse<PreOrder>();
+        ApiResponse<PreOrderDTO> apiResponse = new ApiResponse<PreOrderDTO>();
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         try {
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
@@ -70,9 +70,11 @@ public class PreOrderController {
             preOrderParse.setPreOrderCreator(creator);
             preOrderParse.setRequirement(preOrderRequest.getRequirement());
             preOrderParse.setStatus("PENDING");
+            preOrderParse.setPreOrderDate(Timestamp.valueOf(LocalDateTime.now()));
             _preOrderService.addPreOrder(preOrderParse);
-            apiResponse.ok(preOrderParse);
-            return ResponseEntity.ok(apiResponse);
+            PreOrderDTO preOrderDTO = _preOrderMapper.toPreOrderDTO(preOrderParse);
+            apiResponse.ok(preOrderDTO);
+            return ResponseEntity.ok(preOrderDTO);
         } catch (Exception e) {
             apiResponse.error(e);
             return new ResponseEntity<>(apiResponse, HttpStatus.BAD_REQUEST);
