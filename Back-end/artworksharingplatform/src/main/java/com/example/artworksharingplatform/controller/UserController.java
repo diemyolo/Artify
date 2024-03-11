@@ -1,9 +1,13 @@
 package com.example.artworksharingplatform.controller;
 
 import java.util.Map;
+import java.util.UUID;
 
+import com.example.artworksharingplatform.entity.Interaction;
 import com.example.artworksharingplatform.entity.User;
+import com.example.artworksharingplatform.model.InteractionDTO;
 import com.example.artworksharingplatform.repository.UserRepository;
+import com.example.artworksharingplatform.service.FollowingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,6 +33,8 @@ public class UserController {
 
     @Autowired
     UserService userService;
+    @Autowired
+    FollowingService _followService;
     @Autowired
     UserRepository _userRepository;
 
@@ -66,7 +72,7 @@ public class UserController {
 
     @PutMapping("user/profile")
     public ResponseEntity<ApiResponse<UserDTO>> updateUser(@RequestPart(value = "user") UserDTO updatedUser,
-            @RequestPart(value = "image", required = false) MultipartFile file) {
+                                                           @RequestPart(value = "image", required = false) MultipartFile file) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         ApiResponse<UserDTO> apiResponse = new ApiResponse<UserDTO>();
         try {
@@ -93,6 +99,7 @@ public class UserController {
             return new ResponseEntity<>(apiResponse, HttpStatus.BAD_REQUEST);
         }
     }
+
     @PostMapping("requestBecomeCreator")
     public ResponseEntity<ApiResponse<User>> RequestBecomeCreator() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -114,6 +121,23 @@ public class UserController {
         }
     }
 
+    @PostMapping("/follow")
+    @PreAuthorize("hasRole('ROLE_AUDIENCE')")
+    public ResponseEntity<ApiResponse<String>> following(String creatorEmail) throws Exception {
+        ApiResponse<String> apiResponse = new ApiResponse<String>();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (isUserAuthenticated(authentication)) {
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            String email = userDetails.getUsername();
+            User audience = userService.findByEmail(email);
+            User creator = userService.findByEmail(creatorEmail);
+            String result = _followService.Following(audience, creator);
+            apiResponse.ok(result);
+            return ResponseEntity.ok(apiResponse);
+        } else {
+            return new ResponseEntity<>(apiResponse, HttpStatus.UNAUTHORIZED);
+        }
+    }
 
     @SuppressWarnings("rawtypes")
     public String uploadImage(MultipartFile file) {
