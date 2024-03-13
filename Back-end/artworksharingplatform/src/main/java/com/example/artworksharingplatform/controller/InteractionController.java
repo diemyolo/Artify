@@ -28,7 +28,7 @@ import com.example.artworksharingplatform.service.InteractionService;
 import com.example.artworksharingplatform.service.impl.UserServiceImpl;
 
 @RestController
-@RequestMapping("api/auth")
+@RequestMapping("api/auth/interaction")
 public class InteractionController {
 
     @Autowired
@@ -46,7 +46,7 @@ public class InteractionController {
     @Autowired
     InteractionMapper interactionMapper;
 
-    @GetMapping("post/{postId}")
+    @GetMapping("view")
     public ResponseEntity<ApiResponse<List<InteractionDTO>>> getInteractionByPostId(@PathVariable UUID postId) {
         ApiResponse<List<InteractionDTO>> apiResponse = new ApiResponse<List<InteractionDTO>>();
         try {
@@ -61,7 +61,7 @@ public class InteractionController {
         }
     }
 
-    @PostMapping("post/like")
+    @PostMapping("like")
     @PreAuthorize("hasRole('ROLE_AUDIENCE') or hasRole('ROLE_CREATOR')")
     public ResponseEntity<ApiResponse<InteractionDTO>> likePost(@RequestParam UUID postId) {
         ApiResponse<InteractionDTO> apiResponse = new ApiResponse<InteractionDTO>();

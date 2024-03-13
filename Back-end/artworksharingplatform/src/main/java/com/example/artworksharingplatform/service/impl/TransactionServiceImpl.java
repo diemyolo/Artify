@@ -7,22 +7,32 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.artworksharingplatform.entity.Order;
+import com.example.artworksharingplatform.entity.Role;
 import com.example.artworksharingplatform.entity.Transaction;
+import com.example.artworksharingplatform.entity.User;
 import com.example.artworksharingplatform.mapper.TransactionMapper;
 import com.example.artworksharingplatform.model.TransactionDTO;
 import com.example.artworksharingplatform.repository.TransactionRepository;
+import com.example.artworksharingplatform.repository.UserRepository;
 import com.example.artworksharingplatform.service.TransactionService;
 
 import jakarta.persistence.EntityNotFoundException;
 
 @Service
-public class TransactionServiceImpl implements TransactionService{
+public class TransactionServiceImpl implements TransactionService {
+
+	float adminRate = 0.037f;
+	float creatorRate = 0.96f;
 
 	@Autowired
 	TransactionRepository repo;
 
 	@Autowired
 	TransactionMapper transactionMapper;
+
+	@Autowired
+	UserRepository userRepository;
 
 	@Override
 	public List<Transaction> getTransactionsByUserId(UUID userId) {
@@ -38,9 +48,40 @@ public class TransactionServiceImpl implements TransactionService{
 	@Override
 	public TransactionDTO getTransactionById(UUID id) {
 		Transaction trans = repo.findById(id)
-		.orElseThrow(() -> new EntityNotFoundException("Transaction Not Found"));
+				.orElseThrow(() -> new EntityNotFoundException("Transaction Not Found"));
 		TransactionDTO result = transactionMapper.toTransactionDTO(trans);
 		return result;
 	}
-	
+
+	@Override
+	public Transaction addTransactionOrderAdmin(Order order, float totalMoney) {
+		Role role = Role.ADMIN;
+		User admin = userRepository.findByRole(role);
+
+		Transaction transaction = new Transaction();
+		transaction.setTotalMoney(totalMoney * adminRate);
+		transaction.setUser(admin);
+		transaction.setOrder(order);
+		transaction.setTransactionDate(order.getOrderDate());
+		return repo.save(transaction);
+	}
+
+	@Override
+	public Transaction addTransactionOrderCreator(Order order, float totalMoney) {
+		Transaction transaction = new Transaction();
+		transaction.setTotalMoney(totalMoney * creatorRate);
+		transaction.setUser(order.getArtwork().getPosts().getCreator());
+		transaction.setOrder(order);
+		return repo.save(transaction);
+	}
+
+	@Override
+	public Transaction addTransactionOrderAudience(Order order, float totalMoney) {
+		Transaction transaction = new Transaction();
+		transaction.setTotalMoney(totalMoney);
+		transaction.setUser(order.getAudience());
+		transaction.setOrder(order);
+		return repo.save(transaction);
+	}
+
 }

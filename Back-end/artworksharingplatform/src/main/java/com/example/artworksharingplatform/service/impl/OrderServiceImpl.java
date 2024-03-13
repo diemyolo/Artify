@@ -6,7 +6,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.example.artworksharingplatform.entity.Artworks;
 import com.example.artworksharingplatform.entity.Order;
-import com.example.artworksharingplatform.entity.Transaction;
 import com.example.artworksharingplatform.entity.User;
 import com.example.artworksharingplatform.repository.ArtworkRepository;
 import com.example.artworksharingplatform.repository.OrderRepository;
@@ -14,6 +13,7 @@ import com.example.artworksharingplatform.repository.TransactionRepository;
 import com.example.artworksharingplatform.repository.UserRepository;
 import com.example.artworksharingplatform.service.EWalletService;
 import com.example.artworksharingplatform.service.OrderService;
+import com.example.artworksharingplatform.service.TransactionService;
 
 import jakarta.persistence.EntityNotFoundException;
 
@@ -33,6 +33,9 @@ public class OrderServiceImpl implements OrderService {
     EWalletService eWalletService;
 
     @Autowired
+    TransactionService transactionService;
+
+    @Autowired
     OrderRepository orderRepository;
 
     @Transactional
@@ -50,17 +53,14 @@ public class OrderServiceImpl implements OrderService {
 
                 float totalMoney = order.getTotalPrice();
 
-                Transaction transaction = new Transaction();
-                transaction.setTotalMoney(totalMoney);
-                transaction.setUser(user);
-                transaction.setOrder(order);
-                transactionRepository.save(transaction);
+                order.setTransactions(transactionService.addTransactionOrderCreator(order, -totalMoney));
+                transactionService.addTransactionOrderAdmin(order, totalMoney);
+                transactionService.addTransactionOrderCreator(order, totalMoney);
 
                 eWalletService.updateAudienceWallet(user.getId(), -totalMoney);
                 eWalletService.updateCreatorWallet(order.getArtwork().getPosts().getCreator().getId(), totalMoney);
                 eWalletService.updateAdminWallet(totalMoney);
 
-                order.setTransactions(transaction);
                 return orderRepository.save(order);
             } else {
                 throw new Exception();

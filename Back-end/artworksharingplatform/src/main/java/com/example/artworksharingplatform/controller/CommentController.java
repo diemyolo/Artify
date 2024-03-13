@@ -1,5 +1,6 @@
 package com.example.artworksharingplatform.controller;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,7 @@ import com.example.artworksharingplatform.model.CommentDTO;
 import com.example.artworksharingplatform.model.UserDTO;
 import com.example.artworksharingplatform.service.CommentService;
 import com.example.artworksharingplatform.service.impl.UserServiceImpl;
+import org.springframework.web.bind.annotation.GetMapping;
 
 @RestController
 @RequestMapping("api/auth/comment")
@@ -100,4 +102,21 @@ public class CommentController {
             return new ResponseEntity<>(apiResponse, HttpStatus.BAD_REQUEST);
         }
     }
+
+    @GetMapping("view")
+    public ResponseEntity<ApiResponse<List<CommentDTO>>> getCommentsListByPostId(@RequestParam UUID postId) {
+        ApiResponse<List<CommentDTO>> apiResponse = new ApiResponse<List<CommentDTO>>();
+
+        try {
+            List<Comment> cList = commentService.getCommentsListByPostId(postId);
+            List<CommentDTO> cDtosList = commentMapper.toCommentDTOList(cList);
+
+            apiResponse.ok(cDtosList);
+            return ResponseEntity.ok(apiResponse);
+        } catch (Exception e) {
+            apiResponse.error(e);
+            return new ResponseEntity<>(apiResponse, HttpStatus.BAD_REQUEST);
+        }
+    }
+
 }

@@ -1,5 +1,6 @@
 package com.example.artworksharingplatform.service.impl;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -77,5 +78,10 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public Comment ediComment(Comment comment) {
         return commentRepository.save(comment);
+    }
+
+    @Override
+    public List<Comment> getCommentsListByPostId(UUID postId) {
+        return commentRepository.findAllByInteraction_InteractionPost_Id(postId);
     }
 }
