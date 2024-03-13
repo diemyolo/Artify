@@ -10,7 +10,7 @@ import AddSuccess from "./pages/EWallet/AddSuccess";
 import AddPost from "./pages/Post/AddPost";
 import SinglePost from "./pages/SinglePost/SinglePost";
 import ArtistProfile from "./pages/Profile/ArtistProfile";
-import AddArts from "./pages/Post/AddArts";
+// import AddArts from "./pages/Post/AddArts";
 
 const router = createBrowserRouter([
   {
@@ -50,13 +50,13 @@ const router = createBrowserRouter([
     element: <div><AddPost /></div>,
   },
   {
-    path: "/artistProfile",
+    path: "/artistProfile:creatorName",
     element: <div><ArtistProfile /></div>,
   },
-  {
-    path: "/addArts",
-    element: <div><AddArts /></div>,
-  }
+  // {
+  //   path: "/addArts",
+  //   element: <div><AddArts /></div>,
+  // }
 ]);
 
 function App() {

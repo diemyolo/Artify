@@ -6,7 +6,7 @@ import { Spin } from "antd";
 import { Carousel } from 'flowbite-react';
 import { AiOutlineUserAdd } from "react-icons/ai";
 
-const PostCard = () => {
+const PostCard = ({ creatorName, onCreatorNameClick }) => {
     const [post, setPost] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
 
@@ -41,16 +41,18 @@ const PostCard = () => {
     console.log(post);
     return (
         <>
-        <Spin spinning={!isLoading} fullscreen />
+            <Spin spinning={!isLoading} fullscreen />
             <div className='flex flex-col justify-center items-center w-full'>
                 {post.length > 0 ?
                     post.map((p) =>
                         <Card key={p.postId} className="justify-center flex bg-white shadow-md shadow-gray-300 rounded-md mb-5 w-1/2">
                             <div className="flex justify-between gap-3">
-                                <Link to="/artistProfile" >
+                                <Link to={`/profile/${p.creatorName}`}>
                                     <Avatar rounded>
                                         <div className="space-y-1 dark:text-white">
-                                            <div className='font-medium'>{p.creatorName}</div>
+                                            <div className='font-medium'>
+                                                <button onClick={() => onCreatorNameClick(p.creatorName)}>{p.creatorName}</button>
+                                            </div>
                                             <div className="text-sm text-gray-500 dark:text-gray-400">{p.artList.map(item => item.createdDate)}</div>
                                         </div>
                                     </Avatar>
@@ -67,7 +69,7 @@ const PostCard = () => {
                                     <Carousel pauseOnHover className="w-full mx-auto" infiniteLoop={true}>
                                         {p.artList.map((item, index) => (
                                             <div key={index}>
-                                                <Link to={`/singlePost?postId=${p.postId}`}> 
+                                                <Link to={`/singlePost?postId=${p.postId}`}>
                                                     <img
                                                         src={item.imagePath}
                                                         className="rounded-md w-[700px] mx-auto"

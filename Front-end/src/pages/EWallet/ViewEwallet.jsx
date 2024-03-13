@@ -115,7 +115,7 @@ const ViewEwallet = () => {
                 className="justify-between h-15 inline-flex items-center rounded-md bg-white px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10 mb--20"
               >
                 <div className="flex p-2 items-center">
-                  <Avatar size="large" src={customer.imagePath} />
+                  <Avatar size="lg" src={customer.imagePath} />
                   <p className="ml-2 text-base">{customer.userName}</p>
                 </div>
                 <div className="flex p-2 items-center">

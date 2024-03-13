@@ -3,6 +3,7 @@ import { Avatar, Card, Button } from "flowbite-react";
 import { AiOutlineUserAdd } from "react-icons/ai";
 
 const CardProfile = ({
+    creatorName,
     onPostButtonClick,
     onGalleryButtonClick,
     onFollowerButtonClick,
@@ -13,6 +14,34 @@ const CardProfile = ({
         { id: 3, name: "Followers", value: 0 },
     ];
 
+
+    const myHeaders = new Headers();
+    const token = localStorage.getItem("token");
+    myHeaders.append("Authorization", `Bearer ${token}`);
+    const requestOptions = {
+        method: "GET",
+        headers: myHeaders,
+        redirect: "follow"
+    };
+    useEffect(() => {
+        const fetchFData = () => {
+            fetch(`http://localhost:8080/api/auth/getPostById?postId=${postId}`, requestOptions)
+                .then((response) => {
+                    if (response.ok) {
+                        return response.json();
+                    }
+                    throw Error(response.statusText);
+                })
+                .then((result) => {
+                    console.log(result.payload);
+                    setPost(result.payload);
+                })
+                .catch((error) => console.error(error));
+        }
+        fetchFData();
+    }, []);
+   
+
     return (
         <>
             <div className="h-[40%] ">
@@ -22,7 +51,7 @@ const CardProfile = ({
                             <div className="flex flex-col items-center">
                                 <Avatar rounded size="lg" />
                                 <h5 className="mb-1 text-xl font-medium text-gray-900 dark:text-white">
-                                    Bonnie Green
+                                    {creatorName}
                                 </h5>
                                 <span className="text-sm text-gray-500 dark:text-gray-400">
                                     Artist

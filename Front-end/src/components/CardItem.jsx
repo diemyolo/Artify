@@ -7,16 +7,16 @@ import { AiOutlineUserAdd } from "react-icons/ai";
 import { Carousel } from 'flowbite-react';
 import { Spin } from "antd";
 import { Watermark } from 'antd';
-import { saveAs } from 'file-saver';
+// import { saveAs } from 'file-saver';
 import axios from "axios";
 
-const CardItem = () => {
+const CardItem = ({ onCreatorNameClick }) => {
     const [p, setPost] = useState();
     const [openModal, setOpenModal] = useState(false);
     const [selectedImage, setSelectedImage] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
 
-	  const params = new URLSearchParams(window.location.search);
+    const params = new URLSearchParams(window.location.search);
     const postId = params.get("postId");
 
     const handleImageClick = (imagePath) => {
@@ -49,29 +49,29 @@ const CardItem = () => {
         }
         fetchFData();
     }, []);
-  
-  
-  
+
+
+
     if (p != undefined) {
         console.log(p);
     }
-  
-  
+
+
     const downloadArt = async (image) => {
         const response = await axios.get(`http://localhost:8080/api/auth/downloadArt?artId=${image.artId}`);
-    //    console.log(response.data.payload);
-    //    if(response){
-    //     setIsLoading(false);
-    //    }
-    //     const url = window.URL.createObjectURL(new Blob([response.data.payload]));
-    //     const link = document.createElement('a');
-    //     link.href = url;
-    //     link.setAttribute('download', 'image.png');
-    //     document.body.appendChild(link);
-    //     link.click();
+        //    console.log(response.data.payload);
+        //    if(response){
+        //     setIsLoading(false);
+        //    }
+        //     const url = window.URL.createObjectURL(new Blob([response.data.payload]));
+        //     const link = document.createElement('a');
+        //     link.href = url;
+        //     link.setAttribute('download', 'image.png');
+        //     document.body.appendChild(link);
+        //     link.click();
         saveAs(`${response.data.payload}`, 'image.jpg');
     }
-  
+
     return (
         <>
             <div className='flex flex-col justify-center items-center'>
@@ -83,7 +83,9 @@ const CardItem = () => {
                                     <Link to="/artistProfile" >
                                         <Avatar rounded>
                                             <div className="space-y-1 dark:text-white">
-                                                <div className='font-medium'>{p.creatorName}</div>
+                                                <div className='font-medium'>
+                                                    <button onClick={() => onCreatorNameClick(p.creatorName)}>{p.creatorName}</button>
+                                                </div>                                                
                                                 <div className="text-sm text-gray-500 dark:text-gray-400">{p.artList.map(item => item.createdDate)}</div>
                                             </div>
                                         </Avatar>
@@ -143,7 +145,7 @@ const CardItem = () => {
                             </div>
                         </div>
 
-                         {selectedImage && (
+                        {selectedImage && (
                             <Modal dismissible className='mt-10 px-72' size={1} show={openModal} onClose={() => setOpenModal(false)}>
                                 <Modal.Body className='flex justify-center items-center'>
                                     <div>

@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 import NavBar from '../../components/NavBar'
 import PostCard from '../../components/PostCard'
 import CardProfile from '../../components/CardProfile';
-import InputComment from '../../components/InputComment';
 
 const ArtistProfile = () => {
   const [activeComponent, setActiveComponent] = useState('post');
@@ -21,7 +20,8 @@ const ArtistProfile = () => {
 
   const renderActiveComponent = () => {
     if (activeComponent === 'post') {
-      return <PostCard />;
+      return <PostCard onCreatorNameClick={handleCreatorNameClick}
+      />;
     } else if (activeComponent === 'gallery') {
       return <PostCard />;
     } else if (activeComponent === 'follower') {
@@ -29,11 +29,18 @@ const ArtistProfile = () => {
     }
   };
 
+  const [creatorName, setCreatorName] = useState('');
+
+  const handleCreatorNameClick = (name) => {
+    setCreatorName(name);
+  };
+
   return (
     <div className='w-full h-screen bg-gray-100'>
       <NavBar />
 
       <CardProfile
+        creatorName={creatorName} 
         onPostButtonClick={handlePostButtonClick}
         onGalleryButtonClick={handleGalleryButtonClick}
         onFollowerButtonClick={handleFollowerButtonClick}
