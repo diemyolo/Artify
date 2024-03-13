@@ -5,15 +5,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.artworksharingplatform.entity.Artworks;
-import com.example.artworksharingplatform.entity.EWallet;
 import com.example.artworksharingplatform.entity.Order;
 import com.example.artworksharingplatform.entity.Transaction;
 import com.example.artworksharingplatform.entity.User;
 import com.example.artworksharingplatform.repository.ArtworkRepository;
-import com.example.artworksharingplatform.repository.EWalletRepository;
 import com.example.artworksharingplatform.repository.OrderRepository;
 import com.example.artworksharingplatform.repository.TransactionRepository;
 import com.example.artworksharingplatform.repository.UserRepository;
+import com.example.artworksharingplatform.service.EWalletService;
 import com.example.artworksharingplatform.service.OrderService;
 
 import jakarta.persistence.EntityNotFoundException;
@@ -31,7 +30,7 @@ public class OrderServiceImpl implements OrderService {
     TransactionRepository transactionRepository;
 
     @Autowired
-    EWalletRepository eWalletRepository;
+    EWalletService eWalletService;
 
     @Autowired
     OrderRepository orderRepository;
@@ -49,7 +48,6 @@ public class OrderServiceImpl implements OrderService {
                 User user = userRepository.findById(order.getAudience().getId())
                         .orElseThrow(() -> new EntityNotFoundException("User not found"));
 
-                EWallet eWallet = eWalletRepository.findByUser_Id(user.getId());
                 float totalMoney = order.getTotalPrice();
 
                 Transaction transaction = new Transaction();
@@ -58,9 +56,9 @@ public class OrderServiceImpl implements OrderService {
                 transaction.setOrder(order);
                 transactionRepository.save(transaction);
 
-                float newBalance = eWallet.getTotalAmount() - totalMoney;
-                eWallet.setTotalAmount(newBalance);
-                eWalletRepository.save(eWallet);
+                eWalletService.updateAudienceWallet(user.getId(), -totalMoney);
+                eWalletService.updateCreatorWallet(order.getArtwork().getPosts().getCreator().getId(), totalMoney);
+                eWalletService.updateAdminWallet(totalMoney);
 
                 order.setTransactions(transaction);
                 return orderRepository.save(order);

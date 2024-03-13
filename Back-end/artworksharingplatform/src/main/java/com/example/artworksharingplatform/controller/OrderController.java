@@ -1,5 +1,7 @@
 package com.example.artworksharingplatform.controller;
 
+import java.sql.Timestamp;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -60,7 +62,7 @@ public class OrderController {
                 Order order = new Order();
                 order.setArtwork(artworks);
                 order.setAudience(user);
-                order.setOrderDate(orderDTO.getOrderDate());
+                order.setOrderDate(new Timestamp(System.currentTimeMillis()));
                 order.setTotalPrice(orderDTO.getTotalPrice());
 
                 Order o = orderService.addOrder(order);
