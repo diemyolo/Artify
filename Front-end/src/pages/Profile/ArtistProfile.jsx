@@ -3,6 +3,7 @@ import NavBar from '../../components/NavBar'
 import PostCard from '../../components/PostCard'
 import CardProfile from '../../components/CardProfile';
 import InputComment from '../../components/InputComment';
+import Gallery from '../../components/Gallery';
 
 const ArtistProfile = () => {
   const [activeComponent, setActiveComponent] = useState('post');
@@ -23,7 +24,7 @@ const ArtistProfile = () => {
     if (activeComponent === 'post') {
       return <PostCard />;
     } else if (activeComponent === 'gallery') {
-      return <PostCard />;
+      return <Gallery />;
     } else if (activeComponent === 'follower') {
       return <PostCard />;
     }

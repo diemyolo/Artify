@@ -133,7 +133,7 @@ const CardItem = () => {
                             </div>
                         </div>
 
-                         {selectedImage && (
+                        {selectedImage && (
                             <Modal dismissible className='mt-10 px-72' size={1} show={openModal} onClose={() => setOpenModal(false)}>
                                 <Modal.Body className='flex justify-center items-center'>
                                     <div>
