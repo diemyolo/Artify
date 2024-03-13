@@ -16,7 +16,7 @@ const CardItem = () => {
     const [selectedImage, setSelectedImage] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
 
-	  const params = new URLSearchParams(window.location.search);
+    const params = new URLSearchParams(window.location.search);
     const postId = params.get("postId");
 
     const handleImageClick = (imagePath) => {

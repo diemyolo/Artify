@@ -47,7 +47,7 @@ const PostCard = () => {
                     post.map((p) =>
                         <Card key={p.postId} className="justify-center flex bg-white shadow-md shadow-gray-300 rounded-md mb-5 w-1/2">
                             <div className="flex justify-between gap-3">
-                                <Link to="/artistProfile" >
+                                <Link to={`/artistProfile?creatorId=${p.creatorId}`} >
                                     <Avatar rounded>
                                         <div className="space-y-1 dark:text-white">
                                             <div className='font-medium'>{p.creatorName}</div>
