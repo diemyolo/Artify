@@ -11,6 +11,6 @@ import com.example.artworksharingplatform.model.TransactionDTO;
 @Service
 public interface TransactionService {
 	public List<Transaction> getTransactionsByUserId(UUID userId);
-	public void addTransaction(Transaction transaction);	
+	public Transaction addTransaction(Transaction transaction);	
 	public TransactionDTO getTransactionById(UUID id);
 } 

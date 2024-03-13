@@ -21,4 +21,5 @@ public interface PostServiceImpl {
 	public PostDTO getPostById(UUID id);
 	public ArtworkDTO getArtByArtId(UUID artId);
 	public Post updatePost(PostDTO postDTO);
+	public List<PostDTO> getPostsByCreatorId(UUID creatorId);
 }

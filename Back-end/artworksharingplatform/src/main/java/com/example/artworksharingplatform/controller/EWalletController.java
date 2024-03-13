@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import com.example.artworksharingplatform.config.VnPayConfig;
 import com.example.artworksharingplatform.entity.EWallet;
+import com.example.artworksharingplatform.entity.MoneyInput;
 import com.example.artworksharingplatform.entity.Transaction;
 import com.example.artworksharingplatform.mapper.TransactionMapper;
 import com.example.artworksharingplatform.model.ApiResponse;
@@ -49,6 +50,7 @@ import com.example.artworksharingplatform.entity.EWallet;
 import com.example.artworksharingplatform.entity.Transaction;
 import com.example.artworksharingplatform.model.ApiResponse;
 import com.example.artworksharingplatform.model.UserDTO;
+import com.example.artworksharingplatform.service.MoneyInputService;
 import com.example.artworksharingplatform.service.UserService;
 import com.example.artworksharingplatform.service.impl.EWalletServiceImpl;
 import com.example.artworksharingplatform.service.impl.TransactionServiceImpl;
@@ -72,6 +74,9 @@ public class EWalletController {
   
     @Autowired
     TransactionMapper transactionMapper;
+
+    @Autowired
+    MoneyInputService inputService;
   
     @PostMapping("/pay")
     public String getPay(@RequestParam("input_money") String inputMoney) throws UnsupportedEncodingException {
@@ -153,6 +158,7 @@ public class EWalletController {
             String email = userDetails.getUsername(); // getUserName này là email
             UserDTO userInfo = userService.findByEmailAddress(email);
             EWallet wallet = walletServiceImpl.getWalletByUserId(userInfo.getUserId());
+
             float newAmount = wallet.getTotalAmount() + (Float.parseFloat(amount) / 100);
             wallet.setTotalAmount(newAmount);
             walletServiceImpl.updateWallet(wallet);
@@ -162,8 +168,12 @@ public class EWalletController {
             transaction.setUser(userService.getUser(userInfo.getUserId()));
             transaction.setTransactionDate(date);
             transaction.setTotalMoney(Float.parseFloat(amount) / 100);
-            transactionServiceImpl.addTransaction(transaction);
-            TransactionDTO result = transactionMapper.toTransactionDTO(transaction);
+            Transaction addedTrans = transactionServiceImpl.addTransaction(transaction);
+            MoneyInput input = new MoneyInput();
+            input.setMoney(Float.parseFloat(amount));
+            input.setTransactions(addedTrans);
+            MoneyInput addedMoneyInput = inputService.addMoneyInput(input);
+            TransactionDTO result = transactionMapper.toTransactionDTO(addedTrans);
             apiResponse.ok(result);
 			return ResponseEntity.ok(apiResponse);
 		} else {
