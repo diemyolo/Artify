@@ -95,7 +95,7 @@ const AddMoneyInput = () => {
                   From payment gate
                 </label>
                 <div className="relative mt-2 rounded-md shadow-sm">
-                  <div className="mr-5 flex justify-center items-center pointer-events-none absolute inset-y-0 left-0 fle x items-center pl-3">
+                  <div className="mr-5 flex justify-center items-center pointer-events-none absolute inset-y-0 left-0 pl-3">
                     <span className="mr-5  text-gray-500 sm:text-sm">
                       <img
                         src="/src/assets/vnpay.png"
