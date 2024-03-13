@@ -59,16 +59,6 @@ const CardItem = () => {
   
     const downloadArt = async (image) => {
         const response = await axios.get(`http://localhost:8080/api/auth/downloadArt?artId=${image.artId}`);
-    //    console.log(response.data.payload);
-    //    if(response){
-    //     setIsLoading(false);
-    //    }
-    //     const url = window.URL.createObjectURL(new Blob([response.data.payload]));
-    //     const link = document.createElement('a');
-    //     link.href = url;
-    //     link.setAttribute('download', 'image.png');
-    //     document.body.appendChild(link);
-    //     link.click();
         saveAs(`${response.data.payload}`, 'image.jpg');
     }
   

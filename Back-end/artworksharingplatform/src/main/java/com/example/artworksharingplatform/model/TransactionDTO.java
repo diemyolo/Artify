@@ -15,6 +15,6 @@ public class TransactionDTO {
     private float totalMoney;
     private Timestamp transactionDate;
     private String description;
-	  public UUID transactionId;
-	  public float inputMoney;
+	public UUID transactionId;
+	public MoneyInputDTO input_money;
 }

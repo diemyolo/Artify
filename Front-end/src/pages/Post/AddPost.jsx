@@ -38,7 +38,7 @@ const AddPost = () => {
     });
     formData.append("post", new Blob([JSON.stringify(postDTO)], {type: "application/json"}));
     const response = await axios.post(
-      "http://localhost:8080/api/auth/addArtwork",
+      "http://localhost:8080/api/auth/addPost",
       formData,
       {
         headers: myHeaders
