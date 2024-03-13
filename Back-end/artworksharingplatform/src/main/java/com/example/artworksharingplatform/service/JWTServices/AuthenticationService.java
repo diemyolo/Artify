@@ -64,6 +64,9 @@ public class AuthenticationService {
                 .role(Role.CREATOR)
                 .build();
         _repository.save(user);
+        EWallet wallet = new EWallet();
+        wallet.setUser(user);
+        walletService.createWallet(wallet);
         var jwtToken = _jwtService.generateToken(user);
         return AuthenticationResponse.builder().Token(jwtToken).build();
 

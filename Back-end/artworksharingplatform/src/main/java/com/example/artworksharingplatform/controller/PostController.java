@@ -97,33 +97,43 @@ public class PostController {
     // @PreAuthorize("hasRole('ROLE_CREATOR')")
 	public ResponseEntity<ApiResponse> addArtwork(@RequestPart("image") List<MultipartFile> files,
 	@RequestPart("post") PostDTO postDTO){
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		ApiResponse apiResponse = new ApiResponse();
 		try{
-			// Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-			// UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-			// String email = userDetails.getUsername();
-			// UserDTO userInfo = userService.findByEmailAddress(email);
-			// User creator = userService.getUserById(userInfo.getUserId());
-			Post savedPost = postService.addPostTest(postDTO);
-			List<ArtworkDTO> artsDTO = postDTO.getArtList();
-			List<Artworks> artworks = postService.convertArtList(artsDTO, savedPost);
-			for (int i = 0; i < files.size(); i++) {
-				MultipartFile file = files.get(i);
-				Artworks artwork = artworks.get(i);
-				Map<String, Object> data = cloudinaryService.upload(file);
-				String url = data.get("url").toString();
-				artwork.setImagePath(url);
-				artwork.setStatus("Active");
-				postService.addArtwork(artwork);
+			if (isUserAuthenticated(authentication)) {
+				UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+				String email = userDetails.getUsername();
+				UserDTO userInfo = userService.findByEmailAddress(email);
+				User creator = userService.getUserById(userInfo.getUserId());
+				Post savedPost = postService.addPost(postDTO,creator);
+				List<ArtworkDTO> artsDTO = postDTO.getArtList();
+				List<Artworks> artworks = postService.convertArtList(artsDTO, savedPost);
+				for (int i = 0; i < files.size(); i++) {
+					MultipartFile file = files.get(i);
+					Artworks artwork = artworks.get(i);
+					Map<String, Object> data = cloudinaryService.upload(file);
+					String url = data.get("url").toString();
+					artwork.setImagePath(url);
+					artwork.setStatus("Active");
+					postService.addArtwork(artwork);
+				}
+				PostDTO result = postService.getPostById(savedPost.getId());
+				apiResponse.ok(result);
+				return ResponseEntity.ok(apiResponse);
+			}else{
+				return ResponseEntity.status(HttpStatus.NOT_FOUND).body(apiResponse);
 			}
-			PostDTO result = postService.getPostById(savedPost.getId());
-			apiResponse.ok(result);
-			return ResponseEntity.ok(apiResponse);
+
 		}catch (Exception e){
 			apiResponse.error(e.getMessage());
 			return ResponseEntity.ok(apiResponse);
 		}  
 	}
+
+	private boolean isUserAuthenticated(Authentication authentication) {
+        return authentication != null && authentication.isAuthenticated()
+                && authentication.getPrincipal() instanceof UserDetails;
+    }
 
 	@GetMapping("getPostById")
 	public ResponseEntity<ApiResponse> getPostById(@RequestParam("postId") String postId) {
