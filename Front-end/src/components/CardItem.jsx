@@ -5,13 +5,16 @@ import CommentBar from './CommentBar';
 import { MdOutlineFileDownload } from "react-icons/md";
 import { AiOutlineUserAdd } from "react-icons/ai";
 import { Carousel } from 'flowbite-react';
-
+import { Spin } from "antd";
+import { saveAs } from 'file-saver';
+import axios from "axios";
 const CardItem = () => {
-    const [post, setPost] = useState([]);
+    const [p, setPost] = useState();
     const [openModal, setOpenModal] = useState(false);
     const [selectedImage, setSelectedImage] = useState(null);
-
-
+    const [isLoading, setIsLoading] = useState(false);
+	const params = new URLSearchParams(window.location.search);
+    const postId = params.get("postId");
     const handleImageClick = (imagePath) => {
         setSelectedImage(imagePath);
         setOpenModal(true);
@@ -27,7 +30,7 @@ const CardItem = () => {
     };
     useEffect(() => {
         const fetchFData = () => {
-            fetch("http://localhost:8080/api/auth/audience/viewAllPosts", requestOptions)
+            fetch(`http://localhost:8080/api/auth/getPostById?postId=${postId}`, requestOptions)
                 .then((response) => {
                     if (response.ok) {
                         return response.json();
@@ -36,21 +39,36 @@ const CardItem = () => {
                 })
                 .then((result) => {
                     console.log(result.payload);
-                    setPost(result.payload);
-                    if (result && result.payload && result.payload.length > 0) {
-                    }
+                    setPost(result.payload); 
                 })
                 .catch((error) => console.error(error));
         }
         fetchFData();
     }, []);
-    console.log(post);
+    if(p != undefined){
+        console.log(p);
+    }
+
+    const downloadArt = async (image) => {
+        const response = await axios.get(`http://localhost:8080/api/auth/downloadArt?artId=${image.artId}`);
+    //    console.log(response.data.payload);
+    //    if(response){
+    //     setIsLoading(false);
+    //    }
+    //     const url = window.URL.createObjectURL(new Blob([response.data.payload]));
+    //     const link = document.createElement('a');
+    //     link.href = url;
+    //     link.setAttribute('download', 'image.png');
+    //     document.body.appendChild(link);
+    //     link.click();
+        saveAs(`${response.data.payload}`, 'image.jpg');
+    }
 
     return (
         <>
-            <div className='flex flex-col justify-center items-center'>
-                {post.length > 0 ?
-                    post.map((p) =>
+            <div className='flex flex-col justify-center items-center ư'>
+            
+                {p != null || p != undefined ?
                         <Card key={p.postId} className="flex justify-center bg-white mb-5 w-full" >
                             <div className='flex flex-row gap-6'>
                                 <div className='flex flex-col w-[65%] ' >
@@ -86,7 +104,7 @@ const CardItem = () => {
                                         <div className="w-full h-screen max-h-[50vh]">
                                             <Carousel pauseOnHover className="w-full mx-auto" infiniteLoop={true}>
                                                 {p.artList.map((item, index) => (
-                                                    <div key={index} onClick={() => handleImageClick(item.imagePath)}>
+                                                    <div key={index} onClick={() => handleImageClick(item)}>
                                                         <img
                                                             src={item.imagePath}
                                                             className="rounded-md w-full"
@@ -133,7 +151,7 @@ const CardItem = () => {
                                 <Modal dismissible className='mt-10 px-28' size={1} show={openModal} onClose={() => setOpenModal(false)}>
                                     <Modal.Body className='flex justify-between items-start mx-10'>
                                         <div>
-                                            <img src={selectedImage} alt="Selected Image" className="h-[480px] mx-auto"/>
+                                            <img src={selectedImage.imagePath} alt="Selected Image" className="h-[480px] mx-auto"/>
 
                                             <div className="flex justify-between gap-3 mt-5 w-[650px]">
                                                 <Link href="">
@@ -168,30 +186,27 @@ const CardItem = () => {
                                                 Unlock this file and get unlimited access.
                                             </p>
 
-                                            {p.artList.map(item => item.type === "Free") ? (
-                                                <div className="flex justify-center mt-4">
-                                                    <button className="flex items-center px-4 py-2 text-white bg-[#F4980A] rounded-full transition-all duration-300">
-                                                        <MdOutlineFileDownload className="mr-2" size={20} style={{ color: '#fff', fontWeight: 'bold' }} />
-                                                        Download
-                                                    </button>
-                                                </div>
-                                            ) : (
-                                                <div className="flex justify-center mt-4">
-                                                    <button className="flex items-center px-4 py-2 text-white bg-[#2f6a81] rounded-full transition-all duration-300">
-                                                        <MdOutlineFileDownload className="mr-2" size={20} style={{ color: '#fff', fontWeight: 'bold' }} />
-                                                        Download
-                                                    </button>
-                                                </div>
-                                            )}
+                                            {(selectedImage.type === "Free") ? (
+                                            <div className="flex justify-center mt-4" >
+                                                <button onClick={() => downloadArt(selectedImage)} className="flex items-center px-4 py-2 text-white bg-[#F4980A] rounded-full transition-all duration-300">
+                                                    <MdOutlineFileDownload className="mr-2" size={20} style={{ color: '#fff', fontWeight: 'bold' }} />
+                                                    Download
+                                                </button>
+                                            </div>
+                                        ) : (
+                                            <div className="flex justify-center mt-4" >
+                                                <button onClick={() => downloadArt(selectedImage)} className="flex items-center px-4 py-2 text-white bg-[#2f6a81] rounded-full transition-all duration-300">
+                                                    <MdOutlineFileDownload className="mr-2" size={20} style={{ color: '#fff', fontWeight: 'bold' }} />
+                                                    Download
+                                                </button>
+                                            </div>
+                                        )}
                                         </Card>
                                     </Modal.Body>
                                 </Modal>
                             )}
                         </Card>
-
-                    )
-
-                    : null}
+                    : <Spin spinning={!isLoading} fullscreen />}
             </div>
 
         </>
