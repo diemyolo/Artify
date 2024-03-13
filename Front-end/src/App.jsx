@@ -9,6 +9,7 @@ import AddMoneyInput from "./pages/EWallet/AddMoneyInput";
 import AddSuccess from "./pages/EWallet/AddSuccess";
 import AddPost from "./pages/Post/AddPost";
 import SinglePost from "./pages/SinglePost/SinglePost";
+import AddArts from "./pages/Post/AddArts";
 
 const router = createBrowserRouter([
   {
@@ -46,6 +47,10 @@ const router = createBrowserRouter([
   {
     path: "/addPost",
     element: <div><AddPost /></div>,
+  },
+  {
+    path: "/addArts",
+    element: <div><AddArts /></div>,
   }
 ]);
 
