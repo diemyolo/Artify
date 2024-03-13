@@ -142,6 +142,12 @@ public class PostService implements PostServiceImpl {
         return result;
     }
 
+    @Override
+    public List<PostDTO> getPostsByCreatorId(UUID creatorId) {
+        List<Post> posts =  postRepository.findByCreator_Id(creatorId);
+        return postMapper.toList(posts);
+    }
+
 
 
 }

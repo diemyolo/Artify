@@ -31,8 +31,8 @@ public class TransactionServiceImpl implements TransactionService{
 	}
 
 	@Override
-	public void addTransaction(Transaction transaction) {
-		repo.save(transaction);
+	public Transaction addTransaction(Transaction transaction) {
+		return repo.save(transaction);
 	}
 
 	@Override

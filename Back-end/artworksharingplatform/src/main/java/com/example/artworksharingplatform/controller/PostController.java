@@ -208,6 +208,17 @@ public class PostController {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiResponse);
 		}
 	}
+
+	@GetMapping("getPostByCreator")
+	public ResponseEntity<ApiResponse> getPostByCreator(@RequestParam("creatorId") String creatorId){
+		ApiResponse apiResponse = new ApiResponse(); 
+		UUID convertedArtId = UUID.fromString(creatorId);
+		List<PostDTO> result = postService.getPostsByCreatorId(convertedArtId);
+		apiResponse.ok(result);
+		return ResponseEntity.ok(apiResponse);
+
+	}
+	
 	
 	
 	

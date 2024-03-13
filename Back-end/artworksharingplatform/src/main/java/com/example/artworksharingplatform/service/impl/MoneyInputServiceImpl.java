@@ -13,10 +13,8 @@ public class MoneyInputServiceImpl implements MoneyInputService{
 	@Autowired
 	InputMoneyRepository _repo;
 	@Override
-	public void addMoneyInput(String amount) {
-		MoneyInput inputMoney = new MoneyInput();
-		inputMoney.setMoney(Float.parseFloat(amount));
-		_repo.save(inputMoney);
+	public MoneyInput addMoneyInput(MoneyInput input) {
+		return _repo.save(input);
 	}
 	
 }
