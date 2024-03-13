@@ -33,20 +33,10 @@ public class UserServiceImpl implements UserService {
         try {
             User userToUpdate = userRepository.findByEmailAddress(updatedUser.getEmailAddress())
                     .orElseThrow(() -> new EntityNotFoundException("User not found"));
-
-            if (updatedUser.getUserName() != null && !updatedUser.getUserName().isEmpty()) {
-                userToUpdate.setName(updatedUser.getUserName());
-            }
-            if (updatedUser.getTelephone() != null && !updatedUser.getTelephone().isEmpty()) {
-                userToUpdate.setTelephone(updatedUser.getTelephone());
-            }
-            if (updatedUser.getImagePath() != null && !updatedUser.getImagePath().isEmpty()) {
-                userToUpdate.setImagePath(updatedUser.getImagePath());
-            }
-            if (updatedUser.getPassword() != null && !updatedUser.getPassword().isEmpty()) {
-                userToUpdate.setPass(_passwordEncoder.encode(updatedUser.getPassword()));
-            }
-
+            userToUpdate.setName(updatedUser.getUserName());
+            userToUpdate.setTelephone(updatedUser.getTelephone());
+            userToUpdate.setImagePath(updatedUser.getImagePath());
+            userToUpdate.setPass(_passwordEncoder.encode(updatedUser.getPassword()));
             userRepository.save(userToUpdate);
             return findByEmailAddress(userToUpdate.getEmailAddress());
         } catch (Exception ex) {
@@ -81,8 +71,6 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new EntityNotFoundException("User not found"));
         return user;
     }
-
-
 
     @Override
     public User getUser(UUID userId) {

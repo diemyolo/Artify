@@ -1,7 +1,6 @@
 package com.example.artworksharingplatform.entity;
 
 import java.sql.Timestamp;
-import java.util.Date;
 import java.util.UUID;
 
 import org.hibernate.annotations.UuidGenerator;
@@ -39,7 +38,7 @@ public class Transaction {
 	private User user;
 
 	@OneToOne
-	@JoinColumn(name = "money_input_id",referencedColumnName = "id")
+	@JoinColumn(name = "money_input_id", referencedColumnName = "id")
 	private MoneyInput moneyInput;
 
 	@OneToOne(cascade = CascadeType.ALL)

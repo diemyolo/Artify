@@ -10,7 +10,10 @@ import { Avatar } from "antd";
 import { IoMdSettings } from "react-icons/io";
 import { IoWallet } from "react-icons/io5";
 import { FaPlus } from "react-icons/fa";
-import { Pagination } from 'antd';
+import { Pagination } from "antd";
+import { MdEmail } from "react-icons/md";
+import { BsFillTelephoneFill } from "react-icons/bs";
+
 const ViewEwallet = () => {
   const navigate = useNavigate();
   const [amount, setAmount] = useState(0);
@@ -63,16 +66,21 @@ const ViewEwallet = () => {
       }
     };
 
-    fetchData(); // Gọi hàm fetchData khi component được mount
+    fetchData();
   }, []);
 
   const indexOfLastTransaction = thisPage * itemPerPage;
   const indexOfFirstTransaction = indexOfLastTransaction - itemPerPage;
-  const currentTransactions = transactions.slice(indexOfFirstTransaction, indexOfLastTransaction);
+
+  const currentTransactions = transactions.slice(
+    indexOfFirstTransaction,
+    indexOfLastTransaction
+  );
 
   console.log(transactions);
   console.log(isLoading);
   console.log(totalPage);
+  console.log(customer);
 
   const handlePageClick = (data) => {
     setThisPage(data);
@@ -83,6 +91,11 @@ const ViewEwallet = () => {
     { id: 2, name: "Account Balance", value: `${eWallet.totalAmount} VND` },
     { id: 3, name: "New users annually", value: "46,000" },
   ];
+  const hoverStyle = {
+    backgroundColor: '#2f6a81', // Màu nền khi hover
+    borderColor: '#2f6a81', // Màu viền khi hover
+    color: '#ffffff', // Màu chữ khi hover
+  };
 
   return (
     <div className="">
@@ -132,6 +145,7 @@ const ViewEwallet = () => {
               </div>
             </div>
             {/* Transactions  */}
+
             <div
               className="but-container flex items-center justify-center"
               style={{ marginTop: "-10px" }}
@@ -144,55 +158,79 @@ const ViewEwallet = () => {
                 />
               </Link>
             </div>
-            <div className="flex flex-col items-center justify-center">
-              <ul
-                role="list"
-                className="divide-y divide-gray-100 bg-white mt-5 py-2 px-8 shadow-md shadow-gray-300 rounded-md mb-5"
-                style={{ width: "600px" }}
+            <div className="flex mx-auto max-w-4xl py-24 sm:py-8 justify-between">
+              <div
+                className="divide-y divide-gray-100 bg-white mt-5 py-2 px-8 shadow-md shadow-gray-300 rounded-md mb-5 mr-5"
+                style={{ width: "300px", height: "300px" }}
               >
-                {transactions.length > 0
-                  ? currentTransactions.map((transaction) => (
-                      <li
-                        key={transaction.id}
-                        className="flex justify-between gap-x-6 py-5"
-                      >
-                        <div className="flex min-w-0 gap-x-4">
-                          <IoWallet className="h-12 w-12 flex-none rounded-full bg-gray-50" />
-                          <div className="min-w-0 flex-auto">
-                            <p className="text-sm font-semibold leading-6 text-gray-900">
-                              {transaction.name}
+                <div style={{ width: "240px", height: "300px" }}>
+                  <div className="font-semibold text-2xl">Profile</div>
+                  <div className="flex my-8 items-center">
+                    <MdEmail className="h-6 w-6 flex-none rounded-full bg-gray-50 mr-12" />
+                    <div>{customer.emailAddress}</div>
+                  </div>
+                  <div className="flex my-8 items-center">
+                    <BsFillTelephoneFill className="h-6 w-6 flex-none rounded-full bg-gray-50 mr-12" />
+                    <div>{customer.telephone}</div>
+                  </div>
+                  <Button className="bg-gray-50 hover:bg-red-700 transition duration-300" 
+                   style={{ transition: 'all 0.3s', ...hoverStyle }}  block>
+                    Edit Profile
+                  </Button>
+                </div>
+                
+              </div>
+              <div className="flex flex-col items-center justify-center">
+                <ul
+                  role="list"
+                  className="divide-y divide-gray-100 bg-white mt-5 py-2 px-8 shadow-md shadow-gray-300 rounded-md mb-5"
+                  style={{ width: "600px" }}
+                >
+                  <div className="font-semibold text-2xl">Transactions</div>
+
+                  {transactions.length > 0
+                    ? currentTransactions.map((transaction) => (
+                        <li
+                          key={transaction.id}
+                          className="flex justify-between gap-x-6 py-5"
+                        >
+                          <div className="flex min-w-0 gap-x-4">
+                            <IoWallet className="h-8 w-8 flex-none rounded-full bg-gray-50" />
+                            <div className="min-w-0 flex-auto">
+                              <p className="text-sm font-semibold leading-6 text-gray-900">
+                                {transaction.name}
+                              </p>
+                              <p className="mt-1 truncate text-xs leading-5 text-gray-500">
+                                {transaction.email}
+                              </p>
+                            </div>
+                          </div>
+                          <div className="hidden shrink-0 sm:flex sm:flex-col sm:items-end">
+                            <p className="text-sm leading-6 text-gray-900">
+                              + {transaction.totalMoney}
                             </p>
-                            <p className="mt-1 truncate text-xs leading-5 text-gray-500">
-                              {transaction.email}
+
+                            <p className="mt-1 text-xs leading-5 text-gray-500">
+                              At{" "}
+                              <time dateTime={transaction.lastSeenDateTime}>
+                                {transaction.transactionDate}
+                              </time>
                             </p>
                           </div>
-                        </div>
-                        <div className="hidden shrink-0 sm:flex sm:flex-col sm:items-end">
-                          <p className="text-sm leading-6 text-gray-900">
-                            + {transaction.totalMoney}
-                          </p>
-
-                          <p className="mt-1 text-xs leading-5 text-gray-500">
-                            At{" "}
-                            <time dateTime={transaction.lastSeenDateTime}>
-                              {transaction.transactionDate}
-                            </time>
-                          </p>
-                        </div>
-                      </li>
-                    ))
-                  : null}
-              </ul>
-            <Pagination 
-            defaultCurrent={1} 
-            current={thisPage}
-            pageSize={itemPerPage} 
-            total={Math.ceil(transactions.length)} 
-            onChange={handlePageClick}
-            />
+                        </li>
+                      ))
+                    : null}
+                </ul>
+                <Pagination
+                  defaultCurrent={1}
+                  current={thisPage}
+                  pageSize={itemPerPage}
+                  total={Math.ceil(transactions.length)}
+                  onChange={handlePageClick}
+                />
+              </div>
             </div>
           </div>
-
         </div>
       )}
     </div>

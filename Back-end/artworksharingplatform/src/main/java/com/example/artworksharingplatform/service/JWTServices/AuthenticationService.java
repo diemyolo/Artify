@@ -3,7 +3,6 @@ package com.example.artworksharingplatform.service.JWTServices;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -28,7 +27,6 @@ public class AuthenticationService {
     private final JWTService _jwtService;
     private final AuthenticationManager _authMannager;
     private final EWalletService walletService;
-
 
     public AuthenticationResponse register(RegisterRequest registerRequest) {
         if (registerRequest.getPass() == null) {
@@ -62,9 +60,7 @@ public class AuthenticationService {
                 .pass(_passwordEncoder.encode(registerRequest.getPass()))
                 .telephone((registerRequest.getTelephone()))
                 .createdDate(Timestamp.valueOf(LocalDateTime.now()))
-
-                .status("INACTIVE")
-
+                .status("ACTIVE")
                 .role(Role.CREATOR)
                 .build();
         _repository.save(user);
@@ -97,8 +93,11 @@ public class AuthenticationService {
                         authRequest.getEmail(),
                         authRequest.getPass()));
         var user = _repository.findByEmailAddress(authRequest.getEmail()).orElseThrow();
-        var jwtToken = _jwtService.generateToken(user);
-        return AuthenticationResponse.builder().Token(jwtToken).build();
-
+        if (user.getStatus().equals("ACTIVE") || user.getStatus().equals("READY")) {
+            var jwtToken = _jwtService.generateToken(user);
+            return AuthenticationResponse.builder().Token(jwtToken).build();
+        } else {
+            return null;
+        }
     }
 }

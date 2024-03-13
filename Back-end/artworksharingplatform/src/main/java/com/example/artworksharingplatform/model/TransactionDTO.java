@@ -1,17 +1,20 @@
 package com.example.artworksharingplatform.model;
 
 import java.sql.Timestamp;
-import java.util.Date;
 import java.util.UUID;
 
+import lombok.Getter;
+import lombok.Setter;
 import lombok.Data;
 
+@Getter
+@Setter
 @Data
 public class TransactionDTO {
-	
-	public UUID transactionId;
-	public Timestamp transactionDate;
-	public float totalMoney;
-	public float inputMoney;
-	
+    private UUID userId;
+    private float totalMoney;
+    private Timestamp transactionDate;
+    private String description;
+	  public UUID transactionId;
+	  public float inputMoney;
 }

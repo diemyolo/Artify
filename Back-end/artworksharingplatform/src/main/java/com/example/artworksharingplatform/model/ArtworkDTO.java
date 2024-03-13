@@ -3,7 +3,6 @@ package com.example.artworksharingplatform.model;
 import java.util.Date;
 import java.util.UUID;
 
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 

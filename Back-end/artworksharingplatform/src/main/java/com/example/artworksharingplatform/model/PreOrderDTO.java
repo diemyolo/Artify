@@ -3,11 +3,15 @@ package com.example.artworksharingplatform.model;
 import java.sql.Timestamp;
 import java.util.UUID;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
+@Data
+@AllArgsConstructor
 public class PreOrderDTO {
     private UUID preOrderId;
     private String status;
@@ -20,4 +24,5 @@ public class PreOrderDTO {
     private UUID creatorId;
     private UUID audienceId;
     private UUID artworkId;
+    private String artworkImagePath;
 }

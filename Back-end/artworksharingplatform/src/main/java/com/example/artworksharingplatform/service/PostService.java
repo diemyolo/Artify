@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.artworksharingplatform.entity.Artworks;
 import com.example.artworksharingplatform.entity.Post;
+import com.example.artworksharingplatform.entity.User;
 import com.example.artworksharingplatform.mapper.ArtworkMapper;
 import com.example.artworksharingplatform.mapper.PostMapper;
 import com.example.artworksharingplatform.model.ArtworkDTO;
@@ -59,11 +60,12 @@ public class PostService implements PostServiceImpl {
     }
 
     @Override
-    public Post addPost(PostDTO postDTO) {
+    public Post addPost(PostDTO postDTO, User creator){
         // TODO Auto-generated method stub
        Post post = new Post();
        post.setDescription(postDTO.getDescription());
        post.setNumberOfLikes(postDTO.getNumberOfLikes());
+       post.setCreator(creator);
        Date date = new Date();
        post.setPublishDate(date);
        Post result = postRepository.save(post);
@@ -128,6 +130,18 @@ public class PostService implements PostServiceImpl {
         Post result = postRepository.save(post);
         return result;
     }
+
+    @Override
+    public Post addPostTest(PostDTO postDTO) {
+        Post post = new Post();
+        post.setDescription(postDTO.getDescription());
+        post.setNumberOfLikes(postDTO.getNumberOfLikes());
+        Date date = new Date();
+        post.setPublishDate(date);
+        Post result = postRepository.save(post);
+        return result;
+    }
+
 
 
 }

@@ -41,7 +41,7 @@ const PostCard = () => {
     console.log(post);
     return (
         <>
-            <Spin spinning={!isLoading} fullscreen />
+        <Spin spinning={!isLoading} fullscreen />
             <div className='flex flex-col justify-center items-center w-full'>
                 {post.length > 0 ?
                     post.map((p) =>
@@ -67,7 +67,7 @@ const PostCard = () => {
                                     <Carousel pauseOnHover className="w-full mx-auto" infiniteLoop={true}>
                                         {p.artList.map((item, index) => (
                                             <div key={index}>
-                                                <Link to={`/singlePost?postId=${p.postId}`}>
+                                                <Link to={`/singlePost?postId=${p.postId}`}> 
                                                     <img
                                                         src={item.imagePath}
                                                         className="rounded-md w-[700px] mx-auto"
@@ -115,4 +115,4 @@ const PostCard = () => {
 };
 
 
-export default PostCard;
+export default PostCard

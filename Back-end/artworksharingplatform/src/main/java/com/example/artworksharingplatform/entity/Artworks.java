@@ -1,9 +1,12 @@
 package com.example.artworksharingplatform.entity;
 
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 import org.hibernate.annotations.UuidGenerator;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -11,6 +14,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
@@ -44,8 +48,9 @@ public class Artworks {
 	@Column(name = "CreatedDate")
 	private Date createdDate;
 
-	@OneToOne(mappedBy = "artwork", cascade = CascadeType.ALL)
-	private Order order;
+	@OneToMany(mappedBy = "artwork", cascade = CascadeType.ALL)
+	@JsonIgnore
+	private List<Order> orders;
 
 	@ManyToOne
 	@JoinColumn(name = "PostID")

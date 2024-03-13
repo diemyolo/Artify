@@ -7,6 +7,8 @@ import { AiOutlineUserAdd } from "react-icons/ai";
 import { Carousel } from 'flowbite-react';
 import { Spin } from "antd";
 import { Watermark } from 'antd';
+import { saveAs } from 'file-saver';
+import axios from "axios";
 
 const CardItem = () => {
     const [p, setPost] = useState();
@@ -14,7 +16,7 @@ const CardItem = () => {
     const [selectedImage, setSelectedImage] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
 
-    const params = new URLSearchParams(window.location.search);
+	  const params = new URLSearchParams(window.location.search);
     const postId = params.get("postId");
 
     const handleImageClick = (imagePath) => {
@@ -47,10 +49,29 @@ const CardItem = () => {
         }
         fetchFData();
     }, []);
+  
+  
+  
     if (p != undefined) {
         console.log(p);
     }
-
+  
+  
+    const downloadArt = async (image) => {
+        const response = await axios.get(`http://localhost:8080/api/auth/downloadArt?artId=${image.artId}`);
+    //    console.log(response.data.payload);
+    //    if(response){
+    //     setIsLoading(false);
+    //    }
+    //     const url = window.URL.createObjectURL(new Blob([response.data.payload]));
+    //     const link = document.createElement('a');
+    //     link.href = url;
+    //     link.setAttribute('download', 'image.png');
+    //     document.body.appendChild(link);
+    //     link.click();
+        saveAs(`${response.data.payload}`, 'image.jpg');
+    }
+  
     return (
         <>
             <div className='flex flex-col justify-center items-center'>
@@ -115,7 +136,6 @@ const CardItem = () => {
                                         20
                                     </button>
                                 </div>
-
                             </div>
 
                             <div className='flex flex-col items-center justify-start w-[35%] gap-[70px] p-10  bg-slate-200'>
@@ -123,7 +143,7 @@ const CardItem = () => {
                             </div>
                         </div>
 
-                        {selectedImage && (
+                         {selectedImage && (
                             <Modal dismissible className='mt-10 px-72' size={1} show={openModal} onClose={() => setOpenModal(false)}>
                                 <Modal.Body className='flex justify-center items-center'>
                                     <div>

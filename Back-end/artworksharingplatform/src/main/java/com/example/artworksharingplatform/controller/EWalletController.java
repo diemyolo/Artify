@@ -2,7 +2,6 @@ package com.example.artworksharingplatform.controller;
 
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import com.example.artworksharingplatform.config.VnPayConfig;
 import com.example.artworksharingplatform.entity.EWallet;
@@ -60,6 +59,9 @@ import com.example.artworksharingplatform.service.impl.TransactionServiceImpl;
 public class EWalletController {
 
     @Autowired
+    UserServiceImpl userServiceImpl;
+
+    @Autowired
     UserService userService;
 
     @Autowired
@@ -70,6 +72,7 @@ public class EWalletController {
   
     @Autowired
     TransactionMapper transactionMapper;
+  
     @PostMapping("/pay")
     public String getPay(@RequestParam("input_money") String inputMoney) throws UnsupportedEncodingException {
         String vnp_Version = "2.1.0";
@@ -166,7 +169,6 @@ public class EWalletController {
 		} else {
 			return ResponseEntity.ok(apiResponse);
 		}
-
     }
 
     private boolean isUserAuthenticated(Authentication authentication) {
