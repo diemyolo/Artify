@@ -12,7 +12,7 @@ const CommentBar = () => {
                 <h1 className="text-lg font-semibold text-[#2f6a81]">
                     Comments (20)
                 </h1>
-                <div className="flex flex-col w-full gap-8 overflow-y-scroll pr-8" style={{ maxHeight: '400px' }}>
+                <div className="flex flex-col w-full gap-8 overflow-y-scroll pr-8" style={{ maxHeight: '300px' }}>
                     <SinglePostComment
                         billyGreenOne={login}
                         timezone="Awesome Edward, remeber that five tips for low cost "

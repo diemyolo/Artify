@@ -13,6 +13,7 @@ import { FaPlus } from "react-icons/fa";
 import { Pagination } from "antd";
 import { MdEmail } from "react-icons/md";
 import { BsFillTelephoneFill } from "react-icons/bs";
+
 const ViewEwallet = () => {
   const navigate = useNavigate();
   const [amount, setAmount] = useState(0);
@@ -70,10 +71,12 @@ const ViewEwallet = () => {
 
   const indexOfLastTransaction = thisPage * itemPerPage;
   const indexOfFirstTransaction = indexOfLastTransaction - itemPerPage;
+
   const currentTransactions = transactions.slice(
     indexOfFirstTransaction,
     indexOfLastTransaction
   );
+
   console.log(transactions);
   console.log(isLoading);
   console.log(totalPage);
@@ -82,6 +85,7 @@ const ViewEwallet = () => {
   const handlePageClick = (data) => {
     setThisPage(data);
   };
+  
   const stats = [
     { id: 1, name: "Number of transactions", value: transactions.length },
     { id: 2, name: "Account Balance", value: `${eWallet.totalAmount} VND` },
