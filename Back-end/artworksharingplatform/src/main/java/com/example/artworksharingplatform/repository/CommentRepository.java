@@ -11,4 +11,6 @@ import com.example.artworksharingplatform.entity.Comment;
 @Repository
 public interface CommentRepository extends JpaRepository<Comment, UUID> {
     List<Comment> findAllByInteraction_Id(UUID interactionId);
+
+    List<Comment> findAllByInteraction_InteractionPost_Id(UUID postId);
 }
