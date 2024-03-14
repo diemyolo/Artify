@@ -32,6 +32,8 @@ import com.example.artworksharingplatform.service.CloudinaryService;
 import com.example.artworksharingplatform.service.PreOrderService;
 import com.example.artworksharingplatform.service.UserService;
 
+import org.springframework.web.bind.annotation.RequestBody;;
+
 @RestController
 @RequestMapping("api/auth")
 public class PreOrderController {
@@ -52,7 +54,7 @@ public class PreOrderController {
 
     @PostMapping("audience/PreOrderRequest")
     @PreAuthorize("hasRole('ROLE_AUDIENCE')")
-    public ResponseEntity<?> addPreOder(PreOrderRequest preOrderRequest) {
+    public ResponseEntity<?> addPreOder(@RequestBody PreOrderRequest preOrderRequest) {
         ApiResponse<PreOrderDTO> apiResponse = new ApiResponse<PreOrderDTO>();
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         try {

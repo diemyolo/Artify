@@ -5,43 +5,32 @@ import InputComment from './InputComment';
 import { Spin } from "antd";
 import { Carousel } from 'flowbite-react';
 import { AiOutlineUserAdd } from "react-icons/ai";
+import axios from "axios";
 
 const PostCard = () => {
     const [post, setPost] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
 
-    const myHeaders = new Headers();
     const token = localStorage.getItem("token");
-    myHeaders.append("Authorization", `Bearer ${token}`);
-    const requestOptions = {
-        method: "GET",
-        headers: myHeaders,
-        redirect: "follow"
-    };
+
     useEffect(() => {
-        const fetchFData = () => {
-            fetch("http://localhost:8080/api/auth/audience/viewAllPosts", requestOptions)
-                .then((response) => {
-                    if (response.ok) {
-                        return response.json();
-                    }
-                    throw Error(response.statusText);
-                })
-                .then((result) => {
-                    console.log(result.payload);
-                    setPost(result.payload);
-                    if (result && result.payload && result.payload.length > 0) {
-                        setIsLoading(true);
-                    }
-                })
-                .catch((error) => console.error(error));
+        const fetchData = async () => {
+            const response = await axios.get(
+                `http://localhost:8080/api/auth/audience/viewAllPosts`,
+                {
+                    headers: { Authorization: `Bearer ${token}` },
+                }
+            );
+            setPost(response.data.payload);
+            if (response) setIsLoading(true);
         }
-        fetchFData();
+        fetchData();
     }, []);
-    console.log('posytttttttttttttttttttttt', post);
+
+
     return (
         <>
-        <Spin spinning={!isLoading} fullscreen />
+            <Spin spinning={!isLoading} fullscreen />
             <div className='flex flex-col justify-center items-center w-full'>
                 {post?.length > 0 ?
                     post?.map((p) =>
@@ -67,7 +56,7 @@ const PostCard = () => {
                                     <Carousel pauseOnHover className="w-full mx-auto" infiniteLoop={true}>
                                         {p.artList.map((item, index) => (
                                             <div key={index}>
-                                                <Link to={`/singlePost?postId=${p.postId}`}> 
+                                                <Link to={`/singlePost?postId=${p.postId}`}>
                                                     <img
                                                         src={item.imagePath}
                                                         className="rounded-md w-[700px] mx-auto"

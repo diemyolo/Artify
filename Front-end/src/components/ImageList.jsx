@@ -46,7 +46,6 @@ const ImageList = () => {
     }, []);
 
     useEffect(() => {
-        console.log("`POST DATA`", post)
         combineArt = post?.flatMap(p => p.artList)
         setGallery(combineArt)
     }, [post])

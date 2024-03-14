@@ -7,39 +7,13 @@ const CardProfile = ({
     onPostButtonClick,
     onGalleryButtonClick,
     onFollowerButtonClick,
+    onRequestButtonClick,
+    p,
+    creatorId
 }) => {
    
 
-    const [p, setPost] = useState([]);
-    const params = new URLSearchParams(window.location.search);
-    const creatorId = params.get("creatorId");
     const [isLoading, setIsLoading] = useState(false);
-
-    const myHeaders = new Headers();
-    const token = localStorage.getItem("token");
-    myHeaders.append("Authorization", `Bearer ${token}`);
-    const requestOptions = {
-        method: "GET",
-        headers: myHeaders,
-        redirect: "follow"
-    };
-    useEffect(() => {
-        const fetchFData = () => {
-            fetch(`http://localhost:8080/api/auth/getPostByCreator?creatorId=${creatorId}`, requestOptions)
-                .then((response) => {
-                    if (response.ok) {
-                        return response.json();
-                    }
-                    throw Error(response.statusText);
-                })
-                .then((result) => {
-                    setPost(result.payload);
-                })
-                .catch((error) => console.error(error));
-        }
-        fetchFData();
-    }, []);
-
 
     const stats = [
         { id: 1, name: "Posts", value: p.length },
@@ -78,6 +52,13 @@ const CardProfile = ({
                                                 className="hover:text-[#2f6a81]"
                                             />
                                             <button type="submit">Follow</button>
+                                        </div>
+                                        <div className="cursor-pointer font-semibold border-2 sm:flex gap-2 hidden items-center text-white bg-[#2f6a81] px-4 py-2 transition-all duration-300 rounded-full  hover:bg-gray-100 hover:text-[#2f6a81] hover:border-[#2f6a81] hover:border-2">
+                                            <AiOutlineUserAdd
+                                                size={20}
+                                                className="hover:text-[#2f6a81]"
+                                            />
+                                            <button type="button" onClick={onRequestButtonClick}>Request</button>
                                         </div>
                                     </div>
 

@@ -3,6 +3,7 @@ import { navLinks } from '../constants';
 import logo from "../assets/logo.png"
 import { Link } from "react-router-dom";
 import { AiOutlineSearch } from "react-icons/ai";
+import { Dropdown } from 'flowbite-react';
 
 const NavBar = () => {
   const [isSticky, setIsSticky] = useState(false);
@@ -39,7 +40,7 @@ const NavBar = () => {
   return (
     <header className='w-full bg-gray-100 fixed top-0 left-0 right-0'>
       <nav className='navbar px-10'>
-        <div className='space-x-16 h-[90px] flex justify-between items-center'>
+        <div className='space-x-10 h-[90px] flex justify-between items-center'>
           <a href='/home'>
             <img src={logo} className='w-[124px] h-[124px]' alt="Logo" />
           </a>
@@ -62,22 +63,36 @@ const NavBar = () => {
             />
           </div>
 
-          <div className="space-x-12 lg:flex items-center">
-
+          <div className="lg:flex items-center">
             {token != null ?
               <>
-                <Link
-                  to="/viewEwallet"
-                  className="font-semibold lg:flex items-center hover:text-[#2f6a81]"
-                >
-                  Profile
-                </Link>
-                <button
-                  className="text-white bg-[#2f6a81] py-2 px-4 transition-all duration-300 rounded-full"
-                  onClick={handleLogout}
-                >
-                  Logout
-                </button>
+                <Dropdown label="Profile">
+                  <Dropdown.Header>
+                    <span className="block text-sm"></span>
+                    <span className="block truncate text-sm font-medium"></span>
+                  </Dropdown.Header>
+                  <Dropdown.Item>
+                    <Link to="/viewEwallet" className="font-semibold lg:flex items-center hover:text-[#2f6a81]">
+                      Edit Profile
+                    </Link>
+                  </Dropdown.Item>
+                  <Dropdown.Item>
+                    <Link to="/viewEwallet" className="font-semibold lg:flex items-center hover:text-[#2f6a81]">
+                      My Wallet
+                    </Link>
+                  </Dropdown.Item>
+                  <Dropdown.Item>
+                    <Link to="/requestHistory" className="font-semibold lg:flex items-center hover:text-[#2f6a81]">
+                      Request History
+                    </Link>
+                  </Dropdown.Item>
+                  <Dropdown.Divider />
+                  <Dropdown.Item>
+                    <div onClick={handleLogout} className="cursor-pointer font-semibold lg:flex items-center hover:text-[#2f6a81]">
+                      Sign out
+                    </div>
+                  </Dropdown.Item>
+                </Dropdown>
               </>
               : <>
                 <a
@@ -94,7 +109,6 @@ const NavBar = () => {
                 </Link>
               </>
             }
-
           </div>
         </div>
       </nav>
