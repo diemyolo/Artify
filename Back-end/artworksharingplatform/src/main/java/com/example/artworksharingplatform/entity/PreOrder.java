@@ -31,7 +31,7 @@ public class PreOrder {
 	@Column(name = "Price")
 	private float price;
 
-	@Column(name = "Requirement")
+	@Column(name = "Requirement", columnDefinition = "nvarchar(max)")
 	private String requirement;
 
 	@Column(name = "AudienceRating")
@@ -55,7 +55,8 @@ public class PreOrder {
 	@JoinColumn(name = "CreatorID")
 	private User preOrderCreator;
 
-	@OneToOne(mappedBy = "preOrder")
+	@ManyToOne
+	@JoinColumn(name = "TransactionId")
 	private Transaction transactions;
 
 	@OneToOne(cascade = CascadeType.ALL)
