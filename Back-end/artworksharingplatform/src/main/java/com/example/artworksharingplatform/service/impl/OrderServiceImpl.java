@@ -1,12 +1,14 @@
 package com.example.artworksharingplatform.service.impl;
 
+import java.util.List;
+import java.util.UUID;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.artworksharingplatform.entity.Artworks;
 import com.example.artworksharingplatform.entity.Order;
-import com.example.artworksharingplatform.entity.Transaction;
 import com.example.artworksharingplatform.entity.User;
 import com.example.artworksharingplatform.repository.ArtworkRepository;
 import com.example.artworksharingplatform.repository.OrderRepository;
@@ -85,6 +87,11 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public long countOrders() {
         return orderRepository.count();
+    }
+
+    @Override
+    public List<Order> getOrdersByUserId(UUID userId) {
+        return orderRepository.findByAudience_Id(userId);
     }
 
 }
