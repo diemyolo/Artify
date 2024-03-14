@@ -1,7 +1,7 @@
 package com.example.artworksharingplatform.controller;
 
 import java.sql.Timestamp;
-
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -76,10 +76,33 @@ public class OrderController {
         }
     }
 
-    @GetMapping("countOrders")
-    @PreAuthorize("hasRole('ROLE_AUDIENCE') or hasRole('ROLE_CREATOR') or hasRole('ROLE_ADMIN')")
-    public long countOrders() {
-        return orderService.countOrders();
+    // @GetMapping("countOrders")
+    // @PreAuthorize("hasRole('ROLE_AUDIENCE') or hasRole('ROLE_CREATOR') or
+    // hasRole('ROLE_ADMIN')")
+    // public ResponseEntity<ApiResponse<Long>> countOrders() {
+
+    // }
+
+    @GetMapping("viewList")
+    @PreAuthorize("hasRole('ROLE_AUDIENCE') or hasRole('ROLE_CREATOR')")
+    public ResponseEntity<ApiResponse<List<OrderDTO>>> getMethodName() {
+        ApiResponse<List<OrderDTO>> apiResponse = new ApiResponse<List<OrderDTO>>();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        String email = userDetails.getUsername();
+        User user = userService.findByEmail(email);
+
+        try {
+            List<Order> orders = orderService.getOrdersByUserId(user.getId());
+            List<OrderDTO> orderDTOs = orderMapper.toOrderDTOsList(orders);
+
+            apiResponse.ok(orderDTOs);
+            return ResponseEntity.ok(apiResponse);
+
+        } catch (Exception e) {
+            apiResponse.error(e);
+            return new ResponseEntity<>(apiResponse, HttpStatus.BAD_REQUEST);
+        }
     }
 
 }

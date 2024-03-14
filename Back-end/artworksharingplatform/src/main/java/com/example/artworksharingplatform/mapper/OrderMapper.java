@@ -20,5 +20,5 @@ public interface OrderMapper {
     @Mapping(source = "order.audience.id", target = "audienceId")
     OrderDTO toOrderDTO(Order order);
 
-    List<OrderDTO> toInteractionDTOList(List<Order> ordersList);
+    List<OrderDTO> toOrderDTOsList(List<Order> ordersList);
 }
