@@ -93,8 +93,8 @@ public class PostController {
 		}
 	}
 
-	@PostMapping("addPost")
-    // @PreAuthorize("hasRole('ROLE_CREATOR')")
+	@PostMapping("creator/addPost")
+    @PreAuthorize("hasRole('ROLE_CREATOR')")
 	public ResponseEntity<ApiResponse> addArtwork(@RequestPart("image") List<MultipartFile> files,
 	@RequestPart("post") PostDTO postDTO){
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -216,7 +216,6 @@ public class PostController {
 		List<PostDTO> result = postService.getPostsByCreatorId(convertedArtId);
 		apiResponse.ok(result);
 		return ResponseEntity.ok(apiResponse);
-
 	}
 	
 	
