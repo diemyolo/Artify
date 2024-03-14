@@ -20,7 +20,7 @@ const NavBar = () => {
       }
     }
     window.addEventListener('scroll', handleScroll);
-    
+
     return () => {
       window.removeEventListener('scroll', handleScroll);
     }
@@ -53,9 +53,9 @@ const NavBar = () => {
           </ul>
 
           <div className='bg-gray-200 rounded-full sm:flex hidden items-center px-4 lg:w-[350px]'>
-            <AiOutlineSearch className='cursor-pointer' size={20} style={{ color: '#2f6a81', fontWeight: 'bold' }}/>
+            <AiOutlineSearch className='cursor-pointer' size={20} style={{ color: '#2f6a81', fontWeight: 'bold' }} />
             <input
-              className=' bg-transparent p-3 lg:w-[350px] appearance-none focus:outline-none border-none'
+              className=' bg-transparent p-3 lg:w-[400px] appearance-none focus:outline-none border-none'
               type='search'
               placeholder='Search for art...'
               style={{ outline: 'none' }}
@@ -63,8 +63,9 @@ const NavBar = () => {
           </div>
 
           <div className="space-x-12 lg:flex items-center">
-              
-              {token != null ? <>
+
+            {token != null ?
+              <>
                 <Link
                   to="/viewEwallet"
                   className="font-semibold lg:flex items-center hover:text-[#2f6a81]"
@@ -78,7 +79,7 @@ const NavBar = () => {
                   Logout
                 </button>
               </>
-              :  <>
+              : <>
                 <a
                   href="/"
                   className="font-semibold lg:flex items-center hover:text-[#2f6a81]"
@@ -92,8 +93,8 @@ const NavBar = () => {
                   Sign Up
                 </Link>
               </>
-              }
-              
+            }
+
           </div>
         </div>
       </nav>

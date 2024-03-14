@@ -38,20 +38,20 @@ const PostCard = () => {
         }
         fetchFData();
     }, []);
-    console.log(post);
+    console.log('posytttttttttttttttttttttt', post);
     return (
         <>
         <Spin spinning={!isLoading} fullscreen />
             <div className='flex flex-col justify-center items-center w-full'>
-                {post.length > 0 ?
-                    post.map((p) =>
+                {post?.length > 0 ?
+                    post?.map((p) =>
                         <Card key={p.postId} className="justify-center flex bg-white shadow-md shadow-gray-300 rounded-md mb-5 w-1/2">
                             <div className="flex justify-between gap-3">
                                 <Link to={`/artistProfile?creatorId=${p.creatorId}`} >
                                     <Avatar rounded>
                                         <div className="space-y-1 dark:text-white">
                                             <div className='font-medium'>{p.creatorName}</div>
-                                            <div className="text-sm text-gray-500 dark:text-gray-400">{p.artList.map(item => item.createdDate)}</div>
+                                            <div className="text-sm text-gray-500 dark:text-gray-400">{p.artList[0].createdDate}</div>
                                         </div>
                                     </Avatar>
                                 </Link>
