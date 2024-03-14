@@ -14,7 +14,9 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+
 import org.springframework.web.bind.annotation.*;
+
 import org.springframework.web.multipart.MultipartFile;
 
 import com.example.artworksharingplatform.entity.Artworks;
@@ -24,6 +26,8 @@ import com.example.artworksharingplatform.mapper.PreOrderMapper;
 import com.example.artworksharingplatform.model.ApiResponse;
 import com.example.artworksharingplatform.model.PreOrderDTO;
 import com.example.artworksharingplatform.model.PreOrderRequest;
+
+import org.springframework.web.bind.annotation.RequestBody;;
 
 @RestController
 @RequestMapping("api/auth")
@@ -46,7 +50,7 @@ public class PreOrderController {
 
     @PostMapping("audience/PreOrderRequest")
     @PreAuthorize("hasRole('ROLE_AUDIENCE')")
-    public ResponseEntity<?> addPreOder(PreOrderRequest preOrderRequest) {
+    public ResponseEntity<?> addPreOder(@RequestBody PreOrderRequest preOrderRequest) {
         ApiResponse<PreOrderDTO> apiResponse = new ApiResponse<PreOrderDTO>();
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         try {

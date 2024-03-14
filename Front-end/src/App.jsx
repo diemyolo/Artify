@@ -12,6 +12,7 @@ import SinglePost from "./pages/SinglePost/SinglePost";
 import ArtistProfile from "./pages/Profile/ArtistProfile";
 import AddArts from "./pages/Post/AddArts";
 import Gallery from "./pages/Gallery/Gallery";
+import RequestHistory from "./pages/Request/RequestHistory";
 
 const router = createBrowserRouter([
   {
@@ -61,6 +62,10 @@ const router = createBrowserRouter([
   {
     path: "/gallery",
     element: <div><Gallery /></div>,
+  },
+  {
+    path: "/requestHistory",
+    element: <div><RequestHistory /></div>,
   }
 ]);
 

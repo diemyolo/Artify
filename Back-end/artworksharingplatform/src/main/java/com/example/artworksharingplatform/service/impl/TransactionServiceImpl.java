@@ -66,6 +66,7 @@ public class TransactionServiceImpl implements TransactionService {
 		Transaction transaction = new Transaction();
 		transaction.setTotalMoney(totalMoney * creatorRate);
 		transaction.setUser(order.getArtwork().getPosts().getCreator());
+		transaction.setTransactionDate(order.getOrderDate());
 		return repo.save(transaction);
 	}
 
@@ -74,6 +75,7 @@ public class TransactionServiceImpl implements TransactionService {
 		Transaction transaction = new Transaction();
 		transaction.setTotalMoney(totalMoney);
 		transaction.setUser(order.getAudience());
+		transaction.setTransactionDate(order.getOrderDate());
 		return repo.save(transaction);
 	}
 
