@@ -3,13 +3,10 @@ package com.example.artworksharingplatform.service.impl;
 import java.util.List;
 import java.util.UUID;
 
+import com.example.artworksharingplatform.entity.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.artworksharingplatform.entity.Order;
-import com.example.artworksharingplatform.entity.Role;
-import com.example.artworksharingplatform.entity.Transaction;
-import com.example.artworksharingplatform.entity.User;
 import com.example.artworksharingplatform.mapper.TransactionMapper;
 import com.example.artworksharingplatform.model.TransactionDTO;
 import com.example.artworksharingplatform.repository.TransactionRepository;
@@ -79,6 +76,36 @@ public class TransactionServiceImpl implements TransactionService {
 		transaction.setTotalMoney(totalMoney);
 		transaction.setUser(order.getAudience());
 		transaction.setTransactionDate(order.getOrderDate());
+		return repo.save(transaction);
+	}
+
+	@Override
+	public Transaction addTransactionPreOrderAdmin(PreOrder order, float totalMoney) {
+		Role role = Role.ADMIN;
+		User admin = userRepository.findByRole(role);
+
+		Transaction transaction = new Transaction();
+		transaction.setTotalMoney(totalMoney * adminRate);
+		transaction.setUser(admin);
+		transaction.setTransactionDate(order.getPreOrderDate());
+		return repo.save(transaction);
+	}
+
+	@Override
+	public Transaction addTransactionPreOrderCreator(PreOrder order, float totalMoney) {
+		Transaction transaction = new Transaction();
+		transaction.setTotalMoney(totalMoney * creatorRate);
+		transaction.setUser(order.getPreOrderCreator());
+		transaction.setTransactionDate(order.getPreOrderDate());
+		return repo.save(transaction);
+	}
+
+	@Override
+	public Transaction addTransactionPreOrderAudience(PreOrder order, float totalMoney) {
+		Transaction transaction = new Transaction();
+		transaction.setTotalMoney(totalMoney);
+		transaction.setUser(order.getPreOrderAudience());
+		transaction.setTransactionDate(order.getPreOrderDate());
 		return repo.save(transaction);
 	}
 

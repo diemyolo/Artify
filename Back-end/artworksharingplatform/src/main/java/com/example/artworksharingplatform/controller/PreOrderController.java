@@ -5,6 +5,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
+import com.example.artworksharingplatform.model.ProcessingRequest;
+import com.example.artworksharingplatform.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,13 +14,9 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.RestController;
+
+import org.springframework.web.bind.annotation.*;
+
 import org.springframework.web.multipart.MultipartFile;
 
 import com.example.artworksharingplatform.entity.Artworks;
@@ -28,10 +26,6 @@ import com.example.artworksharingplatform.mapper.PreOrderMapper;
 import com.example.artworksharingplatform.model.ApiResponse;
 import com.example.artworksharingplatform.model.PreOrderDTO;
 import com.example.artworksharingplatform.model.PreOrderRequest;
-import com.example.artworksharingplatform.service.ArtworkService;
-import com.example.artworksharingplatform.service.CloudinaryService;
-import com.example.artworksharingplatform.service.PreOrderService;
-import com.example.artworksharingplatform.service.UserService;
 
 import org.springframework.web.bind.annotation.RequestBody;;
 
@@ -40,7 +34,8 @@ import org.springframework.web.bind.annotation.RequestBody;;
 public class PreOrderController {
     @Autowired
     UserService _userService;
-
+    @Autowired
+    EWalletService _eWalletService;
     @Autowired
     PreOrderService _preOrderService;
 
@@ -152,6 +147,34 @@ public class PreOrderController {
             }
             PreOrderDTO changedPreOrderDTO = _preOrderMapper.toPreOrderDTO(changedPreOrder);
             apiResponse.ok(changedPreOrderDTO);
+            return ResponseEntity.ok(apiResponse);
+        } catch (Exception e) {
+            apiResponse.error(e);
+            return new ResponseEntity<>(apiResponse, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PutMapping("audience/processing")
+    @PreAuthorize("hasRole('ROLE_AUDIENCE')")
+    public ResponseEntity<ApiResponse<PreOrderDTO>> ProcessingPreOrder(@RequestBody ProcessingRequest request) {
+        ApiResponse<PreOrderDTO> apiResponse = new ApiResponse<PreOrderDTO>();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        String email = userDetails.getUsername();
+        User user = _userService.findByEmail(email);
+        try {
+
+            if (_eWalletService.isEnoughMoney(user.getId(), request.getPrice())) {
+                var result = _preOrderService.processingPreOrderAudience(request);
+                if (result == null) {
+                    throw new Exception("processing failed");
+                }
+                PreOrderDTO preOrderDTO = _preOrderMapper.toPreOrderDTO(result);
+                apiResponse.ok(preOrderDTO);
+            } else {
+                throw new Exception("Not enough money in EWallet.");
+            }
+
             return ResponseEntity.ok(apiResponse);
         } catch (Exception e) {
             apiResponse.error(e);
