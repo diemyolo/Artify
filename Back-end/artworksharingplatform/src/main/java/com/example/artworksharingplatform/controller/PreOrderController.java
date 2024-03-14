@@ -33,6 +33,8 @@ import com.example.artworksharingplatform.service.CloudinaryService;
 import com.example.artworksharingplatform.service.PreOrderService;
 import com.example.artworksharingplatform.service.UserService;
 
+import org.springframework.web.bind.annotation.RequestBody;;
+
 @RestController
 @RequestMapping("api/auth")
 public class PreOrderController {
