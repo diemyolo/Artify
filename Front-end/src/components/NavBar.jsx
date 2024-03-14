@@ -73,11 +73,6 @@ const NavBar = () => {
                   </Dropdown.Header>
                   <Dropdown.Item>
                     <Link to="/viewEwallet" className="font-semibold lg:flex items-center hover:text-[#2f6a81]">
-                      Edit Profile
-                    </Link>
-                  </Dropdown.Item>
-                  <Dropdown.Item>
-                    <Link to="/viewEwallet" className="font-semibold lg:flex items-center hover:text-[#2f6a81]">
                       My Wallet
                     </Link>
                   </Dropdown.Item>

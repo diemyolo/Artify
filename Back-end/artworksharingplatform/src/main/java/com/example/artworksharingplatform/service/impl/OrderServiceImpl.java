@@ -55,6 +55,7 @@ public class OrderServiceImpl implements OrderService {
 
                 float totalMoney = order.getTotalPrice();
 
+
                 if (user.getEWallet().getTotalAmount() >= totalMoney) {
                     // set transaction + admin, creator, - audience
                     order.setTransactions(transactionService.addTransactionOrderAudience(order, -totalMoney));
