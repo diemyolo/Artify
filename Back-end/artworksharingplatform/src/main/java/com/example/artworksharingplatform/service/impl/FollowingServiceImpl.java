@@ -6,4 +6,5 @@ import java.util.UUID;
 
 public interface FollowingServiceImpl {
     public String Following(User audience, User creator) throws Exception;
+    public Integer NumOfFollowing(User creator) throws Exception;
 }
