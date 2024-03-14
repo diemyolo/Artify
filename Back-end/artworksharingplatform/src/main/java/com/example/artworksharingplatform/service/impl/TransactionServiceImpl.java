@@ -1,7 +1,6 @@
 package com.example.artworksharingplatform.service.impl;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,7 +60,6 @@ public class TransactionServiceImpl implements TransactionService {
 		Transaction transaction = new Transaction();
 		transaction.setTotalMoney(totalMoney * adminRate);
 		transaction.setUser(admin);
-		transaction.setOrder(order);
 		transaction.setTransactionDate(order.getOrderDate());
 		return repo.save(transaction);
 	}
@@ -71,7 +69,6 @@ public class TransactionServiceImpl implements TransactionService {
 		Transaction transaction = new Transaction();
 		transaction.setTotalMoney(totalMoney * creatorRate);
 		transaction.setUser(order.getArtwork().getPosts().getCreator());
-		transaction.setOrder(order);
 		return repo.save(transaction);
 	}
 
@@ -80,7 +77,6 @@ public class TransactionServiceImpl implements TransactionService {
 		Transaction transaction = new Transaction();
 		transaction.setTotalMoney(totalMoney);
 		transaction.setUser(order.getAudience());
-		transaction.setOrder(order);
 		return repo.save(transaction);
 	}
 

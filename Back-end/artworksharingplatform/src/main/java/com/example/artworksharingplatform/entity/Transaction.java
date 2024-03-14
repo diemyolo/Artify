@@ -1,9 +1,12 @@
 package com.example.artworksharingplatform.entity;
 
 import java.sql.Timestamp;
+import java.util.List;
 import java.util.UUID;
 
 import org.hibernate.annotations.UuidGenerator;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -11,6 +14,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
@@ -41,11 +45,12 @@ public class Transaction {
 	@JoinColumn(name = "money_input_id", referencedColumnName = "id")
 	private MoneyInput moneyInput;
 
-	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "OrderID", referencedColumnName = "id")
-	private Order order;
+	@OneToMany(mappedBy = "transactions", cascade = CascadeType.ALL)
+	@JsonIgnore
+	private List<Order> orders;
 
-	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "PreOrderID", referencedColumnName = "id")
-	private PreOrder preOrder;
+	@OneToMany(mappedBy = "transactions", cascade = CascadeType.ALL)
+	@JsonIgnore
+	private List<PreOrder> preOrders;
+
 }

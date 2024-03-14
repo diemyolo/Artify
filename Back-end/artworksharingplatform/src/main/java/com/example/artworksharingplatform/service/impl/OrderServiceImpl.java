@@ -53,7 +53,7 @@ public class OrderServiceImpl implements OrderService {
 
                 float totalMoney = order.getTotalPrice();
 
-                order.setTransactions(transactionService.addTransactionOrderCreator(order, -totalMoney));
+                order.setTransactions(transactionService.addTransactionOrderAudience(order, -totalMoney));
                 transactionService.addTransactionOrderAdmin(order, totalMoney);
                 transactionService.addTransactionOrderCreator(order, totalMoney);
 
