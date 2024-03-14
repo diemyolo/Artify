@@ -5,7 +5,7 @@ import { Avatar, Modal } from "flowbite-react";
 import { AiOutlineUserAdd } from "react-icons/ai";
 import { MdOutlineFileDownload } from "react-icons/md";
 
-const Gallery = () => {
+const ImageList = () => {
     const [post, setPost] = useState([]);
     const [gallery, setGallery] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
@@ -60,7 +60,7 @@ const Gallery = () => {
 
 
     return (
-        <div className=''>
+        <div>
             <div className="grid grid-cols-3 gap-16 sm:grid-cols-3 px-8 md:px-16 lg:px-28">
                 {post?.length > 0 ?
                     gallery.map((p, postIndex) => (
@@ -149,4 +149,4 @@ const Gallery = () => {
     )
 }
 
-export default Gallery
+export default ImageList

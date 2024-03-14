@@ -4,8 +4,8 @@ export const navLinks = [
         path: "/home",
     },
     {
-        link: "Art",
-        path: "/art",
+        link: "Gallery",
+        path: "/gallery",
     },
     {
         link: "Artist",
