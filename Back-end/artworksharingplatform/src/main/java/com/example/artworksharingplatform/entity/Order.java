@@ -10,7 +10,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
@@ -40,7 +39,8 @@ public class Order {
 	@JoinColumn(name = "ArtworkId")
 	private Artworks artwork;
 
-	@OneToOne(mappedBy = "order")
+	@ManyToOne
+	@JoinColumn(name = "TransactionId")
 	private Transaction transactions;
 
 }

@@ -11,6 +11,7 @@ import AddPost from "./pages/Post/AddPost";
 import SinglePost from "./pages/SinglePost/SinglePost";
 import ArtistProfile from "./pages/Profile/ArtistProfile";
 import AddArts from "./pages/Post/AddArts";
+import Gallery from "./pages/Gallery/Gallery";
 
 const router = createBrowserRouter([
   {
@@ -56,6 +57,10 @@ const router = createBrowserRouter([
   {
     path: "/addArts",
     element: <div><AddArts /></div>,
+  },
+  {
+    path: "/gallery",
+    element: <div><Gallery /></div>,
   }
 ]);
 
