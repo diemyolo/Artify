@@ -13,6 +13,7 @@ import ArtistProfile from "./pages/Profile/ArtistProfile";
 import AddArts from "./pages/Post/AddArts";
 import Gallery from "./pages/Gallery/Gallery";
 import RequestHistory from "./pages/Request/RequestHistory";
+import EditProfile from "./pages/Profile/EditProfile";
 
 const router = createBrowserRouter([
   {
@@ -66,6 +67,10 @@ const router = createBrowserRouter([
   {
     path: "/requestHistory",
     element: <div><RequestHistory /></div>,
+  },
+  {
+    path: "/editProfile",
+    element: <div><EditProfile /></div>,
   }
 ]);
 

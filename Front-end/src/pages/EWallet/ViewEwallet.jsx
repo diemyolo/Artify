@@ -85,7 +85,7 @@ const ViewEwallet = () => {
   const handlePageClick = (data) => {
     setThisPage(data);
   };
-  
+
   const stats = [
     { id: 1, name: "Number of transactions", value: transactions.length },
     { id: 2, name: "Account Balance", value: `${eWallet.totalAmount} VND` },
@@ -124,7 +124,7 @@ const ViewEwallet = () => {
                 </div>
               </div>
             </div>
-            {/* Stats */}
+
             <div className="mx-auto max-w-4xl py-24 sm:px-6 sm:py-8 lg:px-8 text-white bg-[#2f6a81] py-24 sm:py-32">
               <div className="mx-auto max-w-7xl px-6 lg:px-8">
                 <dl className="grid grid-cols-1 gap-x-8 gap-y-16 text-white text-center lg:grid-cols-3">
@@ -173,12 +173,14 @@ const ViewEwallet = () => {
                     <BsFillTelephoneFill className="h-6 w-6 flex-none rounded-full bg-gray-50 mr-12" />
                     <div>{customer.telephone}</div>
                   </div>
-                  <Button className="bg-gray-50 hover:bg-red-700 transition duration-300" 
-                   style={{ transition: 'all 0.3s', ...hoverStyle }}  block>
-                    Edit Profile
-                  </Button>
+                  <Link to="/editProfile">
+                    <Button className="bg-gray-50 hover:bg-red-700 transition duration-300"
+                      style={{ transition: 'all 0.3s', ...hoverStyle }} block>
+                      Edit Profile
+                    </Button>
+                  </Link>
                 </div>
-                
+
               </div>
               <div className="flex flex-col items-center justify-center">
                 <ul
@@ -190,35 +192,35 @@ const ViewEwallet = () => {
 
                   {transactions.length > 0
                     ? currentTransactions.map((transaction) => (
-                        <li
-                          key={transaction.id}
-                          className="flex justify-between gap-x-6 py-5"
-                        >
-                          <div className="flex min-w-0 gap-x-4">
-                            <IoWallet className="h-8 w-8 flex-none rounded-full bg-gray-50" />
-                            <div className="min-w-0 flex-auto">
-                              <p className="text-sm font-semibold leading-6 text-gray-900">
-                                {transaction.name}
-                              </p>
-                              <p className="mt-1 truncate text-xs leading-5 text-gray-500">
-                                {transaction.email}
-                              </p>
-                            </div>
-                          </div>
-                          <div className="hidden shrink-0 sm:flex sm:flex-col sm:items-end">
-                            <p className="text-sm leading-6 text-gray-900">
-                              + {transaction.totalMoney}
+                      <li
+                        key={transaction.id}
+                        className="flex justify-between gap-x-6 py-5"
+                      >
+                        <div className="flex min-w-0 gap-x-4">
+                          <IoWallet className="h-8 w-8 flex-none rounded-full bg-gray-50" />
+                          <div className="min-w-0 flex-auto">
+                            <p className="text-sm font-semibold leading-6 text-gray-900">
+                              {transaction.name}
                             </p>
+                            <p className="mt-1 truncate text-xs leading-5 text-gray-500">
+                              {transaction.email}
+                            </p>
+                          </div>
+                        </div>
+                        <div className="hidden shrink-0 sm:flex sm:flex-col sm:items-end">
+                          <p className="text-sm leading-6 text-gray-900">
+                            + {transaction.totalMoney}
+                          </p>
 
-                            <p className="mt-1 text-xs leading-5 text-gray-500">
-                              At{" "}
-                              <time dateTime={transaction.lastSeenDateTime}>
-                                {transaction.transactionDate}
-                              </time>
-                            </p>
-                          </div>
-                        </li>
-                      ))
+                          <p className="mt-1 text-xs leading-5 text-gray-500">
+                            At{" "}
+                            <time dateTime={transaction.lastSeenDateTime}>
+                              {transaction.transactionDate}
+                            </time>
+                          </p>
+                        </div>
+                      </li>
+                    ))
                     : null}
                 </ul>
                 <Pagination

@@ -67,7 +67,7 @@ export default function Login() {
 
 
   return (
-    <div className="bg-[#f5f5f5] w-full h-screen flex items-center">
+    <div className="bg-gray-100 w-full h-screen flex items-center">
       <div className="relative w-1/2 h-full flex flex-col">
         <div className="absolute top-[20%] left-[10%] flex flex-col z-10">
           <h1 className="text-7xl text-white font-bold my-5">
@@ -105,7 +105,6 @@ export default function Login() {
                 remember: true,
               }}
               autoComplete="off"
-              // onFinish={formik.handleSubmit}
               onSubmit={handleLogin}
             >
               <Form.Item
@@ -127,8 +126,6 @@ export default function Login() {
                   className="w-full px-4 py-2.5"
                   name="email"
                   placeholder="Enter your email"
-                  // value={formik.values.email}
-                  // onChange={formik.handleChange}
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                 />
@@ -151,8 +148,6 @@ export default function Login() {
                 <Input.Password
                   className="w-full px-4 py-2.5"
                   placeholder="Enter your password"
-                  // value={formik.values.password}
-                  // onChange={formik.handleChange}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   name="password"
@@ -175,7 +170,7 @@ export default function Login() {
 
               <div className="w-full flex flex-col my-4">
                 <button
-                  className="w-full bg-[#060606] text-white my-2 font-semibold rounded-md p-4 text-center flex items-center justify-center focus:outline-none hover:bg-[#2f6a81] mt-3"
+                  className="w-full bg-[#2f6a81] text-white my-2 font-semibold rounded-md p-4 text-center flex items-center justify-center focus:outline-none hover:bg-gray-100 hover:text-[#2f6a81] hover:border-[#2f6a81] hover:border-2 mt-3 transition-all duration-300 "
                   type="submit"
                   onClick={handleLogin}
                 >

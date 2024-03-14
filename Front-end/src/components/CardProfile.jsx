@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Avatar, Card, Button } from "flowbite-react";
+import { Avatar, Card } from "flowbite-react";
 import { AiOutlineUserAdd } from "react-icons/ai";
 import { Spin } from "antd";
 

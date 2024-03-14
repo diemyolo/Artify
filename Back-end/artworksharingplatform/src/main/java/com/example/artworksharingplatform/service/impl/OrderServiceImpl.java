@@ -61,7 +61,7 @@ public class OrderServiceImpl implements OrderService {
                 Transaction transaction = new Transaction();
                  transaction.setTotalMoney(totalMoney);
                  transaction.setUser(user);
-                transaction.setOrder(order);
+                // transaction.setOrder(order);S
                  transactionRepository.save(transaction);
 
                 // update admin, creator, audience wallet
