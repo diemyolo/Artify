@@ -45,4 +45,15 @@ public class FollowingService implements FollowingServiceImpl {
         }
         return mess;
     }
+
+    @Override
+    public Integer NumOfFollowing(User creator) throws Exception {
+        try {
+            List<User> listOfFollow = creator.getCreator();
+            return listOfFollow.size();
+
+        } catch (Exception e) {
+            throw new Exception("An error occurred while following the creator: " + e.getMessage());
+        }
+    }
 }

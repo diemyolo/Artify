@@ -28,7 +28,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @RestController
-@RequestMapping("api/auth")
+@RequestMapping("api/auth/order")
 public class OrderController {
 
     @Autowired
@@ -46,7 +46,7 @@ public class OrderController {
     @Autowired
     OrderMapper orderMapper;
 
-    @PostMapping("downloadArtwork")
+    @PostMapping("add")
     @PreAuthorize("hasRole('ROLE_AUDIENCE') or hasRole('ROLE_CREATOR')")
     public ResponseEntity<ApiResponse<OrderDTO>> downloadArtwork(@RequestBody OrderDTO orderDTO) {
         ApiResponse<OrderDTO> apiResponse = new ApiResponse<OrderDTO>();
@@ -56,23 +56,19 @@ public class OrderController {
         User user = userService.findByEmail(email);
 
         try {
-            if (eWalletService.isEnoughMoney(user.getId(), orderDTO.getTotalPrice())) {
-                Artworks artworks = artworkService.geArtworksById(orderDTO.getArtwork().getArtId());
+            Artworks artworks = artworkService.geArtworksById(orderDTO.getArtwork().getArtId());
 
-                Order order = new Order();
-                order.setArtwork(artworks);
-                order.setAudience(user);
-                order.setOrderDate(new Timestamp(System.currentTimeMillis()));
-                order.setTotalPrice(orderDTO.getTotalPrice());
+            Order order = new Order();
+            order.setArtwork(artworks);
+            order.setAudience(user);
+            order.setOrderDate(new Timestamp(System.currentTimeMillis()));
+            order.setTotalPrice(orderDTO.getTotalPrice());
 
-                Order o = orderService.addOrder(order);
-                OrderDTO oDto = orderMapper.toOrderDTO(o);
+            Order o = orderService.addOrder(order);
+            OrderDTO oDto = orderMapper.toOrderDTO(o);
 
-                apiResponse.ok(oDto);
-                return ResponseEntity.ok(apiResponse);
-            } else {
-                throw new Exception("Not enough money in EWallet.");
-            }
+            apiResponse.ok(oDto);
+            return ResponseEntity.ok(apiResponse);
 
         } catch (Exception e) {
             apiResponse.error(e);
