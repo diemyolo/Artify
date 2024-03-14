@@ -121,23 +121,6 @@ public class UserController {
         }
     }
 
-    @PostMapping("/follow")
-    @PreAuthorize("hasRole('ROLE_AUDIENCE')")
-    public ResponseEntity<ApiResponse<String>> following(String creatorEmail) throws Exception {
-        ApiResponse<String> apiResponse = new ApiResponse<String>();
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (isUserAuthenticated(authentication)) {
-            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-            String email = userDetails.getUsername();
-            User audience = userService.findByEmail(email);
-            User creator = userService.findByEmail(creatorEmail);
-            String result = _followService.Following(audience, creator);
-            apiResponse.ok(result);
-            return ResponseEntity.ok(apiResponse);
-        } else {
-            return new ResponseEntity<>(apiResponse, HttpStatus.UNAUTHORIZED);
-        }
-    }
 
     @SuppressWarnings("rawtypes")
     public String uploadImage(MultipartFile file) {

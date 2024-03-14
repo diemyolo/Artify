@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.example.artworksharingplatform.entity.Artworks;
 import com.example.artworksharingplatform.entity.Order;
+import com.example.artworksharingplatform.entity.Transaction;
 import com.example.artworksharingplatform.entity.User;
 import com.example.artworksharingplatform.repository.ArtworkRepository;
 import com.example.artworksharingplatform.repository.OrderRepository;

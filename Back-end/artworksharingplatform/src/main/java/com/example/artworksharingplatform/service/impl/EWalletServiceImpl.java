@@ -74,10 +74,8 @@ public class EWalletServiceImpl implements EWalletService {
 	@Override
 	public void updateAudienceWallet(UUID audienceId, float totalMoney) {
 		EWallet eWallet = getWalletByUserId(audienceId);
-
 		float newBalance = (float) (eWallet.getTotalAmount() + totalMoney);
 		eWallet.setTotalAmount(newBalance);
-
 		eWalletRepository.save(eWallet);
 	}
 

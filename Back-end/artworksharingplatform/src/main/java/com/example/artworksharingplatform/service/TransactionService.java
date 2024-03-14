@@ -3,6 +3,7 @@ package com.example.artworksharingplatform.service;
 import java.util.List;
 import java.util.UUID;
 
+import com.example.artworksharingplatform.entity.PreOrder;
 import org.springframework.stereotype.Service;
 
 import com.example.artworksharingplatform.entity.Order;
@@ -22,4 +23,9 @@ public interface TransactionService {
 	public Transaction addTransactionOrderCreator(Order order, float totalMoney);
 
 	public Transaction addTransactionOrderAudience(Order order, float totalMoney);
+	public Transaction addTransactionPreOrderAdmin(PreOrder order, float totalMoney);
+
+	public Transaction addTransactionPreOrderCreator(PreOrder order, float totalMoney);
+
+	public Transaction addTransactionPreOrderAudience(PreOrder order, float totalMoney);
 }
