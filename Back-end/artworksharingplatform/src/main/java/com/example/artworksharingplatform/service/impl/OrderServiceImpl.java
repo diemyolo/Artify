@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.example.artworksharingplatform.entity.Artworks;
 import com.example.artworksharingplatform.entity.Order;
+import com.example.artworksharingplatform.entity.Transaction;
 import com.example.artworksharingplatform.entity.User;
 import com.example.artworksharingplatform.repository.ArtworkRepository;
 import com.example.artworksharingplatform.repository.OrderRepository;
@@ -53,14 +54,22 @@ public class OrderServiceImpl implements OrderService {
 
                 float totalMoney = order.getTotalPrice();
 
-                order.setTransactions(transactionService.addTransactionOrderCreator(order, -totalMoney));
+                // set transaction + admin, creator, - audience
+                order.setTransactions(transactionService.addTransactionOrderAudience(order, -totalMoney));
                 transactionService.addTransactionOrderAdmin(order, totalMoney);
                 transactionService.addTransactionOrderCreator(order, totalMoney);
+                Transaction transaction = new Transaction();
+                 transaction.setTotalMoney(totalMoney);
+                 transaction.setUser(user);
+                transaction.setOrder(order);
+                 transactionRepository.save(transaction);
 
+                // update admin, creator, audience wallet
                 eWalletService.updateAudienceWallet(user.getId(), -totalMoney);
                 eWalletService.updateCreatorWallet(order.getArtwork().getPosts().getCreator().getId(), totalMoney);
                 eWalletService.updateAdminWallet(totalMoney);
 
+                 order.setTransactions(transaction);
                 return orderRepository.save(order);
             } else {
                 throw new Exception();

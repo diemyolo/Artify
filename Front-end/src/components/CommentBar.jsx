@@ -3,7 +3,7 @@ import SinglePostComment from './SinglePostComment'
 import login from "../assets/login.jpg";
 import InputComment from './InputComment';
 
-const CommentBar = () => {
+const CommentBar = ({ postId }) => {
 
     return (
 
@@ -44,7 +44,7 @@ const CommentBar = () => {
                 </div>
             </div>
             <div className='flex flex-col justify-end w-full'>
-                <InputComment />
+                <InputComment postId={postId}/>
             </div>
         </div>
 
