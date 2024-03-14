@@ -48,28 +48,34 @@ public class OrderServiceImpl implements OrderService {
 
             if (artwork.getType().toLowerCase().equals("premium")
                     && artwork.getStatus().toLowerCase().equals("active")) {
+
                 User user = userRepository.findById(order.getAudience().getId())
                         .orElseThrow(() -> new EntityNotFoundException("User not found"));
 
                 float totalMoney = order.getTotalPrice();
 
-                // set transaction + admin, creator, - audience
-                order.setTransactions(transactionService.addTransactionOrderAudience(order, -totalMoney));
-                transactionService.addTransactionOrderAdmin(order, totalMoney);
-                transactionService.addTransactionOrderCreator(order, totalMoney);
+                if (user.getEWallet().getTotalAmount() >= totalMoney) {
+                    // set transaction + admin, creator, - audience
+                    order.setTransactions(transactionService.addTransactionOrderAudience(order, -totalMoney));
+                    transactionService.addTransactionOrderAdmin(order, totalMoney);
+                    transactionService.addTransactionOrderCreator(order, totalMoney);
 
-                // update admin, creator, audience wallet
-                eWalletService.updateAudienceWallet(user.getId(), -totalMoney);
-                eWalletService.updateCreatorWallet(order.getArtwork().getPosts().getCreator().getId(), totalMoney);
-                eWalletService.updateAdminWallet(totalMoney);
+                    // update admin, creator, audience wallet
+                    eWalletService.updateAudienceWallet(user.getId(), -totalMoney);
+                    eWalletService.updateCreatorWallet(order.getArtwork().getPosts().getCreator().getId(), totalMoney);
+                    eWalletService.updateAdminWallet(totalMoney);
 
-                return orderRepository.save(order);
+                    return orderRepository.save(order);
+                } else {
+                    throw new Exception("Not enough money in EWallet.");
+                }
+
             } else {
-                throw new Exception();
+                throw new Exception("Artwork is not for sale.");
             }
 
         } catch (Exception e) {
-            throw new Exception("Download image fail", e);
+            throw new Exception("Download image fail.", e);
         }
 
     }
