@@ -53,10 +53,12 @@ public class OrderServiceImpl implements OrderService {
 
                 float totalMoney = order.getTotalPrice();
 
+                // set transaction + admin, creator, - audience
                 order.setTransactions(transactionService.addTransactionOrderAudience(order, -totalMoney));
                 transactionService.addTransactionOrderAdmin(order, totalMoney);
                 transactionService.addTransactionOrderCreator(order, totalMoney);
 
+                // update admin, creator, audience wallet
                 eWalletService.updateAudienceWallet(user.getId(), -totalMoney);
                 eWalletService.updateCreatorWallet(order.getArtwork().getPosts().getCreator().getId(), totalMoney);
                 eWalletService.updateAdminWallet(totalMoney);

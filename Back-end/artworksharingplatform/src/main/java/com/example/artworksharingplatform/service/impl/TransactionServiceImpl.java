@@ -22,7 +22,7 @@ import jakarta.persistence.EntityNotFoundException;
 public class TransactionServiceImpl implements TransactionService {
 
 	float adminRate = 0.037f;
-	float creatorRate = 0.96f;
+	float creatorRate = 0.963f;
 
 	@Autowired
 	TransactionRepository repo;
@@ -69,6 +69,7 @@ public class TransactionServiceImpl implements TransactionService {
 		Transaction transaction = new Transaction();
 		transaction.setTotalMoney(totalMoney * creatorRate);
 		transaction.setUser(order.getArtwork().getPosts().getCreator());
+		transaction.setTransactionDate(order.getOrderDate());
 		return repo.save(transaction);
 	}
 
@@ -77,6 +78,7 @@ public class TransactionServiceImpl implements TransactionService {
 		Transaction transaction = new Transaction();
 		transaction.setTotalMoney(totalMoney);
 		transaction.setUser(order.getAudience());
+		transaction.setTransactionDate(order.getOrderDate());
 		return repo.save(transaction);
 	}
 
