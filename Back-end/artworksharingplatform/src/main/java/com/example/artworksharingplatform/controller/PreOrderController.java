@@ -15,6 +15,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
@@ -52,7 +53,7 @@ public class PreOrderController {
 
     @PostMapping("audience/PreOrderRequest")
     @PreAuthorize("hasRole('ROLE_AUDIENCE')")
-    public ResponseEntity<?> addPreOder(PreOrderRequest preOrderRequest) {
+    public ResponseEntity<?> addPreOder(@RequestBody PreOrderRequest preOrderRequest) {
         ApiResponse<PreOrderDTO> apiResponse = new ApiResponse<PreOrderDTO>();
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         try {

@@ -31,16 +31,16 @@ public class PreOrder {
 	@Column(name = "Price")
 	private float price;
 
-	@Column(name = "Requirement")
+	@Column(name = "Requirement", columnDefinition = "nvarchar(max)")
 	private String requirement;
 
 	@Column(name = "AudienceRating")
 	private int audienceRating;
 
-	@Column(name = "AudienceFeedback")
+	@Column(name = "AudienceFeedback", columnDefinition = "nvarchar(max)")
 	private String audienceFeedback;
 
-	@Column(name = "CreatorNote")
+	@Column(name = "CreatorNote", columnDefinition = "nvarchar(max)")
 	private String creatorNote;
 
 	@Temporal(TemporalType.TIMESTAMP)

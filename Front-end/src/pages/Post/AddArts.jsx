@@ -126,14 +126,14 @@ const AddArts = () => {
     );
     console.log(updatedValue);
     console.log(selectedFiles);
-    const response = await axios.post(
-      "http://localhost:8080/api/auth/addPost",
-      formData,
-      {
-        headers: { Authorization: `Bearer ${token}` },
-      }
-    );
-    console.log(response.data);
+    // const response = await axios.post(
+    //   "http://localhost:8080/api/auth/creator/addPost",
+    //   formData,
+    //   {
+    //     headers: { Authorization: `Bearer ${token}` },
+    //   }
+    // );
+    // console.log(response.data);
   };
 
   const uploadButton = (
@@ -310,22 +310,12 @@ const AddArts = () => {
                           >
                             Add Artwork
                           </button>
-                          <Watermark
-                            content="Ant Design"
-                            width={120}
-                            height={64}
-                          >
-                            <img
-                              className="relative w-full"
-                              src="http://res.cloudinary.com/diak7ssve/image/upload/v1710039220/ipebqnfuldhrp1bmnlyj.png"
-                            />
-                          </Watermark>
                         </div>
                       )}
                     </FieldArray>
                   ) : (
-                    <div className="flex flex-col justify-center items-center w-full">
-                      <Card className="justify-center flex bg-white shadow-md shadow-gray-300 rounded-md mb-5 w-1/2">
+                    <div className="w-full flex flex-col justify-center items-center w-full">
+                      <Card className="w-[700px] justify-center flex bg-white shadow-md shadow-gray-300 rounded-md mb-5 w-1/2">
                         <div className="flex justify-between gap-3">
                           <Avatar rounded>
                             <div className="space-y-1 dark:text-white">
@@ -336,16 +326,30 @@ const AddArts = () => {
                         </div>
 
                         <div>
-                          <p className="text-sm my-2">{values.description}</p>
-                          <div className="w-full h-screen max-h-[50vh]">
+                          <p className="w-full text-sm my-2">{values.description}</p>
+                          <div className="w-[700px] h-screen max-h-[50vh]">
                             <Carousel pauseOnHover className="w-full mx-auto">
                               {values.artList.map((item, index) => (
                                 <div key={index}>
-                                  <img
-                                    src={item.imageUrl}
-                                    className="rounded-md w-[700px] mx-auto"
-                                    alt={`Post Image - ${values.description}`}
-                                  />
+                                  {item.type === "Free" ? (
+                                    <img
+                                      src={item.imageUrl}
+                                      className="rounded-md w-[700px] mx-auto"
+                                      alt={`Post Image - ${values.description}`}
+                                    />
+                                  ) : (
+                                    <Watermark
+                                      content="Ant Design"
+                                      width={1200}
+                                      height={64}
+                                    >
+                                      <img
+                                        src={item.imageUrl}
+                                        className="rounded-md w-[700px] mx-auto"
+                                        alt={`Post Image - ${values.description}`}
+                                      />
+                                    </Watermark>
+                                  )}
                                 </div>
                               ))}
                             </Carousel>
