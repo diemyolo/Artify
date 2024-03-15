@@ -9,4 +9,6 @@ public interface ArtworkServiceImpl {
 	public List<Artworks> getAllArtworks();
 
 	public Artworks geArtworksById(UUID artworkId);
+
+	public List<Artworks> getSoldArtworks(UUID creatorId);
 }

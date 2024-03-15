@@ -33,4 +33,9 @@ public class ArtworkService implements ArtworkServiceImpl {
 		return artwork;
 	}
 
+	@Override
+	public List<Artworks> getSoldArtworks(UUID creatorId) {
+		return artworkRepository.findByPosts_Creator_IdAndOrdersIsNotEmpty(creatorId);
+	}
+
 }
