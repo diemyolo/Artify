@@ -8,6 +8,7 @@ import com.example.artworksharingplatform.entity.User;
 import com.example.artworksharingplatform.model.InteractionDTO;
 import com.example.artworksharingplatform.repository.UserRepository;
 import com.example.artworksharingplatform.service.FollowingService;
+import com.example.artworksharingplatform.service.impl.FollowingServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,8 +34,6 @@ public class UserController {
 
     @Autowired
     UserService userService;
-    @Autowired
-    FollowingService _followService;
     @Autowired
     UserRepository _userRepository;
 
