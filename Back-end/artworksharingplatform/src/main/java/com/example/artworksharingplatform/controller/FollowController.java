@@ -4,6 +4,7 @@ import com.example.artworksharingplatform.entity.User;
 import com.example.artworksharingplatform.model.ApiResponse;
 import com.example.artworksharingplatform.service.FollowingService;
 import com.example.artworksharingplatform.service.UserService;
+import com.example.artworksharingplatform.service.impl.FollowingServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +20,7 @@ public class FollowController {
     @Autowired
     UserService userService;
     @Autowired
-    FollowingService _followService;
+    FollowingServiceImpl _followService;
     @PostMapping("follow")
     @PreAuthorize("hasRole('ROLE_AUDIENCE')")
     public ResponseEntity<ApiResponse<String>> following(@RequestParam String creatorEmail) throws Exception {
