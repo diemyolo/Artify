@@ -76,16 +76,9 @@ public class OrderController {
         }
     }
 
-    // @GetMapping("countOrders")
-    // @PreAuthorize("hasRole('ROLE_AUDIENCE') or hasRole('ROLE_CREATOR') or
-    // hasRole('ROLE_ADMIN')")
-    // public ResponseEntity<ApiResponse<Long>> countOrders() {
-
-    // }
-
     @GetMapping("viewList")
     @PreAuthorize("hasRole('ROLE_AUDIENCE') or hasRole('ROLE_CREATOR')")
-    public ResponseEntity<ApiResponse<List<OrderDTO>>> getMethodName() {
+    public ResponseEntity<ApiResponse<List<OrderDTO>>> viewOrdersList() {
         ApiResponse<List<OrderDTO>> apiResponse = new ApiResponse<List<OrderDTO>>();
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();

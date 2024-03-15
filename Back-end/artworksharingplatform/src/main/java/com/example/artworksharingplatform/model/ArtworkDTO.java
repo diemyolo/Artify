@@ -17,4 +17,5 @@ public class ArtworkDTO {
     private float price;
     private String type;
     private UUID postId;
+    private int orderCount;
 }
