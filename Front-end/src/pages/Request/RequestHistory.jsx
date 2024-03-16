@@ -8,7 +8,7 @@ const RequestHistory = () => {
         <div className='w-full h-screen bg-gray-100'>
             <NavBar />
             <div className='h-screen p-28 mt-5'>
-                <h1 className='text-center text-3xl font-semibold mb-10'>Request History</h1>
+                <h1 className='text-center text-3xl font-semibold mb-10 text-[#2f6a81]'>Request History</h1>
                 <div className="overflow-x-auto">
                     <Table striped>
                         <Table.Head>
@@ -46,7 +46,7 @@ const RequestHistory = () => {
                                     </a>
                                 </Table.Cell>
                             </Table.Row>
-                           
+
                         </Table.Body>
                     </Table>
                 </div>

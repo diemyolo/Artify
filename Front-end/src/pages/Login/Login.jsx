@@ -47,7 +47,8 @@ export default function Login() {
           });
         } else {
           throw new Error(response.statusText);
-        }})
+        }
+      })
       .catch((error) => {
         Swal.fire({
           icon: "error",
@@ -108,7 +109,7 @@ export default function Login() {
               onSubmit={handleLogin}
             >
               <Form.Item
-                className="mx-0 px-0 w-full"
+                className="mx-0 px-0 w-full "
                 name="email"
                 rules={[
                   {
@@ -123,7 +124,7 @@ export default function Login() {
                 ]}
               >
                 <Input
-                  className="w-full px-4 py-2.5"
+                  className="w-full px-4 py-2.5 rounded-lg border-[#d9d9d9]"
                   name="email"
                   placeholder="Enter your email"
                   value={email}
@@ -134,16 +135,6 @@ export default function Login() {
               <Form.Item
                 className="mx-0 px-0 w-full pt-2.5"
                 name="password"
-                // rules={[
-                //   {
-                //     required: true,
-                //     message: "Please input your password!",
-                //   },
-                //   {
-                //     pattern: /^.{8,}$/,
-                //     message: "Password must be greater than 7 characters!",
-                //   },
-                // ]}
               >
                 <Input.Password
                   className="w-full px-4 py-2.5"
