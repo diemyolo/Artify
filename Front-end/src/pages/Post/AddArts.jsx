@@ -17,6 +17,7 @@ import { Button, Upload } from "antd";
 import { message, Steps, theme } from "antd";
 import { Watermark } from "antd";
 import { Select } from "antd";
+
 const AddArts = () => {
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [current, setCurrent] = useState(0);
@@ -103,6 +104,7 @@ const AddArts = () => {
   const myHeaders = new Headers();
   myHeaders.append("Authorization", `Bearer ${token}`);
   console.log(token);
+  
   const handleSubmit = async (values) => {
     const formData = new FormData();
 

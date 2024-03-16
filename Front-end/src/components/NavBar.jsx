@@ -53,17 +53,16 @@ const NavBar = () => {
             }
           </ul>
 
-          <div className='bg-gray-200 rounded-full sm:flex hidden items-center px-4 lg:w-[350px]'>
-            <AiOutlineSearch className='cursor-pointer' size={20} style={{ color: '#2f6a81', fontWeight: 'bold' }} />
+          <div className='bg-gray-200 rounded-full sm:flex hidden items-center px-4 lg:w-[350px] '>
+            <AiOutlineSearch className='cursor-pointer' size={25} style={{ color: '#2f6a81', fontWeight: 'bold' }} />
             <input
-              className=' bg-transparent p-3 lg:w-[400px] appearance-none focus:outline-none border-none'
+              className='bg-transparent p-3 lg:w-[400px] appearance-none focus:outline-none border-none' 
               type='search'
               placeholder='Search for art...'
-              style={{ outline: 'none' }}
             />
           </div>
 
-          <div className="lg:flex items-center">
+          <div className="lg:flex items-center bg-[#2f6a81] rounded-lg">
             {token != null ?
               <>
                 <Dropdown label="Profile">

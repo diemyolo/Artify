@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import login from "../../assets/login.jpg";
 import NavBar from "../../components/NavBar";
 import { Link } from "react-router-dom";
 import { Button } from "antd";
@@ -13,6 +12,7 @@ import { FaPlus } from "react-icons/fa";
 import { Pagination } from "antd";
 import { MdEmail } from "react-icons/md";
 import { BsFillTelephoneFill } from "react-icons/bs";
+import { MdOutlineModeEdit } from "react-icons/md";
 
 const ViewEwallet = () => {
   const navigate = useNavigate();
@@ -104,7 +104,7 @@ const ViewEwallet = () => {
 
       {isLoading && (
         <div className="bg-gray-100 mx-auto max-w-screen-xl p-4">
-          <div className="bg-gray-100 mt-40">
+          <div className="bg-gray-100 mt-32">
             {/* Banner intro */}
             <div
               className="flex justify-center items-center"
@@ -144,7 +144,6 @@ const ViewEwallet = () => {
                 </dl>
               </div>
             </div>
-            {/* Transactions  */}
 
             <div
               className="but-container flex items-center justify-center"
@@ -158,34 +157,40 @@ const ViewEwallet = () => {
                 />
               </Link>
             </div>
-            <div className="flex mx-auto max-w-4xl py-24 sm:py-8 justify-between">
+
+            <div className="flex mx-auto max-w-4xl py-20 sm:py-8 justify-between">
               <div
                 className="divide-y divide-gray-100 bg-white mt-5 py-2 px-8 shadow-md shadow-gray-300 rounded-md mb-5 mr-5"
                 style={{ width: "300px", height: "300px" }}
               >
                 <div style={{ width: "240px", height: "300px" }}>
-                  <div className="font-semibold text-2xl">Profile</div>
+                  <div className="font-semibold text-2xl text-center m-5">Profile</div>
                   <div className="flex my-8 items-center">
-                    <MdEmail className="h-6 w-6 flex-none rounded-full bg-gray-50 mr-12" />
+                    <MdEmail size={20} className="flex-none rounded-full bg-gray-50 mr-10" />
                     <div>{customer.emailAddress}</div>
                   </div>
                   <div className="flex my-8 items-center">
-                    <BsFillTelephoneFill className="h-6 w-6 flex-none rounded-full bg-gray-50 mr-12" />
+                    <BsFillTelephoneFill size={20} className="flex-none rounded-full bg-gray-50 mr-10" />
                     <div>{customer.telephone}</div>
                   </div>
                   <Link to="/editProfile">
-                    <Button className="bg-gray-50 hover:bg-red-700 transition duration-300"
-                      style={{ transition: 'all 0.3s', ...hoverStyle }} block>
-                      Edit Profile
-                    </Button>
+                    <div
+                      className="cursor-pointer sm:flex gap-2 hidden items-center justify-center text-white bg-[#2f6a81] px-4 py-2 transition-all duration-300 rounded-full my-1">
+                      <MdOutlineModeEdit
+                        size={20}
+                        style={{ color: "#fff", fontWeight: "bold" }}
+                      />
+                      <button type="submit"> Edit Profile</button>
+                    </div>
                   </Link>
                 </div>
-
               </div>
-              <div className="flex flex-col items-center justify-center">
+
+
+              <div className="flex flex-col items-center justify-start">
                 <ul
                   role="list"
-                  className="divide-y divide-gray-100 bg-white mt-5 py-2 px-8 shadow-md shadow-gray-300 rounded-md mb-5"
+                  className="divide-y divide-gray-100 bg-white mt-5 py-5 px-8 shadow-md shadow-gray-300 rounded-md mb-5"
                   style={{ width: "600px" }}
                 >
                   <div className="font-semibold text-2xl">Transactions</div>

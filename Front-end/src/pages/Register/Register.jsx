@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import { Form, Input } from "antd";
 import login from "../../assets/login.jpg"
 import { NavLink, useNavigate } from "react-router-dom";
+import axios from "axios"; 
+import Swal from "sweetalert2";
 
 const formItemLayout = {
   labelCol: { span: 24 },
@@ -11,8 +13,64 @@ const formItemLayout = {
 export default function Register() {
   const navigate = useNavigate();
 
-  
-  
+  const [userName, setUserName] = useState("");
+  const [emailAddress, setEmailAddress] = useState("");
+  const [password, setPassword] = useState("");
+  const [telephone, setTelephone] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+
+  const handleRegister = () => {
+    if (password !== confirmPassword) {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Confirm password does not match!",
+      });
+      return;
+    }
+
+    const myHeaders = {
+      "Content-Type": "application/json",
+    };
+
+    const data = {
+      userName: userName,
+      emailAddress: emailAddress,
+      pass: password,
+      telephone: telephone,
+    };
+
+    axios
+      .post("http://localhost:8080/api/auth/register", data, { headers: myHeaders })
+      .then((response) => {
+        console.log(response);
+        if (response.status === 200) {
+          Swal.fire({
+            position: "center",
+            icon: "success",
+            title: "Welcome",
+            html: "<h3>Register Successfully</h3>",
+            showConfirmButton: false,
+            timer: 1600,
+          }).then((result) => {
+            if (result.dismiss === Swal.DismissReason.timer) {
+              navigate("/");
+            }
+          });
+        } else {
+          throw new Error(response.statusText);
+        }
+      })
+      .catch((error) => {
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Register is invalid!",
+          footer: '<a href="/">Try again!</a>',
+        });
+      });
+  };
+
 
   return (
     <div className="bg-[#f5f5f5] w-full h-screen flex items-start">
@@ -38,6 +96,7 @@ export default function Register() {
                 remember: true,
               }}
               autoComplete="off"
+              onSubmit={handleRegister}
             >
               <Form.Item
                 className="mx-0 px-0 w-full"
@@ -48,23 +107,23 @@ export default function Register() {
                     message: "Please input your user name!",
                   },
                   {
-                    pattern: /^.{8,}$/,
-                    message: "Username must be greater than 7 characters!",
+                    pattern: /^.{3,}$/,
+                    message: "Username must be greater than 3 characters!",
                   },
                 ]}
               >
                 <Input
-                  className="w-full px-4 py-2.5"
+                  className="w-full px-4 py-2.5 rounded-lg border-[#d9d9d9]"
                   name="userName"
                   placeholder="Enter your user name"
-                  // value={formik.values.userName}
-                  // onChange={formik.handleChange}
+                  value={userName}
+                  onChange={(e) => setUserName(e.target.value)}
                 />
               </Form.Item>
 
               <Form.Item
                 className="mx-0 px-0 w-full"
-                name="email"
+                name="emailAddress"
                 rules={[
                   {
                     required: true,
@@ -78,11 +137,11 @@ export default function Register() {
                 ]}
               >
                 <Input
-                  className="w-full px-4 py-2.5"
-                  name="email"
+                  className="w-full px-4 py-2.5 rounded-lg border-[#d9d9d9]"
+                  name="emailAddress"
                   placeholder="Enter your email"
-                  // value={formik.values.email}
-                  // onChange={formik.handleChange}
+                  value={emailAddress}
+                  onChange={(e) => setEmailAddress(e.target.value)}
                 />
               </Form.Item>
 
@@ -95,16 +154,17 @@ export default function Register() {
                     message: "Please input your password!",
                   },
                   {
-                    pattern: /^.{8,}$/,
+                    pattern: /^.{3,}$/,
                     message: "Password must be greater than 7 characters!",
                   },
                 ]}
               >
                 <Input.Password
                   className="w-full px-4 py-2.5"
+                  name="password"
                   placeholder="Enter your password"
-                  // value={formik.values.password}
-                  // onChange={formik.handleChange}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                 />
               </Form.Item>
 
@@ -117,7 +177,7 @@ export default function Register() {
                     message: "Please input your confirm password!",
                   },
                   {
-                    pattern: /^.{8,}$/,
+                    pattern: /^.{3,}$/,
                     message: "Password must be greater than 7 characters!",
                   },
                 ]}
@@ -125,14 +185,14 @@ export default function Register() {
                 <Input.Password
                   className="w-full px-4 py-2.5"
                   placeholder="Enter your confirm password"
-                  // value={formik.values.confirmPassword}
-                  // onChange={formik.handleChange}
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
                 />
               </Form.Item>
 
               <Form.Item
                 className="mx-0 px-0 w-full"
-                name="confirmPassword"
+                name="telephone"
                 rules={[
                   {
                     required: true,
@@ -145,18 +205,20 @@ export default function Register() {
                 ]}
               >
                 <Input
-                  className="w-full px-4 py-2.5"
+                  className="w-full px-4 py-2.5 rounded-lg border-[#d9d9d9]"
                   placeholder="Enter your telephone number"
-                  // value={formik.values.telephone}
-                  // onChange={formik.handleChange}
+                  name="telephone"
+                  value={telephone}
+                  onChange={(e) => setTelephone(e.target.value)}
                 />
               </Form.Item>
-              
+
 
               <div className="w-full flex flex-col my-3">
                 <button
                   className="w-full bg-[#060606] text-white my-2 font-semibold rounded-md p-4 text-center flex items-center justify-center focus:outline-none hover:bg-[#2f6a81] "
                   type="submit"
+                  onClick={handleRegister}
                 >
                   Sign Up
                 </button>
