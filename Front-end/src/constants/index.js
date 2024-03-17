@@ -14,9 +14,5 @@ export const navLinks = [
     {
         link: "About",
         path: "/about",
-    },
-    {
-        link: "About",
-        path: "/about",
     }
 ]
