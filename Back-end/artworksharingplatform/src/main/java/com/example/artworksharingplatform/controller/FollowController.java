@@ -27,7 +27,7 @@ public class FollowController {
 
     @PostMapping("follow")
     // @PreAuthorize("hasRole('ROLE_AUDIENCE')")
-    public ResponseEntity<ApiResponse<String>> following(@RequestParam("creatorMail") String creatorEmail)
+    public ResponseEntity<ApiResponse<String>> following(@RequestParam("creatorId") UUID creatorId)
             throws Exception {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         ApiResponse apiResponse = new ApiResponse();
@@ -35,7 +35,7 @@ public class FollowController {
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
             String email = userDetails.getUsername();
             User audience = userService.findByEmail(email);
-            User creator = userService.findByEmail(creatorEmail);
+            User creator = userService.getUserById(creatorId);
             String result = _followService.Following(audience, creator);
             apiResponse.ok(result);
             return ResponseEntity.ok(apiResponse);
@@ -65,7 +65,7 @@ public class FollowController {
 
     @GetMapping("is_Following")
     @PreAuthorize("hasRole('ROLE_AUDIENCE')")
-    public ResponseEntity<ApiResponse<String>> IsFollowing(@RequestParam String CreatorEmail) throws Exception {
+    public ResponseEntity<ApiResponse<String>> IsFollowing(@RequestParam UUID creatorId) throws Exception {
         ApiResponse<String> apiResponse = new ApiResponse<>();
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String mess = "";
@@ -74,7 +74,7 @@ public class FollowController {
                 UserDetails userDetails = (UserDetails) authentication.getPrincipal();
                 String email = userDetails.getUsername();
                 User audience = userService.findByEmail(email);
-                User creator = userService.findByEmail(CreatorEmail);
+                User creator = userService.getUserById(creatorId);
                 Boolean result = _followService.IsFollow(audience, creator);
                 if (result) {
                     mess = "You have followed this creator";
