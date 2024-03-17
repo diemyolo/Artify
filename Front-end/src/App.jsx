@@ -14,6 +14,8 @@ import AddArts from "./pages/Post/AddArts";
 import Gallery from "./pages/Gallery/Gallery";
 import RequestHistory from "./pages/Request/RequestHistory";
 import EditProfile from "./pages/Profile/EditProfile";
+import CheckOCB from "./pages/EWallet/CheckOCB";
+import ViewPreOrders from "./pages/ReturnOrderRequest/ViewPreOrders";
 
 const router = createBrowserRouter([
   {
@@ -71,6 +73,14 @@ const router = createBrowserRouter([
   {
     path: "/editProfile",
     element: <div><EditProfile /></div>,
+  },
+  {
+    path: "/checkOCB",
+    element: <div><CheckOCB /></div>,
+  },
+  {
+    path: "/viewPreordersByCreator",
+    element: <div><ViewPreOrders /></div>,
   }
 ]);
 

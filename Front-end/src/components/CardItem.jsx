@@ -61,7 +61,7 @@ const CardItem = () => {
     const response = await axios.get(
       `http://localhost:8080/api/auth/downloadArt?artId=${image.artId}`
     );
-    saveAs(`${response.data.payload}`, "image.jpg");
+    saveAs(`${response.data.payload}`, `${image.artName}.jpg`);
   };
 
   return (

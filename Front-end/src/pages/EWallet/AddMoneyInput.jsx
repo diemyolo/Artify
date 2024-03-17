@@ -28,8 +28,8 @@ const AddMoneyInput = () => {
   };
 
   console.log(eWallet);
-  const addToWallet = () => {
-    axios
+  const addToWallet = async () => {
+  await  axios
       .post(`http://localhost:8080/api/auth/pay?input_money=${inputMoney}`)
       .then((response) => {
         console.log(response.data);
@@ -39,6 +39,8 @@ const AddMoneyInput = () => {
         console.error("Error adding to wallet:", error);
       });
   };
+
+
   return (
     <div>
       <Spin spinning={!isLoading} fullscreen />
@@ -115,6 +117,12 @@ const AddMoneyInput = () => {
               className="w-[395px] bg-[#2f6a81] text-white"
             >
               Charge
+            </Button>
+            <Button
+             
+              className="w-[395px] bg-[#2f6a81] text-white"
+            >
+              Charge OCN
             </Button>
           </div>
         </div>

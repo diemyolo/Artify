@@ -25,4 +25,5 @@ public class PreOrderDTO {
     private UUID audienceId;
     private UUID artworkId;
     private String artworkImagePath;
+    private String creatorName;
 }

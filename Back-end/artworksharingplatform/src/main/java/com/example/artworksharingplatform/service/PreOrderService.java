@@ -15,7 +15,7 @@ public interface PreOrderService {
     void addPreOrder(PreOrder preOrderRequest) throws Exception;
 
     List<PreOrder> getCreatorPreOrderList(User preOrderCreator) throws Exception;
-
+    List<PreOrder> getWaitingPreOrderList(User preOrderCustomer) throws Exception;
     int countByPreOrderCreator(User preOrderCreator);
 
     PreOrder updatePreOrderCreator(PreOrderDTO updatedPreOrderDTO, Artworks updatedArtwork) throws Exception;
