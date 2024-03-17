@@ -4,6 +4,7 @@ import { Button } from "antd";
 import { Spin } from "antd";
 import { IoWallet } from "react-icons/io5";
 import axios from "axios";
+import FooterPart from "../../components/FooterPart";
 const AddMoneyInput = () => {
   const [inputMoney, setInputMoney] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -127,6 +128,7 @@ const AddMoneyInput = () => {
           </div>
         </div>
       </div>
+      <FooterPart />
     </div>
   );
 };
