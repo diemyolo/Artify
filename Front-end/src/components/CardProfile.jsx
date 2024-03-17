@@ -9,27 +9,27 @@ const CardProfile = ({
     onFollowerButtonClick,
     onRequestButtonClick,
     p,
-    creatorId
+    creatorId, follow
 }) => {
-   
+
 
     const [isLoading, setIsLoading] = useState(false);
 
     const stats = [
         { id: 1, name: "Posts", value: p.length },
         { id: 2, name: "Photos", value: calculatePhotos(p) },
-        { id: 3, name: "Followers", value: 0 },
+        { id: 3, name: "Followers", value:  follow.length},
     ];
 
 
     function calculatePhotos(posts) {
         let photoCount = 0;
         for (const post of posts) {
-          photoCount += post.artList.length;
+            photoCount += post.artList.length;
         }
         return photoCount;
-      }
-      
+    }
+
     return (
         <>
             <div className="h-[40%] ">
