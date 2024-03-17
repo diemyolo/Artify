@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from "react";
-import NavBar from "../../components/NavBar";
-import { Avatar, Card } from "flowbite-react";
-import { Button, Form, Input } from "antd";
-import { Spin } from "antd";
+import { Avatar, Button, Form, Input } from "antd";
 import axios from "axios";
+import { Card } from "flowbite-react";
+import React, { useEffect, useState } from "react";
 import { MdOutlineModeEdit } from "react-icons/md";
 import Swal from "sweetalert2";
+import NavBar from "../../components/NavBar";
 
 const formItemCol = {
     labelCol: { span: 24 },
@@ -21,7 +20,6 @@ const EditProfile = () => {
     const [emailAddress, setEmailAddress] = useState("");
     const [userName, setUserName] = useState("");
     const [telephone, setTelephone] = useState("");
-    const [password, setPassword] = useState("");
 
     const [files, setFiles] = useState([]);
     const handleFileChange = (event) => {
@@ -34,7 +32,6 @@ const EditProfile = () => {
         emailAddress: "string",
         telephone: "string",
         imagePath: "string",
-        password: "string",
     });
 
 
@@ -61,12 +58,6 @@ const EditProfile = () => {
         const myHeaders = {
             "Content-Type": "application/json",
         };
-
-        // const data = {
-        //     userName: userName,
-        //     telephone: telephone,
-        //     password: password
-        // };
 
         const formData = new FormData();
         const fileArray = Array.from(files);
@@ -99,7 +90,7 @@ const EditProfile = () => {
                 Swal.fire({
                     icon: "error",
                     title: "Oops...",
-                    text: "Email or password is invalid!",
+                    text: "Something went wrong!",
                     footer: '<a href="/">Try again!</a>'
                 });
             });
@@ -131,11 +122,12 @@ const EditProfile = () => {
                             <div className="flex flex-col items-center">
                                 <div className="relative rounded-full shadow-2xl">
                                     <Avatar
+                                        style={{ width: '225px', height: '225px'}}
                                         rounded
-                                        size="xl"
+                                        size="large"
                                         src={customer.imagePath}
                                     />
-                                    <label htmlFor="upload" className="absolute right-0 bottom-1 bg-[#2f6a81] rounded-full p-1.5 cursor-pointer">
+                                    <label htmlFor="upload" className="absolute right-5 bottom-1 bg-[#2f6a81] rounded-full p-1.5 cursor-pointer">
                                         <MdOutlineModeEdit size={20} color="white" />
                                     </label>
                                     <input
@@ -200,7 +192,7 @@ const EditProfile = () => {
                                         message: "Please input your username!",
                                     },
                                     {
-                                        pattern: /^[A-Za-z]{4,}$/,
+                                        pattern: /^[A-Za-z\s]{4,}$/,
                                         message:
                                             "Please input a valid username with more than 3 letters!",
                                     },
@@ -233,30 +225,6 @@ const EditProfile = () => {
                                     placeholder={customer.telephone}
                                     value={telephone}
                                     onChange={(e) => setTelephone(e.target.value)}
-                                />
-                            </Form.Item>
-
-                            <Form.Item
-                                className="m-2 px-0 w-full"
-                                label="Password"
-                                name="password"
-                                rules={[
-                                    {
-                                        required: true,
-                                        message: "Please input your password!",
-                                    },
-                                    {
-                                        pattern: /^.{3,}$/,
-                                        message: "Password must be greater than 7 characters!",
-                                    },
-                                ]}
-                            >
-                                <Input.Password
-                                    className="w-full px-4 py-2.5"
-                                    name="password"
-                                    placeholder="Enter your password"
-                                    value={password}
-                                    onChange={(e) => setPassword(e.target.value)}
                                 />
                             </Form.Item>
 
