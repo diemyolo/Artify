@@ -23,4 +23,8 @@ public interface UserService {
     User findByEmail(String email);
 
     User getUser(UUID userId);
+
+    boolean checkUserPassword(String email, String passwordToCheck);
+
+    User updateUserPassword(String email, String passwordToUpdate);
 }

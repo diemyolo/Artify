@@ -36,7 +36,6 @@ public class UserServiceImpl implements UserService {
             userToUpdate.setName(updatedUser.getUserName());
             userToUpdate.setTelephone(updatedUser.getTelephone());
             userToUpdate.setImagePath(updatedUser.getImagePath());
-            userToUpdate.setPass(_passwordEncoder.encode(updatedUser.getPassword()));
             userRepository.save(userToUpdate);
             return findByEmailAddress(userToUpdate.getEmailAddress());
         } catch (Exception ex) {
@@ -79,4 +78,31 @@ public class UserServiceImpl implements UserService {
         return userToFind;
     }
 
+    @Override
+    public boolean checkUserPassword(String email, String passwordToCheck) {
+        try {
+            User user = userRepository.findByEmailAddress(email)
+                    .orElseThrow(() -> new EntityNotFoundException("User not found"));
+            if (_passwordEncoder.matches(passwordToCheck, user.getPassword())) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (Exception ex) {
+            throw new RuntimeException("Error running the method.");
+        }
+    }
+
+    @Override
+    public User updateUserPassword(String email, String passwordToUpdate) {
+        try {
+            User user = userRepository.findByEmailAddress(email)
+                    .orElseThrow(() -> new EntityNotFoundException("User not found"));
+            user.setPass(_passwordEncoder.encode(passwordToUpdate));
+            userRepository.save(user);
+            return findByEmail(user.getEmailAddress());
+        } catch (Exception ex) {
+            throw new RuntimeException("Error running the method.");
+        }
+    }
 }

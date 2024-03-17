@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from "react";
-import NavBar from "../../components/NavBar";
-import { Avatar, Card } from "flowbite-react";
-import { Button, Form, Input } from "antd";
-import { Spin } from "antd";
+import { Avatar, Button, Form, Input } from "antd";
 import axios from "axios";
+import { Card } from "flowbite-react";
+import React, { useEffect, useState } from "react";
 import { MdOutlineModeEdit } from "react-icons/md";
 import Swal from "sweetalert2";
+import NavBar from "../../components/NavBar";
 
 const formItemCol = {
   labelCol: { span: 24 },
@@ -17,7 +16,6 @@ const EditProfile = () => {
 
   const [isLoading, setIsLoading] = useState(false);
   const [customer, setCustomer] = useState({});
-
   const [emailAddress, setEmailAddress] = useState("");
   const [userName, setUserName] = useState("");
   const [telephone, setTelephone] = useState("");
@@ -61,13 +59,6 @@ const EditProfile = () => {
     const myHeaders = {
       "Content-Type": "application/json",
     };
-
-    // const data = {
-    //     userName: userName,
-    //     telephone: telephone,
-    //     password: password
-    // };
-
     const formData = new FormData();
     // const fileArray = Array.from(files);
 
@@ -110,7 +101,6 @@ const EditProfile = () => {
         });
       });
   };
-
   const handleAvatarChange = (event) => {
     const selectedFile = event.target.files[0];
     if (selectedFile) {
@@ -195,7 +185,6 @@ const EditProfile = () => {
                   disabled
                 />
               </Form.Item>
-
               <Form.Item
                 className="m-2 px-0 w-full"
                 name="userName"
@@ -241,31 +230,6 @@ const EditProfile = () => {
                   onChange={(e) => setTelephone(e.target.value)}
                 />
               </Form.Item>
-
-              <Form.Item
-                className="m-2 px-0 w-full"
-                label="Password"
-                name="password"
-                rules={[
-                  {
-                    required: true,
-                    message: "Please input your password!",
-                  },
-                  {
-                    pattern: /^.{3,}$/,
-                    message: "Password must be greater than 7 characters!",
-                  },
-                ]}
-              >
-                <Input.Password
-                  className="w-full px-4 py-2.5"
-                  name="password"
-                  placeholder="Enter your password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                />
-              </Form.Item>
-
               <div className="w-full flex justify-center gap-4 my-4">
                 <Button
                   className="rounded-full border-2 w-[140px] bg-[#2f6a81] text-white my-2  px-4 py-2 text-center flex items-center justify-center focus:outline-none hover:bg-gray-100 hover:text-[#2f6a81] hover:border-[#2f6a81] hover:border-2 mt-3 transition-all duration-300 "
