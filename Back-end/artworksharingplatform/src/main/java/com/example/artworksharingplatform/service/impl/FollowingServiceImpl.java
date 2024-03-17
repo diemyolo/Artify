@@ -56,4 +56,23 @@ public class FollowingServiceImpl implements FollowingService {
         }
     }
 
+    @Override
+    public Boolean IsFollow(User audience, User creator) throws Exception {
+        boolean check = false;
+        try {
+            List<User> listOfFollow = audience.getAudience();
+            // Check if the creator is already followed
+            boolean alreadyFollowing = listOfFollow.stream()
+                    .anyMatch(user -> user.getId() == creator.getId());
+            if (alreadyFollowing) {
+                check = true;
+            }
+            return check;
+
+        } catch (Exception e) {
+            throw new Exception("An error occurred while following the creator: " + e.getMessage());
+
+        }
+    }
+
 }
