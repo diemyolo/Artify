@@ -1,29 +1,47 @@
 import React, { useEffect, useState } from "react";
-import NavBar from '../../components/NavBar';
+import NavBar from "../../components/NavBar";
 import { Avatar, Card } from "flowbite-react";
 import { Button, Form, Input } from "antd";
-import { AiOutlineUserAdd } from "react-icons/ai";
+import { Spin } from "antd";
+import axios from "axios";
+import { MdOutlineModeEdit } from "react-icons/md";
+import Swal from "sweetalert2";
 
 const formItemCol = {
     labelCol: { span: 24 },
     wrapperCol: { span: 24 },
 };
 
-
 const EditProfile = () => {
-
-    const [email, setEmail] = useState("");
-    const [username, setUsername] = useState("");
-    const [telephone, setTelephone] = useState("");
-
-    const [customer, setCustomer] = useState({});
     const token = localStorage.getItem("token");
 
-    useEffect(() => {
-        const fetchData = async (event) => {
-            try {
+    const [isLoading, setIsLoading] = useState(false);
+    const [customer, setCustomer] = useState({});
 
-                event.preventDefault();
+    const [emailAddress, setEmailAddress] = useState("");
+    const [userName, setUserName] = useState("");
+    const [telephone, setTelephone] = useState("");
+    const [password, setPassword] = useState("");
+
+    const [files, setFiles] = useState([]);
+    const handleFileChange = (event) => {
+        const selectedFiles = event.target.files;
+        setFiles(selectedFiles);
+    };
+
+    const [profileDTO, setProfileDTO] = useState({
+        userName: "string",
+        emailAddress: "string",
+        telephone: "string",
+        imagePath: "string",
+        password: "string",
+    });
+
+
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
                 const customerResponse = await axios.get(
                     "http://localhost:8080/api/auth/user/profile",
                     {
@@ -31,75 +49,112 @@ const EditProfile = () => {
                     }
                 );
                 setCustomer(customerResponse.data.payload);
-
             } catch (error) {
                 console.error("Error fetching data:", error);
             }
         };
         fetchData();
     }, []);
-    // const handleEditProfile = () => {
-    //     const myHeaders = {
-    //         "Content-Type": "application/json",
-    //     };
-
-    //     const data = {
-    //         email: email,
-    //         pass: password,
-    //     };
-
-    //     axios
-    //         .post("http://localhost:8080/api/auth/login", data, { headers: myHeaders })
-    //         .then((response) => {
-    //             console.log(response.data.payload);
-    //             if (response.status === 200) {
-    //                 const token = response.data.payload.token;
-    //                 localStorage.setItem("token", token);
-    //                 setCookie("token", token, 365); // Expires in 365 days
-    //                 Swal.fire({
-    //                     position: "center",
-    //                     icon: "success",
-    //                     title: `Welcome`,
-    //                     html: "<h3>Login Successfully</h3>",
-    //                     showConfirmButton: false,
-    //                     timer: 1600
-    //                 }).then(() => {
-    //                     navigate("/home");
-    //                 });
-    //             } else {
-    //                 throw new Error(response.statusText);
-    //             }
-    //         })
-    //         .catch((error) => {
-    //             Swal.fire({
-    //                 icon: "error",
-    //                 title: "Oops...",
-    //                 text: "Email or password is invalid!",
-    //                 footer: '<a href="/">Try again!</a>'
-    //             });
-    //         });
-    // };
 
 
+    const handleEditProfile = () => {
+        const myHeaders = {
+            "Content-Type": "application/json",
+        };
+
+        // const data = {
+        //     userName: userName,
+        //     telephone: telephone,
+        //     password: password
+        // };
+
+        const formData = new FormData();
+        const fileArray = Array.from(files);
+
+        fileArray.forEach((file) => {
+            formData.append("image", file);
+        });
+        formData.append("profile", new Blob([JSON.stringify(profileDTO)], { type: "application/json" }));
+
+        axios
+            .put("http://localhost:8080/api/auth/user/profile", formData, { headers: myHeaders })
+            .then((response) => {
+                console.log(response.data.payload);
+                if (response.status === 200) {
+                    Swal.fire({
+                        position: "center",
+                        icon: "success",
+                        title: `Welcome`,
+                        html: "<h3>Updated Successfully</h3>",
+                        showConfirmButton: false,
+                        timer: 1600
+                    }).then(() => {
+                        navigate("/viewEwallet");
+                    });
+                } else {
+                    throw new Error(response.statusText);
+                }
+            })
+            .catch((error) => {
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: "Email or password is invalid!",
+                    footer: '<a href="/">Try again!</a>'
+                });
+            });
+    };
+
+    const handleAvatarChange = (event) => {
+        const selectedFile = event.target.files[0];
+        if (selectedFile) {
+            setFiles([selectedFile]);
+        }
+    };
+
+    
     return (
-        <div className='w-full h-screen bg-gray-100'>
+        <div className="w-full h-full bg-gray-100">
+            {/* <Spin spinning={!isLoading} fullscreen /> */}
             <NavBar />
-
-            <div className='h-scree w-full flex justify-center p-28 mt-10 gap-10'>
-                <Card className="w-[40%]">
-                    <div className="flex flex-col items-center">
-                        <Avatar rounded size="xl" />
-                        <h5 className="mb-1 text-xl font-medium text-gray-900 dark:text-white">
-                            {/* {p[0]?.creatorName} */}{customer.userName}
-                        </h5>
-                        <span className="text-sm text-gray-500 dark:text-gray-400">
-                            Artist
-                        </span>
+            {/* {isLoading && ( */}
+            <div className="h-screen w-full flex justify-center p-28 mt-10 gap-10">
+                <div className="relative w-1/2 h-[40%] bg-[#2f6a81]">
+                    <div className="absolute flex flex-col items-center justify-center w-full top-1/3">
+                        <Card className="w-[50%] h-[300px]">
+                            <div className="flex flex-col items-center">
+                                <div className="relative rounded-full shadow-2xl">
+                                    <Avatar
+                                        rounded
+                                        size="xl"
+                                        src={files.length > 0 ? URL.createObjectURL(files[0]) : customer.imagePath}
+                                    />
+                                    <label htmlFor="upload" className="absolute right-0 bottom-1 bg-[#2f6a81] rounded-full p-1.5 cursor-pointer">
+                                        <MdOutlineModeEdit size={20} color="white" />
+                                    </label>
+                                    <input
+                                        type="file"
+                                        id="upload"
+                                        // accept="image/*"
+                                        style={{ display: "none" }}
+                                        onChange={handleAvatarChange}
+                                    />
+                                </div>
+                                <h5 className="mt-3 text-xl font-medium text-gray-900 dark:text-white">
+                                    {customer.userName}
+                                </h5>
+                            </div>
+                        </Card>
                     </div>
-                </Card>
+                </div>
 
                 <div className="w-1/2 h-full flex flex-col">
-                    <h1 className='text-center text-3xl font-semibold mb-10 text-[#2f6a81]'>Edit Profile</h1>
+                    <h1 className="text-center text-3xl font-semibold mb-3 text-[#2f6a81]">
+                        Edit Profile
+                    </h1>
+                    <p className="text-center mb-10 text-[#2f6a81]">
+                        Update your profile information
+                    </p>
                     <div className="w-full">
                         <Form
                             {...formItemCol}
@@ -111,73 +166,116 @@ const EditProfile = () => {
                                 remember: true,
                             }}
                             autoComplete="off"
-                            // onSubmit={handleEditProfile}
+                            onSubmit={handleEditProfile}
                             className="mx-auto"
                         >
                             <Form.Item
-                                className="mx-0 px-0 w-full"
-                                name="email"
+                                className="m-2 px-0 w-full"
+                                name="emailAddress"
                                 label="Email"
                             >
                                 <Input
-                                    className="w-full px-4"
-                                    name="email"
-                                    placeholder=""
-                                    value={email}
-                                    onChange={(e) => setEmail(e.target.value)}
+                                    className="w-full px-4 rounded-lg"
+                                    name="emailAddress"
+                                    placeholder={customer.emailAddress}
+                                    value={customer.emailAddress}
+                                    onChange={(e) => setEmailAddress(e.target.value)}
                                     disabled
                                 />
                             </Form.Item>
 
                             <Form.Item
-                                className="mx-0 px-0 w-full"
-                                name="username"
+                                className="m-2 px-0 w-full"
+                                name="userName"
                                 label="Username"
+                                rules={[
+                                    {
+                                        required: true,
+                                        message: "Please input your username!",
+                                    },
+                                    {
+                                        pattern: /^[A-Za-z]{4,}$/,
+                                        message:
+                                            "Please input a valid username with more than 3 letters!",
+                                    },
+                                ]}
                             >
                                 <Input
-                                    className="w-full px-4 "
+                                    className="w-full px-4 rounded-lg"
                                     name="username"
-                                    placeholder=""
-                                    value={username}
-                                    onChange={(e) => setUsername(e.target.value)}
+                                    placeholder={customer.userName}
+                                    value={userName}
+                                    onChange={(e) => setUserName(e.target.value)}
                                 />
                             </Form.Item>
 
                             <Form.Item
-                                className="mx-0 px-0 w-full"
+                                className="m-2 px-0 w-full"
                                 name="telephone"
                                 label="Telephone"
+                                rules={[
+                                    {
+                                        pattern: /^0\d{9}$/,
+                                        message:
+                                            "Please input a valid phone number that starts with 0 and contains 10 digits!",
+                                    },
+                                ]}
                             >
                                 <Input
-                                    className="w-full px-4 "
+                                    className="w-full px-4 rounded-lg"
                                     name="telephone"
-                                    placeholder=""
+                                    placeholder={customer.telephone}
                                     value={telephone}
                                     onChange={(e) => setTelephone(e.target.value)}
                                 />
                             </Form.Item>
 
+                            <Form.Item
+                                className="m-2 px-0 w-full"
+                                label="Password"
+                                name="password"
+                                rules={[
+                                    {
+                                        required: true,
+                                        message: "Please input your password!",
+                                    },
+                                    {
+                                        pattern: /^.{3,}$/,
+                                        message: "Password must be greater than 7 characters!",
+                                    },
+                                ]}
+                            >
+                                <Input.Password
+                                    className="w-full px-4 py-2.5"
+                                    name="password"
+                                    placeholder="Enter your password"
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
+                                />
+                            </Form.Item>
 
                             <div className="w-full flex justify-center gap-4 my-4">
                                 <Button
-                                    className="border-2 w-[120px] bg-[#2f6a81] text-white my-2 font-semibold rounded-md p-3 text-center flex items-center justify-center focus:outline-none hover:bg-gray-100 hover:text-[#2f6a81] hover:border-[#2f6a81] hover:border-2 mt-3 transition-all duration-300 "
+                                    className="rounded-full border-2 w-[140px] bg-[#2f6a81] text-white my-2  px-4 py-2 text-center flex items-center justify-center focus:outline-none hover:bg-gray-100 hover:text-[#2f6a81] hover:border-[#2f6a81] hover:border-2 mt-3 transition-all duration-300 "
                                     type="submit"
-                                    // onClick={handleEditProfile}
-                                    >
+                                    onClick={handleEditProfile}
+                                >
                                     Save Changes
                                 </Button>
                                 <Button
-                                    className="border-2 w-[120px] border-[#2f6a81] bg-gray-100 text-[#2f6a81] my-2 font-semibold rounded-md p-3 text-center flex items-center justify-center focus:outline-none hover:bg-[#2f6a81] hover:text-white hover:border-white hover:border-2 mt-3 transition-all duration-300 "
-                                    htmlType="reset">Reset
+                                    className="rounded-full border-2 w-[140px] border-[#2f6a81] bg-gray-100 text-[#2f6a81] my-2  px-4  py-2 text-center flex items-center justify-center focus:outline-none hover:bg-[#2f6a81] hover:text-white hover:border-white hover:border-2 mt-3 transition-all duration-300"
+                                    htmlType="reset"
+                                >
+                                    Reset
                                 </Button>
                             </div>
                         </Form>
-
                     </div>
                 </div>
             </div>
+            {/* )} */}
         </div>
-    )
-}
+    );
+};
 
-export default EditProfile
+export default EditProfile;

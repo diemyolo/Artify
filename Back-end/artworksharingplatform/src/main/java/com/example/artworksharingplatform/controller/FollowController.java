@@ -17,15 +17,18 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("api/auth")
 public class FollowController {
+    
     @Autowired
     UserService userService;
     @Autowired
     FollowingServiceImpl _followService;
+
     @PostMapping("follow")
-    @PreAuthorize("hasRole('ROLE_AUDIENCE')")
-    public ResponseEntity<ApiResponse<String>> following(@RequestParam String creatorEmail) throws Exception {
-        ApiResponse<String> apiResponse = new ApiResponse<String>();
+    // @PreAuthorize("hasRole('ROLE_AUDIENCE')")
+    public ResponseEntity<ApiResponse<String>> following(@RequestParam("creatorMail") String creatorEmail)
+            throws Exception {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        ApiResponse apiResponse = new ApiResponse();
         if (isUserAuthenticated(authentication)) {
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
             String email = userDetails.getUsername();
@@ -52,8 +55,38 @@ public class FollowController {
             return new ResponseEntity<>(apiResponse, HttpStatus.BAD_REQUEST);
         }
     }
+
     private boolean isUserAuthenticated(Authentication authentication) {
         return authentication != null && authentication.isAuthenticated()
                 && authentication.getPrincipal() instanceof UserDetails;
+    }
+
+    @GetMapping("is_Following")
+    @PreAuthorize("hasRole('ROLE_AUDIENCE')")
+    public ResponseEntity<ApiResponse<String>> IsFollowing(@RequestParam String CreatorEmail) throws Exception {
+        ApiResponse<String> apiResponse = new ApiResponse<>();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String mess = "";
+        try {
+            if (isUserAuthenticated(authentication)) {
+                UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+                String email = userDetails.getUsername();
+                User audience = userService.findByEmail(email);
+                User creator = userService.findByEmail(CreatorEmail);
+                Boolean result = _followService.IsFollow(audience, creator);
+                if (result) {
+                    mess = "You have followed this creator";
+                }else {
+                    mess= "You did not follow this creator";
+                }
+                apiResponse.ok(mess);
+                return ResponseEntity.ok(apiResponse);
+            } else {
+                return new ResponseEntity<>(apiResponse, HttpStatus.UNAUTHORIZED);
+            }
+
+        } catch (Exception e) {
+            return new ResponseEntity<>(apiResponse, HttpStatus.BAD_REQUEST);
+        }
     }
 }

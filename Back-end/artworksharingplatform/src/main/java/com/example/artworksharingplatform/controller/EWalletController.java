@@ -78,6 +78,7 @@ public class EWalletController {
     @Autowired
     MoneyInputService inputService;
 
+
     @PostMapping("/pay")
     public String getPay(@RequestParam("input_money") String inputMoney) throws UnsupportedEncodingException {
         String vnp_Version = "2.1.0";
@@ -187,6 +188,7 @@ public class EWalletController {
     }
 
     @GetMapping("/viewEwallet")
+    // @Pre
     public ResponseEntity<ApiResponse> getWalletByUserId() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         ApiResponse apiResponse = new ApiResponse();
@@ -214,9 +216,10 @@ public class EWalletController {
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
             String email = userDetails.getUsername(); // getUserName này là email
             UserDTO userInfo = userService.findByEmailAddress(email);
-            List<Transaction> transactions = transactionService.getTransactionsByUserId(userInfo.getUserId());
+            List<Transaction> transactions = transactionServiceImpl.getTransactionsByUserId(userInfo.getUserId());
+            transactionMapper.toList(transactions);
             if (transactions != null) {
-                apiResponse.ok(transactions);
+                apiResponse.ok(transactionMapper.toList(transactions));
                 return ResponseEntity.ok(apiResponse);
             } else {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(apiResponse);
