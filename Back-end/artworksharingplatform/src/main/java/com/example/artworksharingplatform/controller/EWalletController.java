@@ -15,7 +15,6 @@ import com.example.artworksharingplatform.service.impl.EWalletServiceImpl;
 import com.example.artworksharingplatform.service.impl.TransactionServiceImpl;
 import com.example.artworksharingplatform.service.impl.UserServiceImpl;
 
-
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
@@ -51,6 +50,7 @@ import com.example.artworksharingplatform.entity.Transaction;
 import com.example.artworksharingplatform.model.ApiResponse;
 import com.example.artworksharingplatform.model.UserDTO;
 import com.example.artworksharingplatform.service.MoneyInputService;
+import com.example.artworksharingplatform.service.TransactionService;
 import com.example.artworksharingplatform.service.UserService;
 import com.example.artworksharingplatform.service.impl.EWalletServiceImpl;
 import com.example.artworksharingplatform.service.impl.TransactionServiceImpl;
@@ -70,14 +70,14 @@ public class EWalletController {
     EWalletServiceImpl walletServiceImpl;
 
     @Autowired
-    TransactionServiceImpl transactionServiceImpl;
-  
+    TransactionService transactionService;
+
     @Autowired
     TransactionMapper transactionMapper;
 
     @Autowired
     MoneyInputService inputService;
-  
+
     @PostMapping("/pay")
     public String getPay(@RequestParam("input_money") String inputMoney) throws UnsupportedEncodingException {
         String vnp_Version = "2.1.0";
@@ -163,22 +163,22 @@ public class EWalletController {
             wallet.setTotalAmount(newAmount);
             walletServiceImpl.updateWallet(wallet);
             Timestamp date = new Timestamp(System.currentTimeMillis());
-            // Date date = new Date();  
+            // Date date = new Date();
             Transaction transaction = new Transaction();
             transaction.setUser(userService.getUser(userInfo.getUserId()));
             transaction.setTransactionDate(date);
             transaction.setTotalMoney(Float.parseFloat(amount) / 100);
-            Transaction addedTrans = transactionServiceImpl.addTransaction(transaction);
+            Transaction addedTrans = transactionService.addTransaction(transaction);
             MoneyInput input = new MoneyInput();
             input.setMoney(Float.parseFloat(amount));
             input.setTransactions(addedTrans);
             MoneyInput addedMoneyInput = inputService.addMoneyInput(input);
             TransactionDTO result = transactionMapper.toTransactionDTO(addedTrans);
             apiResponse.ok(result);
-			return ResponseEntity.ok(apiResponse);
-		} else {
-			return ResponseEntity.ok(apiResponse);
-		}
+            return ResponseEntity.ok(apiResponse);
+        } else {
+            return ResponseEntity.ok(apiResponse);
+        }
     }
 
     private boolean isUserAuthenticated(Authentication authentication) {
@@ -214,7 +214,7 @@ public class EWalletController {
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
             String email = userDetails.getUsername(); // getUserName này là email
             UserDTO userInfo = userService.findByEmailAddress(email);
-            List<Transaction> transactions = transactionServiceImpl.getTransactionsByUserId(userInfo.getUserId());
+            List<Transaction> transactions = transactionService.getTransactionsByUserId(userInfo.getUserId());
             if (transactions != null) {
                 apiResponse.ok(transactions);
                 return ResponseEntity.ok(apiResponse);
@@ -228,16 +228,16 @@ public class EWalletController {
     }
 
     @GetMapping("/getTransaction")
-    public ResponseEntity<ApiResponse> getTransactionById(@RequestParam("id") String transId){
+    public ResponseEntity<ApiResponse> getTransactionById(@RequestParam("id") String transId) {
         ApiResponse apiResponse = new ApiResponse();
-        try{
+        try {
             UUID id = UUID.fromString(transId);
-            TransactionDTO result = transactionServiceImpl.getTransactionById(id);
+            TransactionDTO result = transactionService.getTransactionById(id);
             apiResponse.ok(result);
             return ResponseEntity.ok(apiResponse);
-        }catch(Exception e){
+        } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiResponse);
         }
     }
-    
+
 }
