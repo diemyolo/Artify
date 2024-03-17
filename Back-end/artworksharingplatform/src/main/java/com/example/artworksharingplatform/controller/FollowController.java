@@ -14,6 +14,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.UUID;
+
 @RestController
 @RequestMapping("api/auth")
 public class FollowController {
@@ -43,10 +45,10 @@ public class FollowController {
     }
 
     @GetMapping("number_of_follow")
-    public ResponseEntity<ApiResponse<Integer>> NumberOfFollower(@RequestParam String CreatorEmail) throws Exception {
+    public ResponseEntity<ApiResponse<Integer>> NumberOfFollower(@RequestParam UUID CreatorId) throws Exception {
         ApiResponse<Integer> apiResponse = new ApiResponse<>();
         try {
-            User creator = userService.findByEmail(CreatorEmail);
+            User creator = userService.getUserById(CreatorId);
             Integer numberOfFollower = _followService.NumOfFollowing(creator);
             apiResponse.ok(numberOfFollower);
             return ResponseEntity.ok(apiResponse);
