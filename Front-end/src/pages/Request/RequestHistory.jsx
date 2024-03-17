@@ -5,7 +5,7 @@ import axios from "axios";
 
 const RequestHistory = () => {
   const token = localStorage.getItem("token");
-const [requestList,setRequestList] = useState([]);
+  const [requestList, setRequestList] = useState([]);
   useEffect(() => {
     const fetchData = async () => {
       const response = await axios.get(
@@ -19,10 +19,11 @@ const [requestList,setRequestList] = useState([]);
     };
     fetchData();
   }, []);
+
   return (
-    <div className="w-full h-screen bg-gray-100">
+    <div className="w-full h-full bg-gray-100">
       <NavBar />
-      <div className="h-screen p-28 mt-5">
+      <div className="h-full p-28 mt-5">
         <h1 className="text-center text-3xl font-semibold mb-10 text-[#2f6a81]">
           Request History
         </h1>
@@ -44,30 +45,30 @@ const [requestList,setRequestList] = useState([]);
               </Table.HeadCell>
             </Table.Head>
             <Table.Body className="divide-y">
-                {requestList.length > 0 && requestList.map( (item,index) => 
-                    <Table.Row key={item.preOrderId} className="bg-white dark:border-gray-700 dark:bg-gray-800">
-                    <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
-                     {index+1}
-                    </Table.Cell>
-                    <Table.Cell>{item.creatorName}</Table.Cell>
-                    <Table.Cell>Laptop</Table.Cell>
-                    <Table.Cell>{item.requirement}</Table.Cell>
-                    <Table.Cell>{item.price}</Table.Cell>
-                    <Table.Cell>{item.status}</Table.Cell>
-                    <Table.Cell>$2999</Table.Cell>
-                    <Table.Cell>$2999</Table.Cell>
-                    <Table.Cell>$2999</Table.Cell>
-                    <Table.Cell>$2999</Table.Cell>
-                    <Table.Cell>
-                      <a
-                        href="#"
-                        className="font-medium text-cyan-600 hover:underline dark:text-cyan-500"
-                      >
-                        Cancel
-                      </a>
-                    </Table.Cell>
-                  </Table.Row>
-                )}
+              {requestList.length > 0 && requestList.map((item, index) =>
+                <Table.Row key={item.preOrderId} className="bg-white dark:border-gray-700 dark:bg-gray-800">
+                  <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
+                    {index + 1}
+                  </Table.Cell>
+                  <Table.Cell>{item.creatorName}</Table.Cell>
+                  <Table.Cell>{item.preOrderDate}</Table.Cell>
+                  <Table.Cell>{item.requirement}</Table.Cell>
+                  <Table.Cell>{item.price}</Table.Cell>
+                  <Table.Cell>{item.status}</Table.Cell>
+                  <Table.Cell><img src={item.artworkImagePath} alt="art" /></Table.Cell>
+                  <Table.Cell>{item.creatorNote}</Table.Cell>
+                  <Table.Cell>{item.audienceFeedback}</Table.Cell>
+                  <Table.Cell>{item.audienceRating}</Table.Cell>
+                  <Table.Cell>
+                    <a
+                      href="#"
+                      className="font-medium text-cyan-600 hover:underline dark:text-cyan-500"
+                    >
+                      Cancel
+                    </a>
+                  </Table.Cell>
+                </Table.Row>
+              )}
             </Table.Body>
           </Table>
         </div>

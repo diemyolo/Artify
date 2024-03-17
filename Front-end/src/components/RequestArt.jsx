@@ -1,20 +1,27 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Label, Textarea } from "flowbite-react";
 import axios from "axios";
+import Swal from "sweetalert2";
 
 const RequestArt = ({ creatorId }) => {
   const [requirementText, setRequirementText] = useState("");
-  const [requirementDTO, setRequirementDTO] = useState({
-    creatorId: creatorId,
-    requirement: "",
-  });
 
   const token = localStorage.getItem("token");
 
   const handleKeyPress = async (event) => {
     event.preventDefault();
+
+    if (requirementText.trim() === "") {
+      Swal.fire({
+        position: "center",
+        icon: "error",
+        title: "Validation Error",
+        text: "Please enter your request before submitting.",
+      });
+      return;
+    }
+    
     const updatedRequest = { creatorId: creatorId, requirement: requirementText };
-    setRequirementDTO(updatedRequest);
     const response = await axios.post(
       `http://localhost:8080/api/auth/audience/PreOrderRequest`,
       updatedRequest,
@@ -22,6 +29,18 @@ const RequestArt = ({ creatorId }) => {
         headers: { Authorization: `Bearer ${token}` },
       }
     );
+    if (response.status === 200) {
+      Swal.fire({
+        position: "center",
+        icon: "success",
+        title: "Welcome",
+        html: "<h3>Request Art Successfully</h3>",
+        showConfirmButton: false,
+        timer: 1600
+      }).then(() => {
+        navigate("/viewEwallet");
+      });
+    }
     console.log(response.data);
   };
 
