@@ -9,6 +9,7 @@ import axios from "axios";
 const ArtistProfile = () => {
   const [activeComponent, setActiveComponent] = useState('post');
   const [post, setPost] = useState([]);
+  const [follow, setFollow] = useState([]);
 
   const params = new URLSearchParams(window.location.search);
   const creatorId = params.get("creatorId");
@@ -24,11 +25,21 @@ const ArtistProfile = () => {
         }
       );
       setPost(response.data.payload);
+
+      const followResponse = await axios.get(
+        `http://localhost:8080/api/auth/number_of_follow?creatorId=${creatorId}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      setFollow(followResponse.data.payload);
     }
     fetchData();
   }, []);
 
   console.log(post)
+  console.log(follow)
+
 
   const handlePostButtonClick = () => {
     setActiveComponent('post');
@@ -71,6 +82,7 @@ const ArtistProfile = () => {
         onRequestButtonClick={handleRequestButtonClick}
         p={post}
         creatorId={creatorId}
+        follow={follow}
       />
 
       <div className='w-full mt-72 bg-gray-100'>
