@@ -122,4 +122,14 @@ public class PreOrderServiceImpl implements PreOrderService {
             throw new Exception(e.getMessage());
         }
     }
+
+    @Override
+    public List<PreOrder> getWaitingPreOrderList(User preOrderCustomer) throws Exception {
+        try {
+            List<PreOrder> preOrderList = _preOrderRepo.findByPreOrderAudience(preOrderCustomer);
+            return preOrderList;
+        } catch (Exception e) {
+            throw new Exception(e.getMessage());
+        }
+    }
 }

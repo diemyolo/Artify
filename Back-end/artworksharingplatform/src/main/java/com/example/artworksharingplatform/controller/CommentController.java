@@ -104,7 +104,7 @@ public class CommentController {
     }
 
     @GetMapping("view")
-    public ResponseEntity<ApiResponse<List<CommentDTO>>> getCommentsListByPostId(@RequestParam UUID postId) {
+    public ResponseEntity<ApiResponse<List<CommentDTO>>> getCommentsListByPostId(@RequestParam("postId") UUID postId) {
         ApiResponse<List<CommentDTO>> apiResponse = new ApiResponse<List<CommentDTO>>();
 
         try {

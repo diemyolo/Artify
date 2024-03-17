@@ -4,11 +4,12 @@ import logo from "../assets/logo.png"
 import { Link } from "react-router-dom";
 import { AiOutlineSearch } from "react-icons/ai";
 import { Dropdown } from 'flowbite-react';
-
+import axios from "axios";
 const NavBar = () => {
   const [isSticky, setIsSticky] = useState(false);
   const token = localStorage.getItem("token");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [customer, setCustomer] = useState({});
 
   console.log(token)
 
@@ -25,8 +26,23 @@ const NavBar = () => {
     return () => {
       window.removeEventListener('scroll', handleScroll);
     }
+
   });
 
+  useEffect(() => {
+    const fetchData = async () => {
+      const customerResponse = await axios.get(
+        "http://localhost:8080/api/auth/user/profile",
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      setCustomer(customerResponse.data.payload);
+    }
+    fetchData();
+  },[]);
+
+  console.log(customer);
   const handleLogout = () => {
     localStorage.removeItem('token');
     setIsLoggedIn(false);
@@ -80,6 +96,11 @@ const NavBar = () => {
                       Request History
                     </Link>
                   </Dropdown.Item>
+                  {customer.roleName == "CREATOR" && <Dropdown.Item>
+                    <Link to="/viewPreordersByCreator" className="font-semibold lg:flex items-center hover:text-[#2f6a81]">
+                      View your request orders
+                    </Link>
+                  </Dropdown.Item>}
                   <Dropdown.Divider />
                   <Dropdown.Item>
                     <div onClick={handleLogout} className="cursor-pointer font-semibold lg:flex items-center hover:text-[#2f6a81]">

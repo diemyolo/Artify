@@ -17,15 +17,18 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("api/auth")
 public class FollowController {
+    
     @Autowired
     UserService userService;
     @Autowired
     FollowingServiceImpl _followService;
+
     @PostMapping("follow")
-    @PreAuthorize("hasRole('ROLE_AUDIENCE')")
-    public ResponseEntity<ApiResponse<String>> following(@RequestParam String creatorEmail) throws Exception {
-        ApiResponse<String> apiResponse = new ApiResponse<String>();
+    // @PreAuthorize("hasRole('ROLE_AUDIENCE')")
+    public ResponseEntity<ApiResponse<String>> following(@RequestParam("creatorMail") String creatorEmail)
+            throws Exception {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        ApiResponse apiResponse = new ApiResponse();
         if (isUserAuthenticated(authentication)) {
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
             String email = userDetails.getUsername();
@@ -52,6 +55,7 @@ public class FollowController {
             return new ResponseEntity<>(apiResponse, HttpStatus.BAD_REQUEST);
         }
     }
+
     private boolean isUserAuthenticated(Authentication authentication) {
         return authentication != null && authentication.isAuthenticated()
                 && authentication.getPrincipal() instanceof UserDetails;

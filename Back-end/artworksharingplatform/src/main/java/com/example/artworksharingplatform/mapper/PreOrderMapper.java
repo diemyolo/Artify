@@ -19,6 +19,7 @@ public interface PreOrderMapper {
 	@Mapping(source = "preOrder.creatorNote", target = "creatorNote")
 	@Mapping(source = "preOrder.preOrderDate", target = "preOrderDate")
 	@Mapping(source = "preOrder.preOrderCreator.id", target = "creatorId")
+	@Mapping(source = "preOrder.preOrderCreator.name", target = "creatorName")
 	@Mapping(source = "preOrder.preOrderAudience.id", target = "audienceId")
 	@Mapping(source = "preOrder.preOrderArtwork.id", target = "artworkId")
 	@Mapping(source = "preOrder.preOrderArtwork.imagePath", target = "artworkImagePath")

@@ -128,14 +128,14 @@ const AddArts = () => {
     );
     console.log(updatedValue);
     console.log(selectedFiles);
-    // const response = await axios.post(
-    //   "http://localhost:8080/api/auth/creator/addPost",
-    //   formData,
-    //   {
-    //     headers: { Authorization: `Bearer ${token}` },
-    //   }
-    // );
-    // console.log(response.data);
+    const response = await axios.post(
+      "http://localhost:8080/api/auth/creator/addPost",
+      formData,
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
+    console.log(response.data);
   };
 
   const uploadButton = (
