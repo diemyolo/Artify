@@ -16,8 +16,20 @@ public interface TransactionMapper {
     @Mapping(source = "transaction.id", target = "transactionId")
     @Mapping(source = "transaction.transactionDate", target = "transactionDate")
     @Mapping(source = "transaction.moneyInput", target = "input_money")
-    @Mapping(ignore = true, target = "description")
+    @Mapping(expression = "java(transactionDescription(transaction))", target = "description")
+
     TransactionDTO toTransactionDTO(Transaction transaction);
 
     List<TransactionDTO> toList(List<Transaction> transactions);
+
+    default String transactionDescription(Transaction transaction) {
+        if (transaction.getOrders() != null) {
+            return "Order";
+        } else if (transaction.getPreOrders() != null) {
+            return "PreOrder";
+        } else if (transaction.getMoneyInput() != null) {
+            return transaction.getMoneyInput().getDescription();
+        }
+        return "";
+    }
 }

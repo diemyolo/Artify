@@ -11,6 +11,8 @@ import com.example.artworksharingplatform.entity.User;
 
 public interface PreOrderRepository extends JpaRepository<PreOrder, UUID> {
     List<PreOrder> findByPreOrderCreator(User preOrderCreator);
+    List<PreOrder> findByPreOrderAudience(User preOrderCustomer);
+
 
     int countByPreOrderCreator(User preOrderCreator);
 

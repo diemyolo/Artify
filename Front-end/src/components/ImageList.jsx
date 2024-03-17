@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { Avatar, Modal } from "flowbite-react";
 import { AiOutlineUserAdd } from "react-icons/ai";
 import { MdOutlineFileDownload } from "react-icons/md";
+import axios from 'axios';
 
 const ImageList = () => {
     const [post, setPost] = useState([]);
@@ -13,36 +14,30 @@ const ImageList = () => {
     const [openModal, setOpenModal] = useState(false);
     const [indexImage, setIndexImage] = useState(0);
 
-    let combineArt = []
-    const myHeaders = new Headers();
-    const token = localStorage.getItem("token");
-    myHeaders.append("Authorization", `Bearer ${token}`);
-    const requestOptions = {
-        method: "GET",
-        headers: myHeaders,
-        redirect: "follow"
-    };
-    let autoData = []
-    useEffect(() => {
-        const fetchFData = () => {
-            fetch("http://localhost:8080/api/auth/audience/viewAllPosts", requestOptions)
-                .then((response) => {
-                    if (response.ok) {
-                        return response.json();
-                    }
-                    throw Error(response.statusText);
-                })
-                .then((result) => {
-                    let DataList = []
-                    console.log(result.payload);
-                    setPost(result.payload);
-                    if (result && result.payload && result.payload.length > 0) {
-                        setIsLoading(true);
-                    }
-                })
-                .catch((error) => console.error(error));
+    let combineArt = [];
+
+    const fetchData = async () => {
+        try {
+            const token = localStorage.getItem('token');
+            const headers = {
+                Authorization: `Bearer ${token}`
+            };
+            const response = await axios.get('http://localhost:8080/api/auth/audience/viewAllPosts', {
+                headers
+            });
+            const result = response.data;
+            console.log(result.payload);
+            setPost(result.payload);
+            if (result && result.payload && result.payload.length > 0) {
+                setIsLoading(true);
+            }
+        } catch (error) {
+            console.error(error);
         }
-        fetchFData();
+    };
+
+    useEffect(() => {
+        fetchData();
     }, []);
 
     useEffect(() => {
@@ -50,7 +45,6 @@ const ImageList = () => {
         setGallery(combineArt)
     }, [post])
 
-    console.log("galarry", autoData)
     const handleImageClick = (imagePath, index) => {
         setSelectedImage(imagePath);
         setOpenModal(true);

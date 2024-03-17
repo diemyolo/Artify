@@ -13,14 +13,13 @@ const InputComment = ({ postId }) => {
 
   const handleKeyPress = async (event) => {
     event.preventDefault();
-    setCommentDTO({
-      comment: commentText
-    });
+    const updatedCommentDTO = { comment: commentText }; // Lấy giá trị mới của commentText
+    setCommentDTO(updatedCommentDTO);
     const response = await axios.post(
       `http://localhost:8080/api/auth/comment/add?postId=${postId}`,
-      commentDTO,
+      updatedCommentDTO,
       {
-        headers: { Authorization: `Bearer ${token}` },
+        headers: { Authorization: `Bearer ${token}` }
       }
     );
     console.log(response.data);
@@ -47,7 +46,7 @@ const InputComment = ({ postId }) => {
           <div
             onClick={handleKeyPress}
           >
-            <button></button>
+            <button>send</button>
           </div>
         </form>
       </div>
