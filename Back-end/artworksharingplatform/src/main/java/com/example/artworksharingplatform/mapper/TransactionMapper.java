@@ -17,6 +17,7 @@ public interface TransactionMapper {
     @Mapping(source = "transaction.transactionDate", target = "transactionDate")
     @Mapping(source = "transaction.moneyInput", target = "input_money")
     @Mapping(expression = "java(transactionDescription(transaction))", target = "description")
+
     TransactionDTO toTransactionDTO(Transaction transaction);
 
     List<TransactionDTO> toList(List<Transaction> transactions);
