@@ -12,7 +12,6 @@ import com.example.artworksharingplatform.model.ApiResponse;
 import com.example.artworksharingplatform.model.TransactionDTO;
 import com.example.artworksharingplatform.model.UserDTO;
 import com.example.artworksharingplatform.service.impl.EWalletServiceImpl;
-import com.example.artworksharingplatform.service.impl.TransactionServiceImpl;
 import com.example.artworksharingplatform.service.impl.UserServiceImpl;
 
 import java.io.UnsupportedEncodingException;
@@ -24,7 +23,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -40,20 +38,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
-import com.example.artworksharingplatform.config.VnPayConfig;
-import com.example.artworksharingplatform.entity.EWallet;
-import com.example.artworksharingplatform.entity.Transaction;
-import com.example.artworksharingplatform.model.ApiResponse;
-import com.example.artworksharingplatform.model.UserDTO;
 import com.example.artworksharingplatform.service.MoneyInputService;
 import com.example.artworksharingplatform.service.TransactionService;
 import com.example.artworksharingplatform.service.UserService;
-import com.example.artworksharingplatform.service.impl.EWalletServiceImpl;
-import com.example.artworksharingplatform.service.impl.TransactionServiceImpl;
 
 @RestController
 @RequestMapping("api/auth")
@@ -77,7 +64,6 @@ public class EWalletController {
 
     @Autowired
     MoneyInputService inputService;
-
 
     @PostMapping("/pay")
     public String getPay(@RequestParam("input_money") String inputMoney) throws UnsupportedEncodingException {
@@ -216,7 +202,7 @@ public class EWalletController {
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
             String email = userDetails.getUsername(); // getUserName này là email
             UserDTO userInfo = userService.findByEmailAddress(email);
-            List<Transaction> transactions = transactionServiceImpl.getTransactionsByUserId(userInfo.getUserId());
+            List<Transaction> transactions = transactionService.getTransactionsByUserId(userInfo.getUserId());
             transactionMapper.toList(transactions);
             if (transactions != null) {
                 apiResponse.ok(transactionMapper.toList(transactions));
