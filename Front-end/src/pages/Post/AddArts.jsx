@@ -104,7 +104,7 @@ const AddArts = () => {
   const myHeaders = new Headers();
   myHeaders.append("Authorization", `Bearer ${token}`);
   console.log(token);
-  
+
   const handleSubmit = async (values) => {
     const formData = new FormData();
 
@@ -149,7 +149,9 @@ const AddArts = () => {
       <NavBar />
       <div className="bg-gray-100 mx-auto max-w-screen-xl p-4">
         <div className="bg-gray-100 mt-40 min-h-screen">
-          <h1>Add Post</h1>
+          <h1 className="text-3xl text-[#2f6a81] text-center font-bold m-5">
+            Add Post
+          </h1>
           <Steps
             current={current}
             items={items}
@@ -180,13 +182,13 @@ const AddArts = () => {
               onSubmit={handleSubmit}
             >
               {({ values, setFieldValue }) => (
-                <Form>
+                <Form className="w-full px-32">
                   {current == 0 ? (
                     <div>
                       <Field
                         type="text"
                         name="description"
-                        className="bg-slate-200 w-[500px]"
+                        className="bg-slate-200 w-[500px] rounded-lg"
                         autocomplete="off"
                         placeholder="Description..."
                       />
@@ -195,24 +197,26 @@ const AddArts = () => {
                     <FieldArray name="artList">
                       {({ push, remove }) => (
                         <div>
-                          <h3>Art List</h3>
+                          <h3 className="text-3xl text-[#2f6a81] text-center font-semibold mb-5" >Art List</h3>
                           {values.artList.map((artwork, index) => (
                             <div key={index}>
                               <div>
-                                <label htmlFor={`artList.${index}.artName`}>
+                                <label className="mr-4" htmlFor={`artList.${index}.artName`}>
                                   Art Name
                                 </label>
                                 <Field
                                   type="text"
                                   name={`artList.${index}.artName`}
+                                  className="rounded-lg w-full border-[#d9d9d9] mb-5"
                                 />
                               </div>
+
                               <div>
                                 <Upload
                                   action="https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188"
                                   name="avatar"
                                   listType="picture-card"
-                                  className="avatar-uploader"
+                                  className="avatar-uploader mb-5"
                                   showUploadList={false}
                                   beforeUpload={(file) => {
                                     setFieldValue(
@@ -253,12 +257,13 @@ const AddArts = () => {
                               </div>
 
                               <div>
-                                <label htmlFor={`artList.${index}.type`}>
+                                <label className="mr-4" htmlFor={`artList.${index}.type`}>
                                   Type
                                 </label>
                                 <Select
                                   defaultValue="Free"
-                                  style={{ width: 120 }}
+                                  className="rounded-lg w-full border-[#d9d9d9] mb-5"
+                                  // style={{ width: 120 }}
                                   name={`artList.${index}.type`}
                                   options={[
                                     { value: "Free", label: "Free" },
@@ -288,15 +293,18 @@ const AddArts = () => {
                                   />
                                 </div>
                               )}
-                              <button
-                                type="button"
-                                onClick={() => {
-                                  remove(index);
-                                  handleRemoveArtwork(index);
-                                }}
-                              >
-                                Remove
-                              </button>
+
+                              <div className="cursor-pointer w-[20%] mx-auto mt-5 sm:flex gap-2 hidden items-center justify-center text-white bg-[#2f6a81] px-4 py-2 transition-all duration-300 rounded-full ">
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    remove(index);
+                                    handleRemoveArtwork(index);
+                                  }}
+                                >
+                                  Remove
+                                </button>                              
+                                </div>
                             </div>
                           ))}
                           <button
@@ -316,7 +324,7 @@ const AddArts = () => {
                       )}
                     </FieldArray>
                   ) : (
-                    <div className="w-full flex flex-col justify-center items-center w-full">
+                    <div className="w-full flex flex-col justify-center items-center">
                       <Card className="w-[700px] justify-center flex bg-white shadow-md shadow-gray-300 rounded-md mb-5 w-1/2">
                         <div className="flex justify-between gap-3">
                           <Avatar rounded>
@@ -417,13 +425,17 @@ const AddArts = () => {
                       </Card>
                     </div>
                   )}
-                  <button type="submit">Submit</button>
+                  <div className="cursor-pointer w-[20%] mx-auto mt-5 sm:flex gap-2 hidden items-center justify-center text-white bg-[#2f6a81] px-4 py-2 transition-all duration-300 rounded-full ">
+                    <button type="submit">Submit</button>
+                  </div>
                 </Form>
               )}
             </Formik>
           </div>
           {current < steps.length - 1 && (
-            <Button onClick={() => next()}>Next</Button>
+            <div className="flex justify-center mt-5">
+              <Button onClick={() => next()}>Next</Button>
+            </div>
           )}
           {current === steps.length - 1 && (
             <Button

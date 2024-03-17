@@ -108,17 +108,11 @@ const EditProfile = () => {
     const handleAvatarChange = (event) => {
         const selectedFile = event.target.files[0];
         if (selectedFile) {
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                setCustomer((prevCustomer) => ({
-                    ...prevCustomer,
-                    imagePath: e.target.result,
-                }));
-            };
-            reader.readAsDataURL(selectedFile);
+            setFiles([selectedFile]);
         }
     };
 
+    
     return (
         <div className="w-full h-full bg-gray-100">
             {/* <Spin spinning={!isLoading} fullscreen /> */}
@@ -133,7 +127,7 @@ const EditProfile = () => {
                                     <Avatar
                                         rounded
                                         size="xl"
-                                        src={customer.imagePath}
+                                        src={files.length > 0 ? URL.createObjectURL(files[0]) : customer.imagePath}
                                     />
                                     <label htmlFor="upload" className="absolute right-0 bottom-1 bg-[#2f6a81] rounded-full p-1.5 cursor-pointer">
                                         <MdOutlineModeEdit size={20} color="white" />
