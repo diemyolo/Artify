@@ -74,5 +74,14 @@ public class FollowingServiceImpl implements FollowingService {
 
         }
     }
+    @Override
+    public List<User> GetAllFollower(User audience, User creator) throws Exception {
+        try {
+            List<User> listOfFollow = creator.getCreator();
+            return listOfFollow;
+        } catch (Exception e) {
+            throw new Exception("An error occurred while following the creator: " + e.getMessage());
+        }
+    }
 
 }
