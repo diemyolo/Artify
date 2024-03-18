@@ -19,7 +19,7 @@ const EditProfile = () => {
     const [emailAddress, setEmailAddress] = useState("");
     const [userName, setUserName] = useState("");
     const [telephone, setTelephone] = useState("");
-
+    const [imagePath, setImagePath] = useState("");
     const [files, setFiles] = useState();
 
     console.log(files);
@@ -37,6 +37,7 @@ const EditProfile = () => {
                 setCustomer(customerResponse.data.payload);
                 setUserName(customerResponse.data.payload.userName);
                 setTelephone(customerResponse.data.payload.telephone);
+                setImagePath(customerResponse.data.payload.imagePath);
             } catch (error) {
                 console.error("Error fetching data:", error);
             }
@@ -55,6 +56,8 @@ const EditProfile = () => {
         const formData = new FormData();
         if (files != null && files.length > 0) {
             formData.append("image", files[0]);
+        }else {
+            formData.append("imagePath" , imagePath);
         }
         formData.append(
             "user",

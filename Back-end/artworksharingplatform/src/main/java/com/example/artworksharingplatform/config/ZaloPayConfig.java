@@ -1,7 +1,8 @@
 package com.example.artworksharingplatform.config;
 
 public class ZaloPayConfig {
-	public static final String APP_ID = "2554";
+        
+    public static final String APP_ID = "2554";
     public static final String KEY1 = "sdngKKJmqEMzvh5QQcdD2A9XBSKUNaYn";
     public static final String KEY2 = "kLtgPl8HHhfvMuDHPwKfgfsY4Ydm9eIz";
     public static final String ORDER_CREATE_ENDPOINT
