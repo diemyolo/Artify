@@ -85,7 +85,7 @@ public class TransactionServiceImpl implements TransactionService {
 		User admin = userRepository.findByRole(role);
 
 		Transaction transaction = new Transaction();
-		transaction.setTotalMoney(totalMoney * adminRate);
+		transaction.setTotalMoney(totalMoney);
 		transaction.setUser(admin);
 		transaction.setTransactionDate(order.getPreOrderDate());
 		return repo.save(transaction);
