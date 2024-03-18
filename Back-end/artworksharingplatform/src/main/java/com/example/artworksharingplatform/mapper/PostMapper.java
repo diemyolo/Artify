@@ -8,7 +8,7 @@ import org.mapstruct.Mapping;
 import com.example.artworksharingplatform.entity.Post;
 import com.example.artworksharingplatform.model.PostDTO;
 
-@Mapper(componentModel = "spring", uses = { ArtworkMapper.class, InteractionMapper.class })
+@Mapper(componentModel = "spring" ,uses = ArtworkMapper.class)
 public interface PostMapper {
 
 	@Mapping(source = "post.id", target = "postId")
@@ -18,6 +18,7 @@ public interface PostMapper {
 	@Mapping(source = "creator.id", target = "creatorId")
 	@Mapping(source = "postsInteraction", target = "interactions")
 	@Mapping(source = "artworks", target = "artList")
+
 	PostDTO toPostDTO(Post post);
 
 	List<PostDTO> toList(List<Post> postList);
