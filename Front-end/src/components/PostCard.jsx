@@ -11,7 +11,7 @@ import axios from "axios";
 const PostCard = () => {
   const [post, setPost] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-
+  const navigate = useNavigate();
   const token = localStorage.getItem("token");
   console.log(token);
   useEffect(() => {
@@ -30,7 +30,7 @@ const PostCard = () => {
 
   const handleFollow = async (p) => {
     const response = await axios.post(
-      `http://localhost:8080/api/auth/follow?creatorMail=${p.emailAddress}`,
+      `http://localhost:8080/api/auth/follow?creatorId=${p.creatorId}`,
       {
         headers: { Authorization: `Bearer ${token}` }
       }
@@ -75,7 +75,6 @@ const PostCard = () => {
                     <Carousel
                       pauseOnHover
                       className="w-full mx-auto"
-                      infiniteLoop={true}
                     >
                       {p.artList.map((item, index) => (
                         <div key={index}>
