@@ -53,7 +53,7 @@ const ImageList = () => {
 
 
     return (
-        <div className='pb-10'>
+        <div>
             <div className="grid grid-cols-3 gap-16 sm:grid-cols-3 px-8 md:px-16 lg:px-28">
                 {post?.length > 0 ?
                     gallery.map((p, postIndex) => (

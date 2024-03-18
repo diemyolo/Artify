@@ -74,7 +74,6 @@ public class FollowingServiceImpl implements FollowingService {
 
         }
     }
-
     @Override
     public List<User> GetAllFollower(User audience, User creator) throws Exception {
         try {

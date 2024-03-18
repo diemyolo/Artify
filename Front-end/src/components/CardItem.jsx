@@ -15,6 +15,12 @@ const CardItem = () => {
   const [openModal, setOpenModal] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [orderDTO, setOrderDTO] = useState({
+    totalPrice: 0,
+    artwork: {
+      artId: "",
+    },
+  });
 
   const params = new URLSearchParams(window.location.search);
   const postId = params.get("postId");
@@ -62,6 +68,29 @@ const CardItem = () => {
       `http://localhost:8080/api/auth/downloadArt?artId=${image.artId}`
     );
     saveAs(`${response.data.payload}`, `${image.artName}.jpg`);
+  };
+
+  const makeOrder = async (image) => {
+    const updatedOrder = {
+      totalPrice: image.price,
+      artwork: {
+        artId: image.artId,
+      },
+    };
+    const order = await axios.post(
+      "http://localhost:8080/api/auth/order/add",
+      updatedOrder,
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
+
+    console.log(updatedOrder);
+    // const order
+    // const response = await axios.get(
+    //   `http://localhost:8080/api/auth/downloadArt?artId=${image.artId}`
+    // );
+    // saveAs(`${response.data.payload}`, `${image.artName}.jpg`);
   };
 
   return (
@@ -278,7 +307,10 @@ const CardItem = () => {
                         </div>
 
                         {selectedImage.type !== "Free" ? (
-                          <div className="cursor-pointer sm:flex gap-2 hidden items-center text-white bg-[#F4980A] px-4 transition-all duration-300 rounded-full my-1">
+                          <div
+                            onClick={() => makeOrder(selectedImage)}
+                            className="cursor-pointer sm:flex gap-2 hidden items-center text-white bg-[#F4980A] px-4 transition-all duration-300 rounded-full my-1"
+                          >
                             <MdOutlineFileDownload
                               size={20}
                               style={{ color: "#fff", fontWeight: "bold" }}

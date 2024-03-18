@@ -2,7 +2,6 @@ import React from 'react'
 import NavBar from '../../components/NavBar'
 import Hero from '../../components/Hero'
 import PostCard from '../../components/PostCard'
-import FooterPart from '../../components/FooterPart'
 
 export default function Home() {
 
@@ -16,7 +15,6 @@ export default function Home() {
           <div className='m-10 flex flex-col items-center justify-center'>
             <PostCard />
           </div>
-          <FooterPart />
         </div>
       </div>
     </div>

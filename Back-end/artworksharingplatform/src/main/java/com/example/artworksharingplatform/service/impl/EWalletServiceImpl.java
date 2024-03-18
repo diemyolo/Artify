@@ -62,6 +62,18 @@ public class EWalletServiceImpl implements EWalletService {
 	}
 
 	@Override
+	public void processingAdminWallet(float totalMoney) {
+		Role role = Role.ADMIN;
+		User admin = userRepository.findByRole(role);
+		EWallet eWallet = getWalletByUserId(admin.getId());
+
+		float newBalance = (float) (eWallet.getTotalAmount() + totalMoney);
+		eWallet.setTotalAmount(newBalance);
+
+		eWalletRepository.save(eWallet);
+	}
+
+	@Override
 	public void updateCreatorWallet(UUID creatorId, float totalMoney) {
 		EWallet eWallet = getWalletByUserId(creatorId);
 

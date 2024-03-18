@@ -72,7 +72,8 @@ public class UserController {
 
     @PutMapping("user/profile")
     public ResponseEntity<ApiResponse<UserDTO>> updateUser(@RequestPart(value = "user") UserDTO updatedUser,
-            @RequestPart(value = "image", required = false) MultipartFile file) {
+            @RequestPart(value = "image", required = false) MultipartFile file,
+            @RequestPart(value = "imagePath", required = false) String imagePath) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         ApiResponse<UserDTO> apiResponse = new ApiResponse<UserDTO>();
         try {
@@ -82,6 +83,8 @@ public class UserController {
                 updatedUser.setImagePath(null);
                 if (file != null) {
                     updatedUser.setImagePath(uploadImage(file));
+                }else{
+                    updatedUser.setImagePath(imagePath);
                 }
                 updatedUser.setEmailAddress(email);
                 UserDTO userInfo = userService.updateUser(updatedUser);

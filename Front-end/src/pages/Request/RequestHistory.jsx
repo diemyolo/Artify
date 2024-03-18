@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import NavBar from "../../components/NavBar";
 import { Table } from "flowbite-react";
 import axios from "axios";
-import FooterPart from "../../components/FooterPart";
 
 const RequestHistory = () => {
   const token = localStorage.getItem("token");
@@ -74,7 +73,6 @@ const RequestHistory = () => {
           </Table>
         </div>
       </div>
-      <FooterPart />
     </div>
   );
 };

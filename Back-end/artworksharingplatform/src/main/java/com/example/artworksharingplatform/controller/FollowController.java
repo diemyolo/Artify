@@ -22,7 +22,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("api/auth")
 public class FollowController {
-    
+
     @Autowired
     UserService userService;
     @Autowired
@@ -32,8 +32,7 @@ public class FollowController {
 
     @PostMapping("follow")
     // @PreAuthorize("hasRole('ROLE_AUDIENCE')")
-    public ResponseEntity<ApiResponse<String>> following(@RequestParam("creatorId") UUID creatorId)
-            throws Exception {
+    public ResponseEntity<ApiResponse<String>> following(@RequestParam("creatorId") UUID creatorId) throws Exception {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         ApiResponse apiResponse = new ApiResponse();
         if (isUserAuthenticated(authentication)) {

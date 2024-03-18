@@ -5,8 +5,6 @@ import CardProfile from '../../components/CardProfile';
 import ImageList from '../../components/ImageList';
 import RequestArt from '../../components/RequestArt';
 import axios from "axios";
-import FollowList from '../../components/FollowList';
-import FooterPart from '../../components/FooterPart';
 
 const ArtistProfile = () => {
   const [activeComponent, setActiveComponent] = useState('post');
@@ -29,7 +27,7 @@ const ArtistProfile = () => {
       setPost(response.data.payload);
 
       const followResponse = await axios.get(
-        `http://localhost:8080/api/auth/number_of_follow?CreatorId=${creatorId}`,
+        `http://localhost:8080/api/auth/number_of_follow?creatorId=${creatorId}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -65,7 +63,7 @@ const ArtistProfile = () => {
     } else if (activeComponent === 'gallery') {
       return <ImageList />;
     } else if (activeComponent === 'follower') {
-      return <FollowList />;
+      return <PostCard />;
     } else if (activeComponent === 'request') {
       return <RequestArt creatorId={creatorId} />;
     }
@@ -90,8 +88,6 @@ const ArtistProfile = () => {
       <div className='w-full mt-72 bg-gray-100'>
         {renderActiveComponent()}
       </div>
-
-      <FooterPart />
     </div>
   )
 }

@@ -111,12 +111,8 @@ public class PreOrderServiceImpl implements PreOrderService {
             // transaction
             preOrder.setTransactions(_transactionService.addTransactionPreOrderAudience(preOrder, -request.getPrice()));
             var adminTransaction = _transactionService.addTransactionPreOrderAdmin(preOrder, request.getPrice());
-            var creatorTransaction = _transactionService.addTransactionPreOrderCreator(preOrder, request.getPrice());
-            // Get user E-wallet
             _eWalletService.updateAudienceWallet(user.getId(), -request.getPrice());
-            _eWalletService.updateCreatorWallet(preOrder.getPreOrderCreator().getId(),
-                    creatorTransaction.getTotalMoney());
-            _eWalletService.updateAdminWallet(adminTransaction.getTotalMoney());
+            _eWalletService.processingAdminWallet(adminTransaction.getTotalMoney());
             return preOrder;
         } catch (Exception e) {
             throw new Exception(e.getMessage());

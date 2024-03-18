@@ -5,7 +5,6 @@ import React, { useEffect, useState } from "react";
 import { MdOutlineModeEdit } from "react-icons/md";
 import Swal from "sweetalert2";
 import NavBar from "../../components/NavBar";
-import FooterPart from "../../components/FooterPart";
 
 const formItemCol = {
     labelCol: { span: 24 },
@@ -20,7 +19,7 @@ const EditProfile = () => {
     const [emailAddress, setEmailAddress] = useState("");
     const [userName, setUserName] = useState("");
     const [telephone, setTelephone] = useState("");
-
+    const [imagePath, setImagePath] = useState("");
     const [files, setFiles] = useState();
 
     console.log(files);
@@ -37,7 +36,8 @@ const EditProfile = () => {
                 );
                 setCustomer(customerResponse.data.payload);
                 setUserName(customerResponse.data.payload.userName);
-                setEmailAddress(customerResponse.data.payload.emailAddress);
+                setTelephone(customerResponse.data.payload.telephone);
+                setImagePath(customerResponse.data.payload.imagePath);
             } catch (error) {
                 console.error("Error fetching data:", error);
             }
@@ -54,8 +54,10 @@ const EditProfile = () => {
             telephone: telephone,
         };
         const formData = new FormData();
-        if (files && files.length > 0) {
+        if (files != null && files.length > 0) {
             formData.append("image", files[0]);
+        }else {
+            formData.append("imagePath" , imagePath);
         }
         formData.append(
             "user",
@@ -127,7 +129,6 @@ const EditProfile = () => {
                                         <input
                                             type="file"
                                             id="upload"
-                                            // accept="image/*"
                                             style={{ display: "none" }}
                                             onChange={handleAvatarChange}
                                         />
@@ -194,8 +195,8 @@ const EditProfile = () => {
                                     <Input
                                         className="w-full px-4 rounded-lg"
                                         name="username"
-                                        placeholder={customer.userName}
-                                        value={customer.userName}
+                                        placeholder={userName}
+                                        value={userName}
                                         onChange={(e) => setUserName(e.target.value)}
                                     />
                                 </Form.Item>
@@ -214,8 +215,8 @@ const EditProfile = () => {
                                     <Input
                                         className="w-full px-4 rounded-lg"
                                         name="telephone"
-                                        placeholder={customer.telephone}
-                                        value={customer.telephone}
+                                        placeholder={telephone}
+                                        value={telephone}
                                         onChange={(e) => setTelephone(e.target.value)}
                                     />
                                 </Form.Item>
@@ -239,7 +240,6 @@ const EditProfile = () => {
                     </div>
                 </div>
             )}
-            <FooterPart />
         </div>
     );
 };
