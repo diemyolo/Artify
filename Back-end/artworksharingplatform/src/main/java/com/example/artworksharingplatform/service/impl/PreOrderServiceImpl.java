@@ -111,7 +111,6 @@ public class PreOrderServiceImpl implements PreOrderService {
             // transaction
             preOrder.setTransactions(_transactionService.addTransactionPreOrderAudience(preOrder, -request.getPrice()));
             var adminTransaction = _transactionService.addTransactionPreOrderAdmin(preOrder, request.getPrice());
-            // Get user E-wallet
             _eWalletService.updateAudienceWallet(user.getId(), -request.getPrice());
             _eWalletService.processingAdminWallet(adminTransaction.getTotalMoney());
             return preOrder;
@@ -125,6 +124,40 @@ public class PreOrderServiceImpl implements PreOrderService {
         try {
             List<PreOrder> preOrderList = _preOrderRepo.findByPreOrderAudience(preOrderCustomer);
             return preOrderList;
+        } catch (Exception e) {
+            throw new Exception(e.getMessage());
+        }
+    }
+
+    @Override
+    public PreOrder completePreOrderAudience(PreOrderDTO preOrderDTO) throws Exception {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        String email = userDetails.getUsername();
+        User userLogg = _userService.findByEmail(email);
+        try {
+
+            PreOrder preOrder = _preOrderRepo.findById(preOrderDTO.getPreOrderId())
+                    .orElseThrow(() -> new EntityNotFoundException("PreOrder not found"));
+
+            User user = _userRepository.findById(preOrder.getPreOrderAudience().getId())
+                    .orElseThrow(() -> new EntityNotFoundException("User not found"));
+            if (!user.equals(userLogg)) {
+                throw new Exception("User can not be different");
+            }
+            // set status to Processing
+            preOrder.setStatus("COMPLETED");
+            _preOrderRepo.save(preOrder);
+            // transaction
+            var adminTransaction = _transactionService.addTransactionPreOrderAdmin(preOrder,
+                    (preOrderDTO.getPrice() / 0.037f));
+            var creatorTransaction = _transactionService.addTransactionPreOrderCreator(preOrder,
+                    preOrderDTO.getPrice());
+            // Get user E-wallet
+            _eWalletService.updateCreatorWallet(preOrder.getPreOrderCreator().getId(),
+                    creatorTransaction.getTotalMoney());
+            _eWalletService.updateAdminWallet(adminTransaction.getTotalMoney());
+            return preOrder;
         } catch (Exception e) {
             throw new Exception(e.getMessage());
         }

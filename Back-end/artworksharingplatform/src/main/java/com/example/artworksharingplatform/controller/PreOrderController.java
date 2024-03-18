@@ -210,6 +210,33 @@ public class PreOrderController {
         }
     }
 
+    @PutMapping("audience/complete")
+    @PreAuthorize("hasRole('ROLE_AUDIENCE')")
+    public ResponseEntity<ApiResponse<PreOrderDTO>> CompletePreOrder(@RequestBody PreOrderDTO preOrderDto) {
+        ApiResponse<PreOrderDTO> apiResponse = new ApiResponse<PreOrderDTO>();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        String email = userDetails.getUsername();
+        User user = _userService.findByEmail(email);
+        try {
+
+            if (_eWalletService.isEnoughMoney(user.getId(), preOrderDto.getPrice())) {
+                var result = _preOrderService.completePreOrderAudience(preOrderDto);
+                if (result == null) {
+                    throw new Exception("Complete failed");
+                }
+                PreOrderDTO preOrderDTO = _preOrderMapper.toPreOrderDTO(result);
+                apiResponse.ok(preOrderDTO);
+            } else {
+                throw new Exception("Not enough money in EWallet.");
+            }
+            return ResponseEntity.ok(apiResponse);
+        } catch (Exception e) {
+            apiResponse.error(e);
+            return new ResponseEntity<>(apiResponse, HttpStatus.BAD_REQUEST);
+        }
+    }
+
     @SuppressWarnings("rawtypes")
     public String uploadImage(MultipartFile file) {
         Map data = cloudinaryService.upload(file);
