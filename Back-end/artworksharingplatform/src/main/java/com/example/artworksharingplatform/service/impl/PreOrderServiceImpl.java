@@ -1,30 +1,28 @@
 package com.example.artworksharingplatform.service.impl;
 
 import java.util.List;
-import java.util.Optional;
 
-import com.example.artworksharingplatform.entity.Transaction;
-import com.example.artworksharingplatform.model.ProcessingRequest;
-import com.example.artworksharingplatform.repository.TransactionRepository;
-import com.example.artworksharingplatform.repository.UserRepository;
-import com.example.artworksharingplatform.service.EWalletService;
-import com.example.artworksharingplatform.service.TransactionService;
-import com.example.artworksharingplatform.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.artworksharingplatform.entity.Artworks;
 import com.example.artworksharingplatform.entity.PreOrder;
 import com.example.artworksharingplatform.entity.User;
 import com.example.artworksharingplatform.model.PreOrderDTO;
+import com.example.artworksharingplatform.model.ProcessingRequest;
 import com.example.artworksharingplatform.repository.PreOrderRepository;
+import com.example.artworksharingplatform.repository.TransactionRepository;
+import com.example.artworksharingplatform.repository.UserRepository;
+import com.example.artworksharingplatform.service.EWalletService;
 import com.example.artworksharingplatform.service.PreOrderService;
+import com.example.artworksharingplatform.service.TransactionService;
+import com.example.artworksharingplatform.service.UserService;
 
 import jakarta.persistence.EntityNotFoundException;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class PreOrderServiceImpl implements PreOrderService {
@@ -82,6 +80,7 @@ public class PreOrderServiceImpl implements PreOrderService {
             throw new Exception(e.getMessage());
         }
     }
+
     @Transactional
     @Override
     public PreOrder processingPreOrderAudience(ProcessingRequest request) throws Exception {
@@ -96,26 +95,27 @@ public class PreOrderServiceImpl implements PreOrderService {
 
             User user = _userRepository.findById(preOrder.getPreOrderAudience().getId())
                     .orElseThrow(() -> new EntityNotFoundException("User not found"));
-            if (!user.equals(userLogg)){
+            if (!user.equals(userLogg)) {
                 throw new Exception("User can not be different");
             }
-            //validation Price
-            if (request.getPrice() < 0){
+            // validation Price
+            if (request.getPrice() < 0) {
                 throw new Exception("Money can not be negative");
             }
-            if(request.getPrice() < preOrder.getPrice()){
+            if (request.getPrice() < preOrder.getPrice()) {
                 throw new Exception("Not enough money to buy this art");
             }
-            //set status to Processing
+            // set status to Processing
             preOrder.setStatus("PROCESSING");
             _preOrderRepo.save(preOrder);
-            //transaction
-            preOrder.setTransactions(_transactionService.addTransactionPreOrderAudience(preOrder,-request.getPrice()));
+            // transaction
+            preOrder.setTransactions(_transactionService.addTransactionPreOrderAudience(preOrder, -request.getPrice()));
             var adminTransaction = _transactionService.addTransactionPreOrderAdmin(preOrder, request.getPrice());
             var creatorTransaction = _transactionService.addTransactionPreOrderCreator(preOrder, request.getPrice());
-            //Get user E-wallet
+            // Get user E-wallet
             _eWalletService.updateAudienceWallet(user.getId(), -request.getPrice());
-            _eWalletService.updateCreatorWallet(preOrder.getPreOrderCreator().getId(), creatorTransaction.getTotalMoney());
+            _eWalletService.updateCreatorWallet(preOrder.getPreOrderCreator().getId(),
+                    creatorTransaction.getTotalMoney());
             _eWalletService.updateAdminWallet(adminTransaction.getTotalMoney());
             return preOrder;
         } catch (Exception e) {
