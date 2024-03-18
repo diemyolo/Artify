@@ -1,11 +1,13 @@
 package com.example.artworksharingplatform.service.impl;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.example.artworksharingplatform.entity.Role;
 import com.example.artworksharingplatform.entity.User;
 import com.example.artworksharingplatform.mapper.UserMapper;
 import com.example.artworksharingplatform.model.UserDTO;
@@ -104,5 +106,17 @@ public class UserServiceImpl implements UserService {
         } catch (Exception ex) {
             throw new RuntimeException("Error running the method.");
         }
+    }
+
+    @Override
+    public List<User> searchUserByName(String name) {
+        List<User> users = userRepository.findByNameContainingIgnoreCase(name);
+        return users;
+    }
+
+    @Override
+    public List<User> filterByRole(Role role) {
+        List<User> users = userRepository.findAllByRole(role);
+        return users;
     }
 }
