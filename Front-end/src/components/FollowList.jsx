@@ -11,8 +11,8 @@ const FollowList = ({ follow }) => {
                 </div>
                 <div className="flow-root">
                     {follow?.length > 0
-                        ? follow?.map((f) => (
-                            < ul className="divide-y divide-gray-200 dark:divide-gray-700">
+                        ? follow?.map((f,index) => (
+                            < ul key={index} className="divide-y divide-gray-200 dark:divide-gray-700">
                                 <li className="py-3 sm:py-4">
                                     <div className="flex items-center space-x-4">
                                         <div className="shrink-0">
