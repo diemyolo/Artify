@@ -11,8 +11,9 @@ import axios from "axios";
 const PostCard = () => {
   const [post, setPost] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [isFollowed, setIsFollowed] = useState(false);
+  const navigate = useNavigate();
 
+  const [isFollowed, setIsFollowed] = useState(false);
   const token = localStorage.getItem("token");
   console.log(token);
   useEffect(() => {
@@ -30,8 +31,9 @@ const PostCard = () => {
   }, []);
 
   const handleFollow = async (p) => {
-    const followResponse = await axios.post(
-      `http://localhost:8080/api/auth/follow?creatorMail=${p.emailAddress}`,
+    const response = await axios.post(
+      `http://localhost:8080/api/auth/follow?creatorId=${p.creatorId}`,
+
       {
         headers: { Authorization: `Bearer ${token}` }
       }
@@ -39,7 +41,6 @@ const PostCard = () => {
     console.log(followResponse);
     setIsFollowed(true);
   };
-
 
   return (
     <>
@@ -75,26 +76,26 @@ const PostCard = () => {
                 </div>
               </div>
 
-              <div>
-                <p className="text-sm my-2">{p.description}</p>
-                <div className="w-full h-screen max-h-[50vh]">
-                  <Carousel
-                    pauseOnHover
-                    className="w-full mx-auto"
-                    infiniteLoop={true}
-                  >
-                    {p.artList.map((item, index) => (
-                      <div key={index}>
-                        <Link to={`/singlePost?postId=${p.postId}`}>
-                          <img
-                            src={item.imagePath}
-                            className="rounded-md w-[700px] mx-auto"
-                            alt={`Post Image - ${p.description}`}
-                          />
-                        </Link>
-                      </div>
-                    ))}
-                  </Carousel>
+                <div>
+                  <p className="text-sm my-2">{p.description}</p>
+                  <div className="w-full h-screen max-h-[50vh]">
+                    <Carousel
+                      pauseOnHover
+                      className="w-full mx-auto"
+                    >
+                      {p.artList.map((item, index) => (
+                        <div key={index}>
+                          <Link to={`/singlePost?postId=${p.postId}`}>
+                            <img
+                              src={item.imagePath}
+                              className="rounded-md w-[700px] mx-auto"
+                              alt={`Post Image - ${p.description}`}
+                            />
+                          </Link>
+                        </div>
+                      ))}
+                    </Carousel>
+                  </div>
                 </div>
               </div>
 

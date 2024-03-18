@@ -85,12 +85,13 @@ const CardItem = () => {
       }
     );
 
-    console.log(updatedOrder);
-    // const order
-    // const response = await axios.get(
-    //   `http://localhost:8080/api/auth/downloadArt?artId=${image.artId}`
-    // );
-    // saveAs(`${response.data.payload}`, `${image.artName}.jpg`);
+    console.log(order);
+    if (order) {
+      const response = await axios.get(
+        `http://localhost:8080/api/auth/downloadArt?artId=${order.data.payload.artwork.artId}`
+      );
+      saveAs(`${response.data.payload}`, `${order.data.payload.artwork.artName}.jpg`);
+    }
   };
 
   return (

@@ -54,7 +54,7 @@ public class OrderController {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         String email = userDetails.getUsername();
         User user = userService.findByEmail(email);
-
+        
         try {
             Artworks artworks = artworkService.geArtworksById(orderDTO.getArtwork().getArtId());
             Order order = new Order();
@@ -62,7 +62,6 @@ public class OrderController {
             order.setAudience(user);
             order.setOrderDate(new Timestamp(System.currentTimeMillis()));
             order.setTotalPrice(orderDTO.getTotalPrice());
-
             Order o = orderService.addOrder(order);
             OrderDTO oDto = orderMapper.toOrderDTO(o);
 
