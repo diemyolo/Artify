@@ -14,4 +14,5 @@ public interface FollowingService {
     public Integer NumOfFollowing(User creator) throws Exception;
 
     public Boolean IsFollow(User audience, User creator) throws Exception;
+    public List<User> GetAllFollower(User audience, User creator) throws Exception;
 }

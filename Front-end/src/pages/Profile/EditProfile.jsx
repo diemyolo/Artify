@@ -5,6 +5,7 @@ import React, { useEffect, useState } from "react";
 import { MdOutlineModeEdit } from "react-icons/md";
 import Swal from "sweetalert2";
 import NavBar from "../../components/NavBar";
+import FooterPart from "../../components/FooterPart";
 
 const formItemCol = {
     labelCol: { span: 24 },
@@ -238,6 +239,7 @@ const EditProfile = () => {
                     </div>
                 </div>
             )}
+            <FooterPart />
         </div>
     );
 };

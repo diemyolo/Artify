@@ -13,6 +13,7 @@ import { Pagination } from "antd";
 import { MdEmail } from "react-icons/md";
 import { BsFillTelephoneFill } from "react-icons/bs";
 import { MdOutlineModeEdit } from "react-icons/md";
+import FooterPart from "../../components/FooterPart";
 
 const ViewEwallet = () => {
   const navigate = useNavigate();
@@ -240,6 +241,8 @@ const ViewEwallet = () => {
           </div>
         </div>
       )}
+
+      <FooterPart />
     </div>
   );
 };
