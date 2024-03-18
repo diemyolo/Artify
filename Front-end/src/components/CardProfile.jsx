@@ -18,7 +18,7 @@ const CardProfile = ({
     const stats = [
         { id: 1, name: "Posts", value: p.length },
         { id: 2, name: "Photos", value: calculatePhotos(p) },
-        { id: 3, name: "Followers", value: follow},
+        { id: 3, name: "Followers", value:  follow.length},
     ];
 
 

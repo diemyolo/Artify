@@ -1,7 +1,6 @@
 import React from 'react'
 import NavBar from '../../components/NavBar';
 import ImageList from '../../components/ImageList';
-import FooterPart from '../../components/FooterPart';
 
 const Gallery = () => {
 
@@ -48,11 +47,13 @@ const Gallery = () => {
     return (
         <div>
             <NavBar />
-            <div className='h-screen py-28 mt-5 bg-gray-100'>
+            <div className='h-screen py-28 mt-5'>
                 <h1 className='text-center text-4xl font-semibold my-8'>Begin an exploration through a gallery showcasing artisan creativity</h1>
                 <ImageList />
             </div>
-            <FooterPart />
+
+
+           
         </div>
     );
 }
