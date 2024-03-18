@@ -1,6 +1,7 @@
 package com.example.artworksharingplatform.service;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 
@@ -24,5 +25,5 @@ public interface PreOrderService {
 
     PreOrder processingPreOrderAudience(ProcessingRequest request) throws Exception;
 
-    PreOrder completePreOrderAudience(PreOrderDTO preOrderDTO) throws Exception;
+    PreOrder completePreOrderAudience(UUID preOrderId) throws Exception;
 }
