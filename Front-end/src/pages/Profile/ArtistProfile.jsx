@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react'
-import NavBar from '../../components/NavBar'
-import PostCard from '../../components/PostCard'
+import axios from "axios";
+import React, { useEffect, useState } from 'react';
 import CardProfile from '../../components/CardProfile';
 import ImageList from '../../components/ImageList';
+import NavBar from '../../components/NavBar';
+import PostCard from '../../components/PostCard';
 import RequestArt from '../../components/RequestArt';
-import axios from "axios";
 
 const ArtistProfile = () => {
   const [activeComponent, setActiveComponent] = useState('post');
@@ -13,7 +13,6 @@ const ArtistProfile = () => {
 
   const params = new URLSearchParams(window.location.search);
   const creatorId = params.get("creatorId");
- 
   const token = localStorage.getItem("token");
 
   useEffect(() => {
