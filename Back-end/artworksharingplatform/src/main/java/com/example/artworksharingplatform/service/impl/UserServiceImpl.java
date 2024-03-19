@@ -1,5 +1,6 @@
 package com.example.artworksharingplatform.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -110,13 +111,42 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<User> searchUserByName(String name) {
-        List<User> users = userRepository.findByNameContainingIgnoreCase(name);
+        Role roleAdmin = Role.ADMIN;
+        List<User> users = userRepository.findByRoleNotAndNameContainingIgnoreCase(roleAdmin, name);
         return users;
     }
 
     @Override
     public List<User> filterByRole(Role role) {
         List<User> users = userRepository.findAllByRole(role);
+        return users;
+    }
+
+    @Override
+    public List<User> sortUserByCreatedDate(String sortBy) {
+        Role roleAdmin = Role.ADMIN;
+        List<User> users;
+
+        switch (sortBy.toLowerCase()) {
+            case "asc":
+                users = userRepository.findByRoleNotAndOrderByCreatedDateAsc(roleAdmin);
+                break;
+
+            case "desc":
+                users = userRepository.findByRoleNotAndOrderByCreatedDateDesc(roleAdmin);
+                break;
+            default:
+                users = new ArrayList<>();
+                break;
+        }
+
+        return users;
+    }
+
+    @Override
+    public List<User> getUsersList() {
+        Role roleAdmin = Role.ADMIN;
+        List<User> users = userRepository.findByRoleNot(roleAdmin);
         return users;
     }
 }
