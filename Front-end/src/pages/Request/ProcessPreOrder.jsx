@@ -3,6 +3,7 @@ import NavBar from "../../components/NavBar";
 import { Table } from "flowbite-react";
 import axios from "axios";
 import FooterPart from "../../components/FooterPart";
+import { Link } from "react-router-dom";
 const ProcessPreOrder = () => {
   const token = localStorage.getItem("token");
   const [requestList, setRequestList] = useState([]);
@@ -40,9 +41,9 @@ const ProcessPreOrder = () => {
       <NavBar />
       <div className="h-full p-28 mt-5">
         <h1 className="text-center text-3xl font-semibold mb-10 text-[#2f6a81]">
-          Request History
+          Get Pre Orders Art
         </h1>
-
+      <Link to="/getPreOrderArt"></Link>
         <div className="overflow-x-auto">
           <Table striped>
             <Table.Head>

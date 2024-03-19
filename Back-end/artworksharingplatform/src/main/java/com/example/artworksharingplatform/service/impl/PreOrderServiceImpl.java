@@ -15,6 +15,7 @@ import com.example.artworksharingplatform.entity.PreOrder;
 import com.example.artworksharingplatform.entity.User;
 import com.example.artworksharingplatform.model.PreOrderDTO;
 import com.example.artworksharingplatform.model.ProcessingRequest;
+import com.example.artworksharingplatform.repository.ArtworkRepository;
 import com.example.artworksharingplatform.repository.PreOrderRepository;
 import com.example.artworksharingplatform.repository.TransactionRepository;
 import com.example.artworksharingplatform.repository.UserRepository;
@@ -39,6 +40,8 @@ public class PreOrderServiceImpl implements PreOrderService {
     EWalletService _eWalletService;
     @Autowired
     UserRepository _userRepository;
+    @Autowired
+    ArtworkRepository _artworkRepository;
 
     @Override
     public void addPreOrder(PreOrder preOrderRequest) throws Exception {
