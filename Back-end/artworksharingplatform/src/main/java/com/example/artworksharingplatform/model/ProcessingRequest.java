@@ -10,4 +10,5 @@ import java.util.UUID;
 public class ProcessingRequest {
     private UUID preOrderID;
     private float price;
+    String status;
 }

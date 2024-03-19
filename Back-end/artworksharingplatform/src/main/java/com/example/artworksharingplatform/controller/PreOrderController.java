@@ -186,7 +186,6 @@ public class PreOrderController {
         String email = userDetails.getUsername();
         User user = _userService.findByEmail(email);
         try {
-
             if (_eWalletService.isEnoughMoney(user.getId(), request.getPrice())) {
                 var result = _preOrderService.processingPreOrderAudience(request);
                 if (result == null) {
@@ -255,4 +254,99 @@ public class PreOrderController {
         String url = data.get("url").toString();
         return url;
     }
+
+    @GetMapping("viewAcceptedPreOrders")
+    public ResponseEntity<ApiResponse<List<PreOrderDTO>>> getAcceptedPreOrderList() {
+        ApiResponse<List<PreOrderDTO>> apiResponse = new ApiResponse<List<PreOrderDTO>>();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        try {
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            String email = userDetails.getUsername();
+            User creator = _userService.findByEmail(email);
+            String status = "ACCEPTED";
+            if (creator == null) {
+                apiResponse.error("Creator can not be null");
+                return new ResponseEntity<>(apiResponse, HttpStatus.NOT_FOUND);
+            }
+            List<PreOrder> preOrderList = _preOrderService.getAcceptedPreOrderList(creator, status);
+            List<PreOrderDTO> preOrderDTOList = _preOrderMapper.toList(preOrderList);
+            apiResponse.ok(preOrderDTOList);
+            return ResponseEntity.ok(apiResponse);
+        } catch (Exception e) {
+            apiResponse.error(e);
+            return new ResponseEntity<>(apiResponse, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("viewPendingPreOrders")
+    public ResponseEntity<ApiResponse<List<PreOrderDTO>>> getPendingPreOrderList() {
+        ApiResponse<List<PreOrderDTO>> apiResponse = new ApiResponse<List<PreOrderDTO>>();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        try {
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            String email = userDetails.getUsername();
+            User creator = _userService.findByEmail(email);
+            String status = "PENDING";
+            if (creator == null) {
+                apiResponse.error("Creator can not be null");
+                return new ResponseEntity<>(apiResponse, HttpStatus.NOT_FOUND);
+            }
+            List<PreOrder> preOrderList = _preOrderService.getAcceptedPreOrderList(creator, status);
+            List<PreOrderDTO> preOrderDTOList = _preOrderMapper.toList(preOrderList);
+            apiResponse.ok(preOrderDTOList);
+            return ResponseEntity.ok(apiResponse);
+        } catch (Exception e) {
+            apiResponse.error(e);
+            return new ResponseEntity<>(apiResponse, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("creator/viewProcessedPreOrders")
+    @PreAuthorize("hasRole('ROLE_CREATOR')")
+    public ResponseEntity<ApiResponse<List<PreOrderDTO>>> getProcessingPreOrderList() {
+        ApiResponse<List<PreOrderDTO>> apiResponse = new ApiResponse<List<PreOrderDTO>>();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        try {
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            String email = userDetails.getUsername();
+            User creator = _userService.findByEmail(email);
+            String status = "PROCESSING";
+            if (creator == null) {
+                apiResponse.error("Creator can not be null");
+                return new ResponseEntity<>(apiResponse, HttpStatus.NOT_FOUND);
+            }
+            List<PreOrder> preOrderList = _preOrderService.getProcessingPreOrderList(creator, status);
+            List<PreOrderDTO> preOrderDTOList = _preOrderMapper.toList(preOrderList);
+            apiResponse.ok(preOrderDTOList);
+            return ResponseEntity.ok(apiResponse);
+        } catch (Exception e) {
+            apiResponse.error(e);
+            return new ResponseEntity<>(apiResponse, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("creator/viewPendingCreatorPreOrders")
+    @PreAuthorize("hasRole('ROLE_CREATOR')")
+    public ResponseEntity<ApiResponse<List<PreOrderDTO>>> getPendingCreatorPreOrdersList() {
+        ApiResponse<List<PreOrderDTO>> apiResponse = new ApiResponse<List<PreOrderDTO>>();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        try {
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            String email = userDetails.getUsername();
+            User creator = _userService.findByEmail(email);
+            String status = "PENDING";
+            if (creator == null) {
+                apiResponse.error("Creator can not be null");
+                return new ResponseEntity<>(apiResponse, HttpStatus.NOT_FOUND);
+            }
+            List<PreOrder> preOrderList = _preOrderService.getProcessingPreOrderList(creator, status);
+            List<PreOrderDTO> preOrderDTOList = _preOrderMapper.toList(preOrderList);
+            apiResponse.ok(preOrderDTOList);
+            return ResponseEntity.ok(apiResponse);
+        } catch (Exception e) {
+            apiResponse.error(e);
+            return new ResponseEntity<>(apiResponse, HttpStatus.BAD_REQUEST);
+        }
+    }
+
 }

@@ -27,7 +27,7 @@ const ViewPreOrders = () => {
   useEffect(() => {
     const fetchData = async () => {
       const result = await axios.get(
-        "http://localhost:8080/api/auth/creator/viewAllPreOrder",
+        "http://localhost:8080/api/auth/creator/viewPendingCreatorPreOrders",
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -37,6 +37,7 @@ const ViewPreOrders = () => {
     fetchData();
   }, []);
 
+  console.log(waitingList)
   const handleOpenAccept = () => {
     setOpenModal(true);
     setBtnCheck("accept");
@@ -49,7 +50,7 @@ const ViewPreOrders = () => {
   const handleAccept = async (values) => {
     console.log(values);
     const formData = new FormData();
-    if(files != null) formData.append("preOrderArtWork", files);
+    // if(files != null) formData.append("preOrderArtWork", files);
     formData.append(
       "updatedPreOrder",
       new Blob([JSON.stringify(values)], { type: "application/json" })
@@ -153,7 +154,7 @@ const ViewPreOrders = () => {
                                 className="rounded-lg w-full border-[#d9d9d9] mb-5"
                                 placeholder="price"
                               />
-                              <div className="flex flex-col items-center">
+                              {/* <div className="flex flex-col items-center">
                                 <div className="relative rounded-full shadow-2xl">
                                   <Avatar
                                     size="large"
@@ -176,7 +177,7 @@ const ViewPreOrders = () => {
                                     onChange={handleAvatarChange}
                                   />
                                 </div>
-                              </div>
+                              </div> */}
       
                               <button type="submit">Send</button>
                             </Form>

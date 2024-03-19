@@ -17,6 +17,7 @@ import EditProfile from "./pages/Profile/EditProfile";
 import CheckOCB from "./pages/EWallet/CheckOCB";
 import ViewPreOrders from "./pages/ReturnOrderRequest/ViewPreOrders";
 import ArtistList from "./pages/Profile/ArtistList";
+import ProcessPreOrder from "./pages/Request/ProcessPreOrder";
 
 const router = createBrowserRouter([
   {
@@ -86,6 +87,10 @@ const router = createBrowserRouter([
   {
     path: "/artistList",
     element: <div><ArtistList /></div>,
+  },
+  {
+    path: "/processRequest",
+    element: <div><ProcessPreOrder /></div>,
   }
 ]);
 
@@ -95,6 +100,6 @@ function App() {
      <RouterProvider router={router} />
     </>
   )
-};
+}
 
 export default App

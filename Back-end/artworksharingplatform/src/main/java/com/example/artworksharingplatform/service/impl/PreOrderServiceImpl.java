@@ -99,21 +99,28 @@ public class PreOrderServiceImpl implements PreOrderService {
             if (!user.equals(userLogg)) {
                 throw new Exception("User can not be different");
             }
-            // validation Price
-            if (request.getPrice() < 0) {
-                throw new Exception("Money can not be negative");
+            if (request.getStatus() == "DENIEDPROCESSING") {
+                preOrder.setStatus(request.getStatus());
+                _preOrderRepo.save(preOrder);
+            } else {
+                // validation Price
+                if (request.getPrice() < 0) {
+                    throw new Exception("Money can not be negative");
+                }
+                if (request.getPrice() < preOrder.getPrice()) {
+                    throw new Exception("Not enough money to buy this art");
+                }
+                // set status to Processing
+                preOrder.setStatus("PROCESSING");
+                _preOrderRepo.save(preOrder);
+                // transaction
+                preOrder.setTransactions(
+                        _transactionService.addTransactionPreOrderAudience(preOrder, -request.getPrice()));
+                var adminTransaction = _transactionService.addTransactionPreOrderAdmin(preOrder, request.getPrice());
+                _eWalletService.updateAudienceWallet(user.getId(), -request.getPrice());
+                _eWalletService.processingAdminWallet(adminTransaction.getTotalMoney());
             }
-            if (request.getPrice() < preOrder.getPrice()) {
-                throw new Exception("Not enough money to buy this art");
-            }
-            // set status to Processing
-            preOrder.setStatus("PROCESSING");
-            _preOrderRepo.save(preOrder);
-            // transaction
-            preOrder.setTransactions(_transactionService.addTransactionPreOrderAudience(preOrder, -request.getPrice()));
-            var adminTransaction = _transactionService.addTransactionPreOrderAdmin(preOrder, request.getPrice());
-            _eWalletService.updateAudienceWallet(user.getId(), -request.getPrice());
-            _eWalletService.processingAdminWallet(adminTransaction.getTotalMoney());
+
             return preOrder;
         } catch (Exception e) {
             throw new Exception(e.getMessage());
@@ -153,6 +160,7 @@ public class PreOrderServiceImpl implements PreOrderService {
     }
 
     @Override
+
     public PreOrder canclePreOrderAudience(UUID preOrderId) throws Exception {
         try {
             PreOrder preOrder = _preOrderRepo.findById(preOrderId)
@@ -161,6 +169,20 @@ public class PreOrderServiceImpl implements PreOrderService {
             _preOrderRepo.save(preOrder);
             return preOrder;
 
+    public List<PreOrder> getAcceptedPreOrderList(User preOrderCustomer, String status) throws Exception {
+        try {
+            List<PreOrder> preOrders = _preOrderRepo.findByPreOrderAudienceAndStatus(preOrderCustomer, status);
+            return preOrders;
+        } catch (Exception e) {
+            throw new Exception(e.getMessage());
+        }
+    }
+
+    @Override
+    public List<PreOrder> getProcessingPreOrderList(User preOrderCreator, String status) throws Exception {
+        try {
+            List<PreOrder> preOrders = _preOrderRepo.findByPreOrderCreatorAndStatus(preOrderCreator, status);
+            return preOrders;
         } catch (Exception e) {
             throw new Exception(e.getMessage());
         }
