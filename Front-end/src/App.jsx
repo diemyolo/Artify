@@ -16,6 +16,7 @@ import RequestHistory from "./pages/Request/RequestHistory";
 import EditProfile from "./pages/Profile/EditProfile";
 import CheckOCB from "./pages/EWallet/CheckOCB";
 import ViewPreOrders from "./pages/ReturnOrderRequest/ViewPreOrders";
+import ArtistList from "./pages/Profile/ArtistList";
 
 const router = createBrowserRouter([
   {
@@ -81,6 +82,10 @@ const router = createBrowserRouter([
   {
     path: "/viewPreordersByCreator",
     element: <div><ViewPreOrders /></div>,
+  },
+  {
+    path: "/artistList",
+    element: <div><ArtistList /></div>,
   }
 ]);
 

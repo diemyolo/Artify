@@ -9,7 +9,7 @@ export const navLinks = [
     },
     {
         link: "Artist",
-        path: "/artist",
+        path: "/artistList",
     },
     {
         link: "About",

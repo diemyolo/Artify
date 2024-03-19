@@ -1,6 +1,7 @@
 import React from 'react'
 import CardItem from '../../components/CardItem';
 import NavBar from '../../components/NavBar'
+import FooterPart from '../../components/FooterPart'
 
 const SinglePost = () => {
     return (
@@ -11,6 +12,7 @@ const SinglePost = () => {
                     <CardItem />
                 </div>
             </div>
+            <FooterPart />
         </div>
     )
 }

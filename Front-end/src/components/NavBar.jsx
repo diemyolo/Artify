@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import { AiOutlineSearch } from "react-icons/ai";
 import { Dropdown } from 'flowbite-react';
 import axios from "axios";
+
 const NavBar = () => {
   const [isSticky, setIsSticky] = useState(false);
   const token = localStorage.getItem("token");
