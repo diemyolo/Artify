@@ -3,6 +3,8 @@ import axios from "axios";
 import { Card } from "flowbite-react";
 import { Button, Spin, Table } from "antd";
 import { EditOutlined } from '@ant-design/icons';
+import { Link } from "react-router-dom";
+
 
 
 const AdminProfile = () => {
@@ -34,9 +36,11 @@ const AdminProfile = () => {
         <div className='h-full bg-gray-100 py-10 px-28'>
             <Card className="w-full p-5">
                 <div className="relative">
-                    <Button icon={<EditOutlined />} onClick={() => handleEdit(record)} className="absolute top-0 right-0">
-                        Edit
-                    </Button>
+                    <Link to="/editAdminProfile">
+                        <Button icon={<EditOutlined />} onClick={() => handleEditProfile(record)} className="absolute top-0 right-0">
+                            Edit Profile
+                        </Button>
+                    </Link>
                     <div className="flex items-center">
                         <img
                             alt="Avatar"

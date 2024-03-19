@@ -18,6 +18,7 @@ import CheckOCB from "./pages/EWallet/CheckOCB";
 import ViewPreOrders from "./pages/ReturnOrderRequest/ViewPreOrders";
 import ArtistList from "./pages/Profile/ArtistList";
 import ProcessPreOrder from "./pages/Request/ProcessPreOrder";
+import EditAdminProfile from "./pages/Admin/Profile/EditAdminProfile";
 
 const router = createBrowserRouter([
   {
@@ -91,6 +92,10 @@ const router = createBrowserRouter([
   {
     path: "/processRequest",
     element: <div><ProcessPreOrder /></div>,
+  },
+  {
+    path: "/editAdminProfile",
+    element: <div><EditAdminProfile /></div>,
   }
 ]);
 
