@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import Hero from '../../components/Hero';
 import NavBar from '../../components/NavBar';
 import PostCard from '../../components/PostCard';
-import SideBar from "../../components/SideBar";
+import AdminHome from "../Admin/AdminHome";
 
 const Home = () => {
   const token = localStorage.getItem("token");
@@ -40,7 +40,7 @@ const Home = () => {
           }
           {user.roleName == "ADMIN" &&
             <Fragment>
-              <SideBar />
+              <AdminHome />
             </Fragment>
           }
         </div>

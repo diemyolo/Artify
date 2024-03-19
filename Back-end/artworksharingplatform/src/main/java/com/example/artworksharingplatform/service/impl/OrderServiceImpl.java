@@ -57,7 +57,8 @@ public class OrderServiceImpl implements OrderService {
 
                 float totalMoney = order.getTotalPrice();
 
-                if (eWalletService.isEnoughMoney(user.getId(), totalMoney)) {
+
+                if (user.getEWallet().getTotalAmount() >= totalMoney) {
                     // set transaction + admin, creator, - audience
                     order.setTransactions(transactionService.addTransactionOrderAudience(order, -totalMoney));
                     transactionService.addTransactionOrderAdmin(order, totalMoney);
@@ -78,7 +79,7 @@ public class OrderServiceImpl implements OrderService {
             }
 
         } catch (Exception e) {
-            throw new Exception(e.getMessage());
+            throw new Exception("Download image fail.", e);
         }
 
     }
