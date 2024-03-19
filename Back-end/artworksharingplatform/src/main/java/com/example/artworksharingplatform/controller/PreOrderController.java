@@ -13,7 +13,15 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.example.artworksharingplatform.entity.Artworks;
@@ -51,7 +59,7 @@ public class PreOrderController {
     ArtworkService artworkService;
 
     @Autowired
-	PostService postService;
+    PostService postService;
 
     @PostMapping("audience/PreOrderRequest")
     @PreAuthorize("hasRole('ROLE_AUDIENCE')")
@@ -211,15 +219,15 @@ public class PreOrderController {
 
     @PutMapping("audience/complete")
     @PreAuthorize("hasRole('ROLE_AUDIENCE')")
-    public ResponseEntity<ApiResponse<PreOrderDTO>> completePreOrder(@RequestParam("preorderId") UUID preOrderId) {
+    public ResponseEntity<ApiResponse<PreOrderDTO>> completePreOrder(@RequestBody PreOrderDTO preOrderDTO) {
         ApiResponse<PreOrderDTO> apiResponse = new ApiResponse<PreOrderDTO>();
         try {
-            PreOrder result = _preOrderService.completePreOrderAudience(preOrderId);
+            PreOrder result = _preOrderService.completePreOrderAudience(preOrderDTO);
             if (result == null) {
                 throw new Exception("Complete failed");
             }
-            PreOrderDTO preOrderDTO = _preOrderMapper.toPreOrderDTO(result);
-            apiResponse.ok(preOrderDTO);
+            PreOrderDTO preOrder = _preOrderMapper.toPreOrderDTO(result);
+            apiResponse.ok(preOrder);
             return ResponseEntity.ok(apiResponse);
         } catch (Exception e) {
             apiResponse.error(e);
