@@ -1,21 +1,22 @@
 import React from "react";
-import { RouterProvider, createBrowserRouter } from 'react-router-dom'
-import Login from "./pages/Login/Login";
-import Register from "./pages/Register/Register";
-import Home from "./pages/Home/Home"
-import ViewEwallet from "./pages/EWallet/ViewEwallet";
-import ReturnWallet from "./pages/EWallet/ReturnWallet";
+import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import AddMoneyInput from "./pages/EWallet/AddMoneyInput";
 import AddSuccess from "./pages/EWallet/AddSuccess";
-import AddPost from "./pages/Post/AddPost";
-import SinglePost from "./pages/SinglePost/SinglePost";
-import ArtistProfile from "./pages/Profile/ArtistProfile";
-import AddArts from "./pages/Post/AddArts";
-import Gallery from "./pages/Gallery/Gallery";
-import RequestHistory from "./pages/Request/RequestHistory";
-import EditProfile from "./pages/Profile/EditProfile";
 import CheckOCB from "./pages/EWallet/CheckOCB";
+import ReturnWallet from "./pages/EWallet/ReturnWallet";
+import ViewEwallet from "./pages/EWallet/ViewEwallet";
+import Gallery from "./pages/Gallery/Gallery";
+import Home from "./pages/Home/Home";
+import Login from "./pages/Login/Login";
+import AddArts from "./pages/Post/AddArts";
+import AddPost from "./pages/Post/AddPost";
+import ArtistList from "./pages/Profile/ArtistList";
+import ArtistProfile from "./pages/Profile/ArtistProfile";
+import EditProfile from "./pages/Profile/EditProfile";
+import Register from "./pages/Register/Register";
+import RequestHistory from "./pages/Request/RequestHistory";
 import ViewPreOrders from "./pages/ReturnOrderRequest/ViewPreOrders";
+import SinglePost from "./pages/SinglePost/SinglePost";
 import ArtistList from "./pages/Profile/ArtistList";
 import ProcessPreOrder from "./pages/Request/ProcessPreOrder";
 
@@ -97,7 +98,7 @@ const router = createBrowserRouter([
 function App() {
   return (
     <>
-     <RouterProvider router={router} />
+      <RouterProvider router={router} />
     </>
   )
 }

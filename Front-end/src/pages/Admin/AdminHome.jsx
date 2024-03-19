@@ -118,7 +118,7 @@ const AdminHome = () => {
                         ]}
                     />
                 </Sider>
-                <Layout>
+                <Layout style={{ zIndex: 0 }}>
                     <Header style={{ padding: 0, backgroundColor: 'whitesmoke' }}>
                         <Button
                             type="text"
