@@ -19,6 +19,8 @@ import ViewPreOrders from "./pages/ReturnOrderRequest/ViewPreOrders";
 import SinglePost from "./pages/SinglePost/SinglePost";
 import ArtistList from "./pages/Profile/ArtistList";
 import ProcessPreOrder from "./pages/Request/ProcessPreOrder";
+import ReturnPreOrder from "./pages/ReturnOrderRequest/ReturnPreOrder";
+import ConfirmPreOrder from "./pages/Request/ConfirmPreOrder";
 
 const router = createBrowserRouter([
   {
@@ -78,10 +80,6 @@ const router = createBrowserRouter([
     element: <div><EditProfile /></div>,
   },
   {
-    path: "/checkOCB",
-    element: <div><CheckOCB /></div>,
-  },
-  {
     path: "/viewPreordersByCreator",
     element: <div><ViewPreOrders /></div>,
   },
@@ -92,6 +90,14 @@ const router = createBrowserRouter([
   {
     path: "/processRequest",
     element: <div><ProcessPreOrder /></div>,
+  },
+  {
+    path: "/returnPreOrderArt",
+    element: <div><ReturnPreOrder /></div>,
+  },
+  {
+    path: "/getPreOrderArt",
+    element: <div><ConfirmPreOrder /></div>,
   }
 ]);
 
