@@ -122,6 +122,10 @@ const ViewEwallet = () => {
                 <div className="flex p-2 items-center">
                   <IoMdSettings className="w-5 h-5 cursor-pointer" />
                   <p className="ml-2 text-base">Settings</p>
+
+                {customer.roleName == "CREATOR" &&  <Link to={`/viewMyPosts?creatorId=${customer.userId}`} className="font-semibold lg:flex items-center hover:text-[#2f6a81]">
+                      View your posts
+                    </Link>} 
                 </div>
               </div>
             </div>
