@@ -5,10 +5,12 @@ import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 import com.example.artworksharingplatform.entity.User;
 import com.example.artworksharingplatform.entity.Role;
 
+@Repository
 public interface UserRepository extends JpaRepository<User, UUID> {
     Optional<User> findByEmailAddress(String emailAddress);
 
@@ -18,9 +20,9 @@ public interface UserRepository extends JpaRepository<User, UUID> {
 
     List<User> findAllByRole(Role role);
 
-    // List<User> findByRoleNotAndOrderByCreatedDateAsc(Role role);
+    List<User> findByRoleNotOrderByCreatedDateAsc(Role role);
 
-    // List<User> findByRoleNotAndOrderByCreatedDateDesc(Role role);
+    List<User> findByRoleNotOrderByCreatedDateDesc(Role role);
 
     List<User> findByRoleNot(Role role);
 }

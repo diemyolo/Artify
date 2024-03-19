@@ -34,7 +34,7 @@ public interface UserService {
 
     List<User> filterByRole(Role role);
 
-    // List<User> sortUserByCreatedDate(String sortBy);
+    List<User> sortUserByCreatedDate(String sortBy);
 
     List<User> getUsersList();
 }
