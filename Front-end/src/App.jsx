@@ -19,6 +19,7 @@ import RequestHistory from "./pages/Request/RequestHistory";
 import ReturnPreOrder from "./pages/ReturnOrderRequest/ReturnPreOrder";
 import ViewPreOrders from "./pages/ReturnOrderRequest/ViewPreOrders";
 import SinglePost from "./pages/SinglePost/SinglePost";
+import EditAdminProfile from "./pages/Admin/Profile/EditAdminProfile";
 
 const router = createBrowserRouter([
   {
@@ -88,6 +89,10 @@ const router = createBrowserRouter([
   {
     path: "/processRequest",
     element: <div><ProcessPreOrder /></div>,
+  },
+  {
+    path: "/editAdminProfile",
+    element: <div><EditAdminProfile /></div>,
   },
   {
     path: "/returnPreOrderArt",

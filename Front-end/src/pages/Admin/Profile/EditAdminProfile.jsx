@@ -8,15 +8,13 @@ import React, { useEffect, useState } from "react";
 import { MdOutlineModeEdit } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
-import FooterPart from '../../components/FooterPart';
-import NavBar from "../../components/NavBar";
 
 const formItemCol = {
     labelCol: { span: 24 },
     wrapperCol: { span: 24 },
 };
 
-const EditProfile = () => {
+const EditAdminProfile = () => {
     const token = localStorage.getItem("token");
     const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(false);
@@ -187,7 +185,6 @@ const EditProfile = () => {
     return (
         <div className="w-full h-full bg-gray-100 ">
             <Spin spinning={!isLoading} fullscreen />
-            <NavBar />
             <Modal
                 show={openModal}
                 onClose={() => setOpenModal(false)}
@@ -265,8 +262,8 @@ const EditProfile = () => {
                 <Button
                     className="absolute top-3 right-3"
                     type="text"
-                    onClick={() => setOpenModal(false)}
-                    icon={<CloseOutlined />}
+                    onClick={() => setOpenModal(false)} // Close the modal when clicking the "x" button
+                    icon={<CloseOutlined />} // Display the "x" icon
                 />
             </Modal>
 
@@ -416,9 +413,8 @@ const EditProfile = () => {
                 </div>
             )}
 
-            <FooterPart />
         </div>
     );
 };
 
-export default EditProfile;
+export default EditAdminProfile;
