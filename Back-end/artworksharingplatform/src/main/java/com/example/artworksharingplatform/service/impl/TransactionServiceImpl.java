@@ -1,5 +1,7 @@
 package com.example.artworksharingplatform.service.impl;
 
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -87,7 +89,7 @@ public class TransactionServiceImpl implements TransactionService {
 		Transaction transaction = new Transaction();
 		transaction.setTotalMoney(totalMoney);
 		transaction.setUser(admin);
-		transaction.setTransactionDate(order.getPreOrderDate());
+		transaction.setTransactionDate(Timestamp.valueOf(LocalDateTime.now()));
 		return repo.save(transaction);
 	}
 
@@ -105,7 +107,7 @@ public class TransactionServiceImpl implements TransactionService {
 		Transaction transaction = new Transaction();
 		transaction.setTotalMoney(totalMoney);
 		transaction.setUser(order.getPreOrderAudience());
-		transaction.setTransactionDate(order.getPreOrderDate());
+		transaction.setTransactionDate(Timestamp.valueOf(LocalDateTime.now()));
 		return repo.save(transaction);
 	}
 
