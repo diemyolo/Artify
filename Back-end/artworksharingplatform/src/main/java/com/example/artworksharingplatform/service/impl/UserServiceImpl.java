@@ -122,26 +122,26 @@ public class UserServiceImpl implements UserService {
         return users;
     }
 
-    @Override
-    public List<User> sortUserByCreatedDate(String sortBy) {
-        Role roleAdmin = Role.ADMIN;
-        List<User> users;
+    // @Override
+    // public List<User> sortUserByCreatedDate(String sortBy) {
+    // Role roleAdmin = Role.ADMIN;
+    // List<User> users;
 
-        switch (sortBy.toLowerCase()) {
-            case "asc":
-                users = userRepository.findByRoleNotAndOrderByCreatedDateAsc(roleAdmin);
-                break;
+    // switch (sortBy.toLowerCase()) {
+    // case "asc":
+    // users = userRepository.findByRoleNotAndOrderByCreatedDateAsc(roleAdmin);
+    // break;
 
-            case "desc":
-                users = userRepository.findByRoleNotAndOrderByCreatedDateDesc(roleAdmin);
-                break;
-            default:
-                users = new ArrayList<>();
-                break;
-        }
+    // case "desc":
+    // users = userRepository.findByRoleNotAndOrderByCreatedDateDesc(roleAdmin);
+    // break;
+    // default:
+    // users = new ArrayList<>();
+    // break;
+    // }
 
-        return users;
-    }
+    // return users;
+    // }
 
     @Override
     public List<User> getUsersList() {
