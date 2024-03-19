@@ -1,21 +1,22 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { Avatar, Button, Form, Input, Select, Spin, Table, Tag } from "antd";
 
 const Transaction = () => {
     const token = localStorage.getItem("token");
-    const [customerList, setCustomerList] = useState([]);
+    const [transaction, setTransaction] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
         const fetchData = async () => {
             try {
                 const response = await axios.get(
-                    `http://localhost:8080/api/auth/admin/user/list`,
+                    `http://localhost:8080/api/auth/viewList`,
                     {
                         headers: { Authorization: `Bearer ${token}` },
                     }
                 );
-                setCustomerList(response.data.payload);
+                setTransaction(response.data.payload);
                 if (response) setIsLoading(true);
             } catch (error) {
                 console.error('Error fetching customer list:', error);
@@ -24,53 +25,41 @@ const Transaction = () => {
         fetchData();
     }, [token]);
 
+    console.log("i", transaction)
+
     const columns = [
         {
-            title: 'Name',
-            dataIndex: 'userName',
-            key: 'userName',
+            title: 'Transaction Id',
+            dataIndex: 'transactionId',
+            key: 'transactionId',
         },
         {
-            title: 'Email',
-            dataIndex: 'emailAddress',
-            key: 'emailAddress',
+            title: 'User Id',
+            dataIndex: 'userId',
+            key: 'userId',
         },
         {
-            title: 'Telephone',
-            dataIndex: 'telephone',
-            key: 'telephone',
+            title: 'Transaction Date',
+            dataIndex: 'transactionDate',
+            key: 'transactionDate',
         },
         {
-            title: 'Status',
-            dataIndex: 'status',
-            key: 'status',
-            render: (text) => (
-                <Tag color={text === 'ACTIVE' ? 'green' : 'red'}>
-                    {text}
-                </Tag>
-            ),
+            title: 'Description',
+            dataIndex: 'description',
+            key: 'description',
         },
         {
-            title: 'Role',
-            dataIndex: 'roleName',
-            key: 'roleName',
-        },
-        {
-            title: 'Action',
-            key: 'action',
-            render: (text, record) => (
-                <Button icon={<EditOutlined />} onClick={() => handleEdit(record)}>
-                    Edit
-                </Button>
-            ),
+            title: 'TotalMoney',
+            dataIndex: 'totalMoney',
+            key: 'totalMoney',
         },
     ];
 
     return (
         <div className='h-full bg-gray-100'>
             <Spin spinning={!isLoading} fullscreen />
-            <h1 className='text-center font-semibold text-3xl px-5'>Account Management</h1>
-            <Table dataSource={customerList} columns={columns} rowKey="userId" className='p-5' />
+            <h1 className='text-center font-semibold text-3xl px-5'>Transaction Management</h1>
+            <Table dataSource={transaction} columns={columns} rowKey="transactionId" className='p-5' />
         </div>
     );
 };

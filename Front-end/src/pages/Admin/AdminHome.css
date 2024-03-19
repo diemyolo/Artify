@@ -35,9 +35,9 @@
 
 .ant-menu-item {
     color: #0e7490 !important;
-    padding-top: 25px !important;
+    /* padding-top: 25px !important;
     padding-bottom: 25px !important;
-    margin-bottom: 20px !important;
+    margin-bottom: 20px !important; */
 }
 
 .ant-layout-sider:not(.ant-layout-sider-collapsed) .ant-menu-item-selected,
