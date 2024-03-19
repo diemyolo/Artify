@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.List;
 
@@ -31,7 +32,7 @@ public class TransactionController {
     @Autowired
     TransactionMapper _mapper;
     @GetMapping("filter_By_Date")
-    public ResponseEntity<ApiResponse<List<TransactionDTO>>> filterByDate(@RequestParam("date") String date){
+    public ResponseEntity<ApiResponse<List<TransactionDTO>>> filterByDate(@RequestParam("date") Date date){
         ApiResponse<List<TransactionDTO>> apiResponse = new ApiResponse<>();
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         try{

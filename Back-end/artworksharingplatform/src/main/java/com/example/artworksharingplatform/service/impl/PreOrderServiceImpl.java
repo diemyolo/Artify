@@ -183,11 +183,11 @@ public class PreOrderServiceImpl implements PreOrderService {
 
             preOrder.setAudienceFeedback(null);
             return _preOrderRepo.save(preOrder);
-          } catch (Exception e) {
+        } catch (Exception e) {
             throw new Exception(e.getMessage());
         }
     }
-  
+
     @Override
     public PreOrder canclePreOrderAudience(UUID preOrderId) throws Exception {
         try {
@@ -206,6 +206,11 @@ public class PreOrderServiceImpl implements PreOrderService {
         try {
             PreOrder preOrder = _preOrderRepo.findById(preOrderId)
                     .orElseThrow(() -> new EntityNotFoundException("PreOrder not found"));
+
+            if (rate > 5)
+                rate = 5;
+            else if (rate < 0)
+                rate = 0;
 
             preOrder.setAudienceRating(rate);
             return _preOrderRepo.save(preOrder);
@@ -227,24 +232,23 @@ public class PreOrderServiceImpl implements PreOrderService {
         }
     }
 
-
-        @Override
-        public List<PreOrder> getAcceptedPreOrderList (User preOrderCustomer, String status) throws Exception {
-            try {
-                List<PreOrder> preOrders = _preOrderRepo.findByPreOrderAudienceAndStatus(preOrderCustomer, status);
-                return preOrders;
-            } catch (Exception e) {
-                throw new Exception(e.getMessage());
-            }
-        }
-
-        @Override
-        public List<PreOrder> getProcessingPreOrderList (User preOrderCreator, String status) throws Exception {
-            try {
-                List<PreOrder> preOrders = _preOrderRepo.findByPreOrderCreatorAndStatus(preOrderCreator, status);
-                return preOrders;
-            } catch (Exception e) {
-                throw new Exception(e.getMessage());
-            }
+    @Override
+    public List<PreOrder> getAcceptedPreOrderList(User preOrderCustomer, String status) throws Exception {
+        try {
+            List<PreOrder> preOrders = _preOrderRepo.findByPreOrderAudienceAndStatus(preOrderCustomer, status);
+            return preOrders;
+        } catch (Exception e) {
+            throw new Exception(e.getMessage());
         }
     }
+
+    @Override
+    public List<PreOrder> getProcessingPreOrderList(User preOrderCreator, String status) throws Exception {
+        try {
+            List<PreOrder> preOrders = _preOrderRepo.findByPreOrderCreatorAndStatus(preOrderCreator, status);
+            return preOrders;
+        } catch (Exception e) {
+            throw new Exception(e.getMessage());
+        }
+    }
+}

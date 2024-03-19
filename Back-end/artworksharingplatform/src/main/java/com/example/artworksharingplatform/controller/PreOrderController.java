@@ -235,13 +235,13 @@ public class PreOrderController {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         String email = userDetails.getUsername();
         User user = _userService.findByEmail(email);
-        String mess= "";
+        String mess = "";
         try {
-            if(authentication.isAuthenticated()){
+            if (authentication.isAuthenticated()) {
                 var result = _preOrderService.canclePreOrderAudience(preOrderId);
                 mess = "Delete PreOrder Successfully";
                 apiResponse.ok(mess);
-            }else{
+            } else {
                 apiResponse.error("Not authenticated");
                 return new ResponseEntity<>(apiResponse, HttpStatus.BAD_REQUEST);
             }
@@ -377,4 +377,109 @@ public class PreOrderController {
         }
     }
 
+    @PostMapping("/preorder/feedback/create")
+    @PreAuthorize("hasRole('ROLE_CREATOR') or hasRole('ROLE_AUDIENCE')")
+    public ResponseEntity<ApiResponse<PreOrderDTO>> createFeedback(@RequestBody PreOrderDTO preOrderDTO) {
+        ApiResponse<PreOrderDTO> apiResponse = new ApiResponse<PreOrderDTO>();
+
+        try {
+            PreOrder preOrder = _preOrderService.feedbackPreOrder(preOrderDTO.getPreOrderId(),
+                    preOrderDTO.getAudienceFeedback());
+            PreOrderDTO pOrderDTO = _preOrderMapper.toPreOrderDTO(preOrder);
+
+            apiResponse.ok(pOrderDTO);
+            return ResponseEntity.ok(apiResponse);
+        } catch (Exception e) {
+            apiResponse.error(e);
+            return new ResponseEntity<>(apiResponse, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PutMapping("/preorder/feedback/update")
+    @PreAuthorize("hasRole('ROLE_CREATOR') or hasRole('ROLE_AUDIENCE')")
+    public ResponseEntity<ApiResponse<PreOrderDTO>> updateFeedback(@RequestBody PreOrderDTO preOrderDTO) {
+        ApiResponse<PreOrderDTO> apiResponse = new ApiResponse<PreOrderDTO>();
+
+        try {
+            PreOrder preOrder = _preOrderService.feedbackPreOrder(preOrderDTO.getPreOrderId(),
+                    preOrderDTO.getAudienceFeedback());
+            PreOrderDTO pOrderDTO = _preOrderMapper.toPreOrderDTO(preOrder);
+
+            apiResponse.ok(pOrderDTO);
+            return ResponseEntity.ok(apiResponse);
+        } catch (Exception e) {
+            apiResponse.error(e);
+            return new ResponseEntity<>(apiResponse, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @DeleteMapping("/preorder/feedback/delete")
+    @PreAuthorize("hasRole('ROLE_CREATOR') or hasRole('ROLE_AUDIENCE')")
+    public ResponseEntity<ApiResponse<PreOrderDTO>> deleteFeedback(@RequestParam UUID preOrderId) {
+        ApiResponse<PreOrderDTO> apiResponse = new ApiResponse<PreOrderDTO>();
+
+        try {
+            PreOrder preOrder = _preOrderService.deleteFeedback(preOrderId);
+            PreOrderDTO pOrderDTO = _preOrderMapper.toPreOrderDTO(preOrder);
+
+            apiResponse.ok(pOrderDTO);
+            return ResponseEntity.ok(apiResponse);
+        } catch (Exception e) {
+            apiResponse.error(e);
+            return new ResponseEntity<>(apiResponse, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PostMapping("/preorder/rating/create")
+    @PreAuthorize("hasRole('ROLE_CREATOR') or hasRole('ROLE_AUDIENCE')")
+    public ResponseEntity<ApiResponse<PreOrderDTO>> createRating(@RequestBody PreOrderDTO preOrderDTO) {
+        ApiResponse<PreOrderDTO> apiResponse = new ApiResponse<PreOrderDTO>();
+
+        try {
+            PreOrder preOrder = _preOrderService.ratePreOrder(preOrderDTO.getPreOrderId(),
+                    preOrderDTO.getAudienceRating());
+            PreOrderDTO pOrderDTO = _preOrderMapper.toPreOrderDTO(preOrder);
+
+            apiResponse.ok(pOrderDTO);
+            return ResponseEntity.ok(apiResponse);
+        } catch (Exception e) {
+            apiResponse.error(e);
+            return new ResponseEntity<>(apiResponse, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PutMapping("/preorder/rating/update")
+    @PreAuthorize("hasRole('ROLE_CREATOR') or hasRole('ROLE_AUDIENCE')")
+    public ResponseEntity<ApiResponse<PreOrderDTO>> updateRating(@RequestBody PreOrderDTO preOrderDTO) {
+        ApiResponse<PreOrderDTO> apiResponse = new ApiResponse<PreOrderDTO>();
+
+        try {
+            PreOrder preOrder = _preOrderService.ratePreOrder(preOrderDTO.getPreOrderId(),
+                    preOrderDTO.getAudienceRating());
+            PreOrderDTO pOrderDTO = _preOrderMapper.toPreOrderDTO(preOrder);
+
+            apiResponse.ok(pOrderDTO);
+            return ResponseEntity.ok(apiResponse);
+        } catch (Exception e) {
+            apiResponse.error(e);
+            return new ResponseEntity<>(apiResponse, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @DeleteMapping("/preorder/rating/delete")
+    @PreAuthorize("hasRole('ROLE_CREATOR') or hasRole('ROLE_AUDIENCE')")
+    public ResponseEntity<ApiResponse<PreOrderDTO>> deleteRating(@RequestParam UUID preOrderId) {
+        ApiResponse<PreOrderDTO> apiResponse = new ApiResponse<PreOrderDTO>();
+
+        try {
+            PreOrder preOrder = _preOrderService.deleteRating(preOrderId);
+            PreOrderDTO pOrderDTO = _preOrderMapper.toPreOrderDTO(preOrder);
+
+            apiResponse.ok(pOrderDTO);
+            return ResponseEntity.ok(apiResponse);
+        } catch (Exception e) {
+            apiResponse.error(e);
+            return new ResponseEntity<>(apiResponse, HttpStatus.BAD_REQUEST);
+        }
+    }
 }

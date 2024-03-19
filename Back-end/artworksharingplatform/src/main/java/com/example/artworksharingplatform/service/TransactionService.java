@@ -1,6 +1,7 @@
 package com.example.artworksharingplatform.service;
 
-import java.sql.Timestamp;
+
+import java.sql.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -30,5 +31,5 @@ public interface TransactionService {
 	public Transaction addTransactionPreOrderCreator(PreOrder order, float totalMoney);
 
 	public Transaction addTransactionPreOrderAudience(PreOrder order, float totalMoney);
-	public List<Transaction> filterByDate(String time, User user) throws Exception;
+	public List<Transaction> filterByDate(Date time, User user) throws Exception;
 }

@@ -236,38 +236,120 @@ const EditProfile = () => {
               className="mx-0 px-0 w-full pt-2.5"
               name="confirmNewPassword"
             >
-              <Input.Password
-                className="w-full px-4 py-2.5"
-                placeholder="Enter your confirm new password"
-                value={confirmNewPassword}
-                onChange={(e) => setConfirmNewPassword(e.target.value)}
-                name="confirmNewPassword"
-              />
-            </Form.Item>
-            <div className="w-full flex justify-center gap-4 my-4">
-              <Button
-                className="rounded-full border-2 w-[140px] bg-[#2f6a81] text-white my-2  px-4 py-2 text-center flex items-center justify-center focus:outline-none hover:bg-gray-100 hover:text-[#2f6a81] hover:border-[#2f6a81] hover:border-2 mt-3 transition-all duration-300 "
-                type="submit"
-                onClick={handleChangePassword}
-              >
-                Save Changes
-              </Button>
-              <Button
-                className="rounded-full border-2 w-[140px] border-[#2f6a81] bg-gray-100 text-[#2f6a81] my-2  px-4  py-2 text-center flex items-center justify-center focus:outline-none hover:bg-[#2f6a81] hover:text-white hover:border-white hover:border-2 mt-3 transition-all duration-300"
-                htmlType="reset"
-              >
-                Reset
-              </Button>
-            </div>
-          </Form>
-        </div>
-        <Button
-          className="absolute top-3 right-3"
-          type="text"
-          onClick={() => setOpenModal(false)} // Close the modal when clicking the "x" button
-          icon={<CloseOutlined />} // Display the "x" icon
-        />
-      </Modal>
+                <h1 className="text-center font-semibold text-2xl mt-14">Change Password</h1>
+                <p className="text-center mt-3">To change your password, please fill in the fields below.</p>
+                <div className="pt-14 px-52" style={{ overflow: 'hidden' }}>
+                    <Form
+                        {...formItemCol}
+                        size="large"
+                        style={{
+                            maxWidth: 600,
+                        }}
+                        initialValues={{
+                            remember: true,
+                        }}
+                        autoComplete="off"
+                    >
+                        <Form.Item
+                            className="mx-0 px-0 w-full pt-2.5"
+                            name="password"
+                        >
+                            <Input.Password
+                                className="w-full px-4 py-2.5"
+                                placeholder="Enter your password"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                name="password"
+                            />
+                        </Form.Item>
+                        <Form.Item
+                            className="mx-0 px-0 w-full pt-2.5"
+                            name="newPassword"
+                        >
+                            <Input.Password
+                                className="w-full px-4 py-2.5"
+                                placeholder="Enter your new password"
+                                value={newPassword}
+                                onChange={(e) => setNewPassword(e.target.value)}
+                                name="newPassword"
+                            />
+                        </Form.Item>
+                        <Form.Item
+                            className="mx-0 px-0 w-full pt-2.5"
+                            name="confirmNewPassword"
+                        >
+                            <Input.Password
+                                className="w-full px-4 py-2.5"
+                                placeholder="Enter your confirm new password"
+                                value={confirmNewPassword}
+                                onChange={(e) => setConfirmNewPassword(e.target.value)}
+                                name="confirmNewPassword"
+                            />
+                        </Form.Item>
+                        <div className="w-full flex justify-center gap-4 my-4">
+                            <Button
+                                className="rounded-full border-2 w-[140px] bg-[#2f6a81] text-white my-2  px-4 py-2 text-center flex items-center justify-center focus:outline-none hover:bg-gray-100 hover:text-[#2f6a81] hover:border-[#2f6a81] hover:border-2 mt-3 transition-all duration-300 "
+                                type="submit"
+                                onClick={handleChangePassword}
+                            >
+                                Save Changes
+                            </Button>
+                            <Button
+                                className="rounded-full border-2 w-[140px] border-[#2f6a81] bg-gray-100 text-[#2f6a81] my-2  px-4  py-2 text-center flex items-center justify-center focus:outline-none hover:bg-[#2f6a81] hover:text-white hover:border-white hover:border-2 mt-3 transition-all duration-300"
+                                htmlType="reset"
+                            >
+                                Reset
+                            </Button>
+                        </div>
+                    </Form>
+                </div>
+                <Button
+                    className="absolute top-3 right-3"
+                    type="text"
+                    onClick={() => setOpenModal(false)}
+                    icon={<CloseOutlined />}
+                />
+            </Modal>
+
+
+            {isLoading && (
+                <div className="h-screen w-full flex justify-center p-28 mt-10 gap-10">
+
+                    <div className="w-1/2 flex flex-col">
+                        <div className="relative h-[40%] bg-[#2f6a81]">
+                            <div className="absolute flex flex-col items-center justify-center w-full top-1/3">
+                                <Card className="w-[50%] h-[300px]">
+                                    <div className="flex flex-col items-center">
+                                        <div className="relative rounded-full shadow-2xl">
+                                            <Avatar
+                                                size="large"
+                                                style={{ width: '225px', height: '225px' }}
+                                                src={
+                                                    files != null
+                                                        ? URL.createObjectURL(files[0])
+                                                        : customer.imagePath
+                                                }
+                                            />
+                                            <label
+                                                htmlFor="upload"
+                                                className="absolute right-0 bottom-1 bg-[#2f6a81] rounded-full p-1.5 cursor-pointer"
+                                            >
+                                                <MdOutlineModeEdit size={20} color="white" />
+                                            </label>
+                                            <input
+                                                type="file"
+                                                id="upload"
+                                                style={{ display: "none" }}
+                                                onChange={handleAvatarChange}
+                                            />
+                                        </div>
+                                        <h5 className="mt-3 text-xl font-medium text-gray-900 dark:text-white capitalize">
+                                            {userName}
+                                        </h5>
+                                    </div>
+                                </Card>
+                            </div>
+                        </div>
 
       {isLoading && (
         <div className="h-screen w-full flex justify-center p-28 mt-10 gap-10">

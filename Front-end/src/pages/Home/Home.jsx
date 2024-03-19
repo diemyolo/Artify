@@ -2,12 +2,11 @@
 import axios from "axios";
 import React, { Fragment, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import FooterPart from '../../components/FooterPart';
 import Hero from '../../components/Hero';
 import NavBar from '../../components/NavBar';
 import PostCard from '../../components/PostCard';
 import AdminHome from "../Admin/AdminHome";
-import FooterPart from '../../components/FooterPart'
-import { FloatButton } from 'antd';
 
 
 const Home = () => {
@@ -41,19 +40,14 @@ const Home = () => {
               <div className='m-10 flex flex-col items-center justify-center'>
                 <PostCard />
               </div>
-              <FloatButton.BackTop />
-
               <FooterPart />
             </Fragment>
           }
           {user.roleName == "ADMIN" &&
             <Fragment>
               <AdminHome />
-              <FloatButton.BackTop />
-
             </Fragment>
           }
-
         </div>
       </div>
     </div>

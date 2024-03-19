@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from "react";
+import { EditOutlined } from '@ant-design/icons';
+import { Button, Spin } from "antd";
 import axios from "axios";
 import { Card } from "flowbite-react";
-import { Button, Spin, Table } from "antd";
-import { EditOutlined } from '@ant-design/icons';
+import React, { useEffect, useState } from "react";
 
 
 const AdminProfile = () => {
 
     const [user, setUser] = useState("");
-
+    const [isLoading, setIsLoading] = useState(false);
     const token = localStorage.getItem("token");
     useEffect(() => {
         const fetchData = async () => {
@@ -32,6 +32,7 @@ const AdminProfile = () => {
 
     return (
         <div className='h-full bg-gray-100 py-10 px-28'>
+            <Spin spinning={!isLoading} fullscreen />
             <Card className="w-full p-5">
                 <div className="relative">
                     <Button icon={<EditOutlined />} onClick={() => handleEdit(record)} className="absolute top-0 right-0">

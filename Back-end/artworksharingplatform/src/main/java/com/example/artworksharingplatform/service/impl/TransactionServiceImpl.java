@@ -1,9 +1,10 @@
 package com.example.artworksharingplatform.service.impl;
 
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
-
+import java.sql.Date;
 import com.example.artworksharingplatform.entity.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -112,15 +113,17 @@ public class TransactionServiceImpl implements TransactionService {
 	}
 
 	@Override
-	public List<Transaction> filterByDate(String time, User user) throws Exception {
+	public List<Transaction> filterByDate(Date date, User user) throws Exception {
 		try{
 			// Retrieve all transactions from the repository
 			List<Transaction> allTransactions = repo.findByUser_id(user.getId());
-			//
+			LocalDate targetDate = date.toLocalDate();
 			// Filter transactions by the given time
 			List<Transaction> filteredTransactions = new ArrayList<>();
 			for (Transaction transaction : allTransactions) {
-				if (transaction.getTransactionDate().equals(time)) {
+				LocalDateTime transactionDateTime = transaction.getTransactionDate().toLocalDateTime();
+				LocalDate transactionDate = transactionDateTime.toLocalDate();
+				if (transactionDate.equals(targetDate)) {
 					filteredTransactions.add(transaction);
 				}
 			}
