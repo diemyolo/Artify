@@ -19,12 +19,13 @@ const ReturnPreOrder = () => {
     fetchData();
 
   },[]);
+  
   return (
 <div className="w-full h-full bg-gray-100">
       <NavBar />
       <div className="h-full p-28 mt-5">
         <h1 className="text-center text-3xl font-semibold mb-10 text-[#2f6a81]">
-          Request History
+          Your request orders
         </h1>
         <div className="overflow-x-auto">
           <Table striped>
@@ -44,7 +45,7 @@ const ReturnPreOrder = () => {
               </Table.HeadCell>
             </Table.Head>
             <Table.Body className="divide-y">
-              {waitingList.length > 0 && waitingList.map((item, index) =>
+              {waitingList.length > 0 && waitingList.status === "PENDING" && waitingList.map((item, index) =>
                 <Table.Row key={item.preOrderId} className="bg-white dark:border-gray-700 dark:bg-gray-800">
                   <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
                     {index + 1}

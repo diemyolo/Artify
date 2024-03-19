@@ -97,6 +97,11 @@ const NavBar = () => {
                       Request History
                     </Link>
                   </Dropdown.Item>
+                  <Dropdown.Item>
+                    <Link to="/processRequest" className="font-semibold lg:flex items-center hover:text-[#2f6a81]">
+                      Get your pre-orders
+                    </Link>
+                  </Dropdown.Item>
                   {customer.roleName == "CREATOR" && <Dropdown.Item>
                     <Link to="/viewPreordersByCreator" className="font-semibold lg:flex items-center hover:text-[#2f6a81]">
                       View your request orders
