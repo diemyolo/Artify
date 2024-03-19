@@ -1,4 +1,6 @@
-import { CloseOutlined } from "@ant-design/icons";
+import {
+  CloseOutlined,
+} from '@ant-design/icons';
 import { Avatar, Button, Form, Input, Spin } from "antd";
 import axios from "axios";
 import { Card, Modal } from "flowbite-react";
@@ -6,7 +8,7 @@ import React, { useEffect, useState } from "react";
 import { MdOutlineModeEdit } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
-import FooterPart from "../../components/FooterPart";
+import FooterPart from '../../components/FooterPart';
 import NavBar from "../../components/NavBar";
 
 const formItemCol = {
@@ -68,9 +70,7 @@ const EditProfile = () => {
     }
     formData.append(
       "user",
-      new Blob([JSON.stringify(updatedProfileDTO)], {
-        type: "application/json",
-      })
+      new Blob([JSON.stringify(updatedProfileDTO)], { type: "application/json" })
     );
     console.log(formData);
     axios
@@ -109,6 +109,7 @@ const EditProfile = () => {
       setFiles([selectedFile]);
     }
   };
+
 
   const handleModalClose = () => {
     setOpenModal(true);
@@ -149,13 +150,9 @@ const EditProfile = () => {
         } else {
           const updatedPassword = { password: newPassword };
           await axios
-            .put(
-              "http://localhost:8080/api/auth/user/profile/password",
-              updatedPassword,
-              {
-                headers: { Authorization: `Bearer ${token}` },
-              }
-            )
+            .put("http://localhost:8080/api/auth/user/profile/password", updatedPassword, {
+              headers: { Authorization: `Bearer ${token}` },
+            })
             .then((response) => {
               if (response) setIsLoading(true);
               if (response.status === 200) {
@@ -183,7 +180,9 @@ const EditProfile = () => {
         }
       }
     }
-  };
+  }
+
+
 
   return (
     <div className="w-full h-full bg-gray-100 ">
@@ -196,13 +195,9 @@ const EditProfile = () => {
         className="mt-10 p-72 "
         size={1}
       >
-        <h1 className="text-center font-semibold text-2xl mt-14">
-          Change Password
-        </h1>
-        <p className="text-center mt-3">
-          To change your password, please fill in the fields below.
-        </p>
-        <div className="pt-14 px-52" style={{ overflow: "hidden" }}>
+        <h1 className="text-center font-semibold text-2xl mt-14">Change Password</h1>
+        <p className="text-center mt-3">To change your password, please fill in the fields below.</p>
+        <div className="pt-14 px-52" style={{ overflow: 'hidden' }}>
           <Form
             {...formItemCol}
             size="large"
@@ -214,7 +209,10 @@ const EditProfile = () => {
             }}
             autoComplete="off"
           >
-            <Form.Item className="mx-0 px-0 w-full pt-2.5" name="password">
+            <Form.Item
+              className="mx-0 px-0 w-full pt-2.5"
+              name="password"
+            >
               <Input.Password
                 className="w-full px-4 py-2.5"
                 placeholder="Enter your password"
@@ -223,7 +221,10 @@ const EditProfile = () => {
                 name="password"
               />
             </Form.Item>
-            <Form.Item className="mx-0 px-0 w-full pt-2.5" name="newPassword">
+            <Form.Item
+              className="mx-0 px-0 w-full pt-2.5"
+              name="newPassword"
+            >
               <Input.Password
                 className="w-full px-4 py-2.5"
                 placeholder="Enter your new password"
@@ -236,123 +237,43 @@ const EditProfile = () => {
               className="mx-0 px-0 w-full pt-2.5"
               name="confirmNewPassword"
             >
-                <h1 className="text-center font-semibold text-2xl mt-14">Change Password</h1>
-                <p className="text-center mt-3">To change your password, please fill in the fields below.</p>
-                <div className="pt-14 px-52" style={{ overflow: 'hidden' }}>
-                    <Form
-                        {...formItemCol}
-                        size="large"
-                        style={{
-                            maxWidth: 600,
-                        }}
-                        initialValues={{
-                            remember: true,
-                        }}
-                        autoComplete="off"
-                    >
-                        <Form.Item
-                            className="mx-0 px-0 w-full pt-2.5"
-                            name="password"
-                        >
-                            <Input.Password
-                                className="w-full px-4 py-2.5"
-                                placeholder="Enter your password"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                                name="password"
-                            />
-                        </Form.Item>
-                        <Form.Item
-                            className="mx-0 px-0 w-full pt-2.5"
-                            name="newPassword"
-                        >
-                            <Input.Password
-                                className="w-full px-4 py-2.5"
-                                placeholder="Enter your new password"
-                                value={newPassword}
-                                onChange={(e) => setNewPassword(e.target.value)}
-                                name="newPassword"
-                            />
-                        </Form.Item>
-                        <Form.Item
-                            className="mx-0 px-0 w-full pt-2.5"
-                            name="confirmNewPassword"
-                        >
-                            <Input.Password
-                                className="w-full px-4 py-2.5"
-                                placeholder="Enter your confirm new password"
-                                value={confirmNewPassword}
-                                onChange={(e) => setConfirmNewPassword(e.target.value)}
-                                name="confirmNewPassword"
-                            />
-                        </Form.Item>
-                        <div className="w-full flex justify-center gap-4 my-4">
-                            <Button
-                                className="rounded-full border-2 w-[140px] bg-[#2f6a81] text-white my-2  px-4 py-2 text-center flex items-center justify-center focus:outline-none hover:bg-gray-100 hover:text-[#2f6a81] hover:border-[#2f6a81] hover:border-2 mt-3 transition-all duration-300 "
-                                type="submit"
-                                onClick={handleChangePassword}
-                            >
-                                Save Changes
-                            </Button>
-                            <Button
-                                className="rounded-full border-2 w-[140px] border-[#2f6a81] bg-gray-100 text-[#2f6a81] my-2  px-4  py-2 text-center flex items-center justify-center focus:outline-none hover:bg-[#2f6a81] hover:text-white hover:border-white hover:border-2 mt-3 transition-all duration-300"
-                                htmlType="reset"
-                            >
-                                Reset
-                            </Button>
-                        </div>
-                    </Form>
-                </div>
-                <Button
-                    className="absolute top-3 right-3"
-                    type="text"
-                    onClick={() => setOpenModal(false)}
-                    icon={<CloseOutlined />}
-                />
-            </Modal>
+              <Input.Password
+                className="w-full px-4 py-2.5"
+                placeholder="Enter your confirm new password"
+                value={confirmNewPassword}
+                onChange={(e) => setConfirmNewPassword(e.target.value)}
+                name="confirmNewPassword"
+              />
+            </Form.Item>
+            <div className="w-full flex justify-center gap-4 my-4">
+              <Button
+                className="rounded-full border-2 w-[140px] bg-[#2f6a81] text-white my-2  px-4 py-2 text-center flex items-center justify-center focus:outline-none hover:bg-gray-100 hover:text-[#2f6a81] hover:border-[#2f6a81] hover:border-2 mt-3 transition-all duration-300 "
+                type="submit"
+                onClick={handleChangePassword}
+              >
+                Save Changes
+              </Button>
+              <Button
+                className="rounded-full border-2 w-[140px] border-[#2f6a81] bg-gray-100 text-[#2f6a81] my-2  px-4  py-2 text-center flex items-center justify-center focus:outline-none hover:bg-[#2f6a81] hover:text-white hover:border-white hover:border-2 mt-3 transition-all duration-300"
+                htmlType="reset"
+              >
+                Reset
+              </Button>
+            </div>
+          </Form>
+        </div>
+        <Button
+          className="absolute top-3 right-3"
+          type="text"
+          onClick={() => setOpenModal(false)}
+          icon={<CloseOutlined />}
+        />
+      </Modal>
 
-
-            {isLoading && (
-                <div className="h-screen w-full flex justify-center p-28 mt-10 gap-10">
-
-                    <div className="w-1/2 flex flex-col">
-                        <div className="relative h-[40%] bg-[#2f6a81]">
-                            <div className="absolute flex flex-col items-center justify-center w-full top-1/3">
-                                <Card className="w-[50%] h-[300px]">
-                                    <div className="flex flex-col items-center">
-                                        <div className="relative rounded-full shadow-2xl">
-                                            <Avatar
-                                                size="large"
-                                                style={{ width: '225px', height: '225px' }}
-                                                src={
-                                                    files != null
-                                                        ? URL.createObjectURL(files[0])
-                                                        : customer.imagePath
-                                                }
-                                            />
-                                            <label
-                                                htmlFor="upload"
-                                                className="absolute right-0 bottom-1 bg-[#2f6a81] rounded-full p-1.5 cursor-pointer"
-                                            >
-                                                <MdOutlineModeEdit size={20} color="white" />
-                                            </label>
-                                            <input
-                                                type="file"
-                                                id="upload"
-                                                style={{ display: "none" }}
-                                                onChange={handleAvatarChange}
-                                            />
-                                        </div>
-                                        <h5 className="mt-3 text-xl font-medium text-gray-900 dark:text-white capitalize">
-                                            {userName}
-                                        </h5>
-                                    </div>
-                                </Card>
-                            </div>
-                        </div>
 
       {isLoading && (
         <div className="h-screen w-full flex justify-center p-28 mt-10 gap-10">
+
           <div className="w-1/2 flex flex-col">
             <div className="relative h-[40%] bg-[#2f6a81]">
               <div className="absolute flex flex-col items-center justify-center w-full top-1/3">
@@ -361,7 +282,7 @@ const EditProfile = () => {
                     <div className="relative rounded-full shadow-2xl">
                       <Avatar
                         size="large"
-                        style={{ width: "225px", height: "225px" }}
+                        style={{ width: '225px', height: '225px' }}
                         src={
                           files != null
                             ? URL.createObjectURL(files[0])
@@ -390,11 +311,11 @@ const EditProfile = () => {
             </div>
 
             <div className="cursor-pointer w-[180px] flex justify-center gap-2 mx-auto text-white bg-[#2f6a81] px-4 py-2 transition-all duration-300 rounded-full my-1 mt-[30%]">
-              <button type="submit" onClick={handleModalClose}>
-                Change Password
-              </button>
+              <button type="submit" onClick={handleModalClose}>Change Password</button>
             </div>
           </div>
+
+
 
           <div className="w-1/2 h-full flex flex-col">
             <h1 className="text-center text-3xl font-semibold mb-3 text-[#2f6a81]">
@@ -491,6 +412,7 @@ const EditProfile = () => {
               </Form>
             </div>
           </div>
+
         </div>
       )}
 

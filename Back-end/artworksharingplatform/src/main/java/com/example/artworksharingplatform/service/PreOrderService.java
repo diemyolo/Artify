@@ -20,15 +20,16 @@ public interface PreOrderService {
     List<PreOrder> getWaitingPreOrderList(User preOrderCustomer) throws Exception;
 
     List<PreOrder> getAcceptedPreOrderList(User preOrderCustomer, String status) throws Exception;
+
     List<PreOrder> getProcessingPreOrderList(User preOrderCreator, String status) throws Exception;
-    
+
     int countByPreOrderCreator(User preOrderCreator);
 
     PreOrder updatePreOrderCreator(PreOrderDTO updatedPreOrderDTO, Artworks updatedArtwork) throws Exception;
 
     PreOrder processingPreOrderAudience(ProcessingRequest request) throws Exception;
 
-    PreOrder completePreOrderAudience(UUID preOrderId) throws Exception;
+    PreOrder completePreOrderAudience(PreOrderDTO preOrderDTO) throws Exception;
 
     PreOrder feedbackPreOrder(UUID preOrderId, String feedback) throws Exception;
 

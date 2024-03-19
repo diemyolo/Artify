@@ -141,9 +141,9 @@ public class PreOrderServiceImpl implements PreOrderService {
     }
 
     @Override
-    public PreOrder completePreOrderAudience(UUID preOrderId) throws Exception {
+    public PreOrder completePreOrderAudience(PreOrderDTO preOrderDTO) throws Exception {
         try {
-            PreOrder preOrder = _preOrderRepo.findById(preOrderId)
+            PreOrder preOrder = _preOrderRepo.findById(preOrderDTO.getPreOrderId())
                     .orElseThrow(() -> new EntityNotFoundException("PreOrder not found"));
             preOrder.setStatus("COMPLETED");
             _preOrderRepo.save(preOrder);
