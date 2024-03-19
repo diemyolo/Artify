@@ -138,12 +138,9 @@ const CardItem = () => {
                   >
                     {p.description}
                   </p>
+                  
                   <div className="w-full h-screen max-h-[50vh]">
-                    <Carousel
-                      pauseOnHover
-                      className="w-full mx-auto"
-                      infiniteLoop={true}
-                    >
+                    <Carousel className="w-full mx-auto">
                       {p.artList.map((item, index) => (
                         <div key={index} onClick={() => handleImageClick(item)}>
                           <img

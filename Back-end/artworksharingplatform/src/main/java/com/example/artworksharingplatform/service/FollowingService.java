@@ -1,5 +1,6 @@
 package com.example.artworksharingplatform.service;
 
+import java.util.List;
 
 import com.example.artworksharingplatform.entity.User;
 import org.springframework.stereotype.Service;

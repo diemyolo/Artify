@@ -1,3 +1,4 @@
+
 import axios from "axios";
 import React, { Fragment, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -5,6 +6,8 @@ import Hero from '../../components/Hero';
 import NavBar from '../../components/NavBar';
 import PostCard from '../../components/PostCard';
 import AdminHome from "../Admin/AdminHome";
+import FooterPart from '../../components/FooterPart'
+
 
 const Home = () => {
   const token = localStorage.getItem("token");
@@ -29,6 +32,7 @@ const Home = () => {
     <div className='w-full bg-gray-100'>
       <div className="flex justify-center items-center ">
         <div className="w-full">
+
           {(user.roleName == "AUDIENCE" || user.roleName == "CREATOR") &&
             <Fragment>
               <NavBar />
@@ -43,6 +47,8 @@ const Home = () => {
               <AdminHome />
             </Fragment>
           }
+        <FooterPart/>
+
         </div>
       </div>
     </div>

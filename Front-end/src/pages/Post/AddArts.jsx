@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Formik, Form, Field, FieldArray } from "formik";
 import * as Yup from "yup";
-import { Avatar, Card } from "flowbite-react";
+import { Avatar, Card, Footer } from "flowbite-react";
 import { Carousel } from "flowbite-react";
-
-// import "./ArtUp.css";
 import { IoIosPerson } from "react-icons/io";
 import axios from "axios";
 import NavBar from "../../components/NavBar";
@@ -17,6 +15,8 @@ import { Button, Upload } from "antd";
 import { message, Steps, theme } from "antd";
 import { Watermark } from "antd";
 import { Select } from "antd";
+import FooterPart from '../../components/FooterPart'
+
 
 const AddArts = () => {
   const [selectedFiles, setSelectedFiles] = useState([]);
@@ -452,6 +452,7 @@ const AddArts = () => {
           )}
         </div>
       </div>
+      <FooterPart />
     </div>
   );
 };

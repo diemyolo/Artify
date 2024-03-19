@@ -4,6 +4,8 @@ import axios from "axios";
 import NavBar from "../../components/NavBar";
 import { Spin } from "antd";
 import { Link } from "react-router-dom";
+import FooterPart from '../../components/FooterPart'
+
 const AddSuccess = () => {
   const params = new URLSearchParams(window.location.search);
   const id = params.get("id");
@@ -44,6 +46,7 @@ const AddSuccess = () => {
         </div>
       </div>
       )}   
+      <FooterPart />
     </div>
   );
 };

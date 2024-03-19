@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useDropzone } from "react-dropzone";
+
 const AddPost = () => {
   const token = localStorage.getItem("token");
   const [postDTO, setPostDTO] = useState({

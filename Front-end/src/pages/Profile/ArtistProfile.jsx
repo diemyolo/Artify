@@ -5,6 +5,9 @@ import ImageList from '../../components/ImageList';
 import NavBar from '../../components/NavBar';
 import PostCard from '../../components/PostCard';
 import RequestArt from '../../components/RequestArt';
+import axios from "axios";
+import FooterPart from '../../components/FooterPart'
+
 
 const ArtistProfile = () => {
   const [activeComponent, setActiveComponent] = useState('post');
@@ -87,7 +90,9 @@ const ArtistProfile = () => {
       <div className='w-full mt-72 bg-gray-100'>
         {renderActiveComponent()}
       </div>
+      <FooterPart />
     </div>
+
   )
 }
 
