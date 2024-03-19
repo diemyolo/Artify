@@ -1,13 +1,15 @@
+import {
+    CloseOutlined,
+} from '@ant-design/icons';
 import { Avatar, Button, Form, Input, Spin } from "antd";
 import axios from "axios";
-import { Card } from "flowbite-react";
+import { Card, Modal } from "flowbite-react";
 import React, { useEffect, useState } from "react";
 import { MdOutlineModeEdit } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
+import FooterPart from '../../components/FooterPart';
 import NavBar from "../../components/NavBar";
-import { Modal } from "flowbite-react";
-import FooterPart from '../../components/FooterPart'
 
 const formItemCol = {
     labelCol: { span: 24 },
@@ -82,7 +84,7 @@ const EditProfile = () => {
                         position: "center",
                         icon: "success",
                         title: `Done`,
-                        html: "<h3>Updated Successfully</h3>",
+                        html: "<h3>Update Successfully</h3>",
                         showConfirmButton: false,
                         timer: 1600,
                     });
@@ -113,19 +115,73 @@ const EditProfile = () => {
         setOpenModal(true);
     };
 
-    const handleChangePassword = () => {
-        if (newPassword !== confirmNewPassword) {
+    const handleChangePassword = async () => {
+        if (!password || !newPassword || !confirmNewPassword) {
+            Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "Please fill in all password fields!",
+            });
+            return;
+        } else if (newPassword !== confirmNewPassword) {
             Swal.fire({
                 icon: "error",
                 title: "Oops...",
                 text: "Confirm password does not match!",
             });
             return;
+        } else {
+            const oldPassword = { password: password };
+            const response = await axios.post(
+                `http://localhost:8080/api/auth/user/profile/password`,
+                oldPassword,
+                {
+                    headers: { Authorization: `Bearer ${token}` },
+                }
+            );
+            if (response.status === 200) {
+                if (response.data.payload === false) {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Oops...",
+                        text: "Your password does not match the current one!",
+                    });
+                    return;
+                } else {
+                    const updatedPassword = { password: newPassword };
+                    await axios
+                        .put("http://localhost:8080/api/auth/user/profile/password", updatedPassword, {
+                            headers: { Authorization: `Bearer ${token}` },
+                        })
+                        .then((response) => {
+                            if (response) setIsLoading(true);
+                            if (response.status === 200) {
+                                Swal.fire({
+                                    position: "center",
+                                    icon: "success",
+                                    title: `Done`,
+                                    html: "<h3>Update Password Successfully</h3>",
+                                    showConfirmButton: false,
+                                    timer: 1600,
+                                });
+                                setOpenModal(false);
+                            } else {
+                                throw new Error(response.statusText);
+                            }
+                        })
+                        .catch((error) => {
+                            Swal.fire({
+                                icon: "error",
+                                title: "Oops...",
+                                text: "Something went wrong!",
+                                footer: '<a href="/">Try again!</a>',
+                            });
+                        });
+                }
+            }
         }
     }
 
-    console.log(userName);
-    console.log(telephone);
 
 
     return (
@@ -206,6 +262,12 @@ const EditProfile = () => {
                         </div>
                     </Form>
                 </div>
+                <Button
+                    className="absolute top-3 right-3"
+                    type="text"
+                    onClick={() => setOpenModal(false)} // Close the modal when clicking the "x" button
+                    icon={<CloseOutlined />} // Display the "x" icon
+                />
             </Modal>
 
 
@@ -310,7 +372,6 @@ const EditProfile = () => {
                                         className="w-full px-4 rounded-lg"
                                         name="username"
                                         placeholder={userName}
-                                        value={userName}
                                         onChange={(e) => setUserName(e.target.value)}
                                     />
                                 </Form.Item>
@@ -330,7 +391,6 @@ const EditProfile = () => {
                                         className="w-full px-4 rounded-lg"
                                         name="telephone"
                                         placeholder={telephone}
-                                        value={telephone}
                                         onChange={(e) => setTelephone(e.target.value)}
                                     />
                                 </Form.Item>

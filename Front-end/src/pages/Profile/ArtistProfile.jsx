@@ -1,12 +1,11 @@
 import axios from "axios";
 import React, { useEffect, useState } from 'react';
 import CardProfile from '../../components/CardProfile';
+import FooterPart from '../../components/FooterPart';
 import ImageList from '../../components/ImageList';
 import NavBar from '../../components/NavBar';
 import PostCard from '../../components/PostCard';
 import RequestArt from '../../components/RequestArt';
-import axios from "axios";
-import FooterPart from '../../components/FooterPart'
 
 
 const ArtistProfile = () => {
