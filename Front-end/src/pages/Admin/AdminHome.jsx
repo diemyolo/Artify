@@ -14,7 +14,9 @@ import logo from "../../assets/logo.png";
 import Account from './Account/Account';
 import './AdminHome.css';
 import AdminProfile from './Profile/AdminProfile';
-const { Header, Sider, Content } = Layout;
+import Transaction from './Transaction/Transaction';
+import CreatorRequest from './CreatorRequest/CreatorRequest';
+const { Header, Sider } = Layout;
 
 const AdminHome = () => {
     const [activeComponent, setActiveComponent] = useState('dashboard');
@@ -53,9 +55,9 @@ const AdminHome = () => {
         } else if (activeComponent === 'account') {
             return <Account />;
         } else if (activeComponent === 'transaction') {
-            return;
+            return <Transaction />;
         } else if (activeComponent === 'request') {
-            return;
+            return <CreatorRequest />;
         } else if (activeComponent === 'profile') {
             return <AdminProfile />;
         }
@@ -70,6 +72,7 @@ const AdminHome = () => {
                     </a>
                     <Menu
                         theme="dark"
+                        className='mt-10'
                         mode="inline"
                         defaultSelectedKeys={['1']}
                         items={[
@@ -77,47 +80,48 @@ const AdminHome = () => {
                                 key: '1',
                                 icon: <AreaChartOutlined />,
                                 label: 'Dashboards',
-                                style: { fontSize: '1rem', width: '80%', marginLeft: 'auto', marginRight: 'auto' },
+                                style: { fontSize: '1rem', width: '80%', marginLeft: 'auto', marginRight: 'auto', marginBottom: '30px' },
                                 onClick: () => handleDashBoardClick()
                             },
                             {
                                 key: '2',
                                 icon: <ProfileOutlined />,
                                 label: 'Accounts',
-                                style: { fontSize: '1rem', width: '80%', marginLeft: 'auto', marginRight: 'auto' },
+                                style: { fontSize: '1rem', width: '80%', marginLeft: 'auto', marginRight: 'auto', marginBottom: '30px' },
                                 onClick: () => handleAccountClick()
                             },
                             {
                                 key: '3',
                                 icon: <TransactionOutlined />,
                                 label: 'Transactions',
-                                style: { fontSize: '1rem', width: '80%', marginLeft: 'auto', marginRight: 'auto' },
+                                style: { fontSize: '1rem', width: '80%', marginLeft: 'auto', marginRight: 'auto', marginBottom: '30px' },
                                 onClick: () => handleTransactionClick()
                             },
                             {
                                 key: '4',
                                 icon: <SendOutlined />,
                                 label: 'Creator Requests',
-                                style: { fontSize: '1rem', width: '80%', marginLeft: 'auto', marginRight: 'auto' },
+                                style: { fontSize: '1rem', width: '80%', marginLeft: 'auto', marginRight: 'auto', marginBottom: '30px' },
                                 onClick: () => handleRequestClick()
                             },
                             {
                                 key: '5',
                                 icon: <UserOutlined />,
                                 label: 'Profile',
-                                style: { fontSize: '1rem', width: '80%', marginLeft: 'auto', marginRight: 'auto' },
+                                style: { fontSize: '1rem', width: '80%', marginLeft: 'auto', marginRight: 'auto', marginBottom: '30px' },
                                 onClick: () => handleProfileClick()
                             },
                             {
                                 key: '6',
                                 icon: <LogoutOutlined />,
                                 label: 'Log Out',
-                                style: { fontSize: '1rem', width: '80%', marginLeft: 'auto', marginRight: 'auto' },
+                                style: { fontSize: '1rem', width: '80%', marginLeft: 'auto', marginRight: 'auto', marginBottom: '30px' },
                                 onClick: () => handleLogoutClick()
                             },
                         ]}
                     />
                 </Sider>
+                
                 <Layout style={{ zIndex: 0 }}>
                     <Header style={{ padding: 0, backgroundColor: 'whitesmoke' }}>
                         <Button

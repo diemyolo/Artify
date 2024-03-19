@@ -17,7 +17,7 @@ const formItemCol = {
 };
 const { Option } = Select;
 
-const Account = () => {
+const CreatorRequest = () => {
     const token = localStorage.getItem("token");
     const [userList, setUserList] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
@@ -196,7 +196,7 @@ const Account = () => {
         <>
             <div className='h-full bg-gray-100'>
                 <Spin spinning={!isLoading} fullscreen />
-                <h1 className='text-center font-semibold text-3xl px-5'>Account Management</h1>
+                <h1 className='text-center font-semibold text-3xl px-5'>Creator Request Management</h1>
 
                 <div className='flex justify-between mt-10'>
                     <div className='bg-gray-200 rounded-full sm:flex hidden items-center px-4 lg:w-[400px] h-12 mx-5'>
@@ -204,12 +204,8 @@ const Account = () => {
                         <input
                             className='bg-transparent lg:w-[400px] appearance-none focus:outline-none border-none'
                             type='search'
-                            placeholder='Search for account...'
+                            placeholder='Search for creator request...'
                         />
-                    </div>
-                    <div className="mx-5 cursor-pointer w-[150px] h-12 flex justify-center items-center gap-2 text-white bg-[#2f6a81] transition-all duration-300 rounded-lg ">
-                        <PlusOutlined className="mr-1" />
-                        <button type="submit" onClick={handleModalOpen}>Add Account</button>
                     </div>
                 </div>
 
@@ -289,8 +285,9 @@ const Account = () => {
                                                     message: "Please input your username!",
                                                 },
                                                 {
-                                                    pattern: /^[A-Za-z0-9\s]{3,}$/,
-                                                    message: "Please input a valid username with at least 3 characters!",
+                                                    pattern: /^[A-Za-z\s]{4,}$/,
+                                                    message:
+                                                        "Please input a valid username with more than 3 letters!",
                                                 },
                                             ]}
                                         >
@@ -306,17 +303,6 @@ const Account = () => {
                                             className="mx-0 px-0 w-full "
                                             name="emailAddress"
                                             label="Email Address"
-                                            rules={[
-                                                {
-                                                    required: true,
-                                                    message: "Please input your email!",
-                                                },
-                                                {
-                                                    pattern:
-                                                        /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-                                                    message: "Please input valid email!",
-                                                },
-                                            ]}
                                         >
                                             <Input
                                                 className="w-full px-4 rounded-lg border-[#d9d9d9]"
@@ -330,12 +316,6 @@ const Account = () => {
                                             className="mx-0 px-0 w-full "
                                             name="password"
                                             label="Password"
-                                            rules={[
-                                                {
-                                                    required: true,
-                                                    message: "Please input your password!",
-                                                }
-                                            ]}
                                         >
                                             <Input.Password
                                                 className="w-full px-4  rounded-lg border-[#d9d9d9]"
@@ -349,12 +329,6 @@ const Account = () => {
                                             className="mx-0 px-0 w-full"
                                             name="confirmPassword"
                                             label="Confirm Password"
-                                            rules={[
-                                                {
-                                                    required: true,
-                                                    message: "Please input your confirm password!",
-                                                }
-                                            ]}
                                         >
                                             <Input.Password
                                                 className="w-full px-4  rounded-lg border-[#d9d9d9] "
@@ -368,16 +342,6 @@ const Account = () => {
                                             className="mx-0 px-0 w-full "
                                             name="telephone"
                                             label="Telephone"
-                                            rules={[
-                                                {
-                                                    required: true,
-                                                    message: "Please input your telephone!",
-                                                },
-                                                {
-                                                    pattern: /^\d{10}$/,
-                                                    message: "Telephone number must be exactly 10 digits!",
-                                                },
-                                            ]}
                                         >
                                             <Input
                                                 className="w-full px-4 rounded-lg border-[#d9d9d9]"
@@ -387,14 +351,13 @@ const Account = () => {
                                             />
                                         </Form.Item>
                                         <Form.Item
-                                            className="mx-0 px-0 w-full"
+                                            className="mx-0 px-0 w-full "
                                             name="status"
                                             label="Status"
                                         >
                                             <Select
                                                 placeholder="Select status"
                                                 onChange={(value) => setStatus(value)}
-                                                defaultValue="ACTIVE"
                                             >
                                                 <Option value="ACTIVE">Active</Option>
                                                 <Option value="INACTIVE">Inactive</Option>
@@ -409,7 +372,6 @@ const Account = () => {
                                             <Select
                                                 placeholder="Select role"
                                                 onChange={(value) => setRoleName(value)}
-                                                defaultValue="AUDIENCE"
                                             >
                                                 <Option value="Creator">Creator</Option>
                                                 <Option value="Customer">Customer</Option>
@@ -446,4 +408,4 @@ const Account = () => {
     );
 };
 
-export default Account;
+export default CreatorRequest;
