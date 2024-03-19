@@ -30,7 +30,7 @@ public interface UserService {
 
     User updateUserPassword(String email, String passwordToUpdate);
 
-    List<User> searchUserByName(String name);
+    List<User> searchUserByName(String name) throws Exception;
 
     List<User> filterByRole(Role role);
 

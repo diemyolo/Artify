@@ -110,10 +110,21 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> searchUserByName(String name) {
-        Role role = Role.ADMIN;
-        List<User> users = userRepository.findByRoleNotAndNameContainingIgnoreCase(role, name);
-        return users;
+    public List<User> searchUserByName(String name) throws Exception {
+        try {
+            List<User> users = new ArrayList<>();
+            Role role = Role.ADMIN;
+
+            if (name != null) {
+                users = userRepository.findByRoleNotAndNameContainingIgnoreCase(role, name);
+            } else {
+                users = userRepository.findByRoleNot(role);
+            }
+
+            return users;
+        } catch (Exception e) {
+            throw new Exception(e.getMessage());
+        }
     }
 
     @Override
