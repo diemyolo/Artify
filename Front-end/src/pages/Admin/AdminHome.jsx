@@ -13,6 +13,7 @@ import React, { Fragment, useEffect, useState } from "react";
 import logo from "../../assets/logo.png";
 import Account from './Account/Account';
 import './AdminHome.css';
+import AdminProfile from './Profile/AdminProfile';
 const { Header, Sider, Content } = Layout;
 
 const AdminHome = () => {
@@ -56,7 +57,7 @@ const AdminHome = () => {
         } else if (activeComponent === 'request') {
             return;
         } else if (activeComponent === 'profile') {
-            return;
+            return <AdminProfile />;
         }
     };
 
