@@ -33,4 +33,8 @@ public interface UserService {
     List<User> searchUserByName(String name);
 
     List<User> filterByRole(Role role);
+
+    List<User> sortUserByCreatedDate(String sortBy);
+
+    List<User> getUsersList();
 }
