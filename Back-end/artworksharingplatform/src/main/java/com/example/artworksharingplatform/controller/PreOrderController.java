@@ -27,6 +27,7 @@ import com.example.artworksharingplatform.model.ProcessingRequest;
 import com.example.artworksharingplatform.service.ArtworkService;
 import com.example.artworksharingplatform.service.CloudinaryService;
 import com.example.artworksharingplatform.service.EWalletService;
+import com.example.artworksharingplatform.service.PostService;
 import com.example.artworksharingplatform.service.PreOrderService;
 import com.example.artworksharingplatform.service.UserService;;
 
@@ -48,6 +49,9 @@ public class PreOrderController {
 
     @Autowired
     ArtworkService artworkService;
+
+    @Autowired
+	PostService postService;
 
     @PostMapping("audience/PreOrderRequest")
     @PreAuthorize("hasRole('ROLE_AUDIENCE')")
@@ -160,6 +164,7 @@ public class PreOrderController {
                 artwork.setCreatedDate(Timestamp.valueOf(LocalDateTime.now()));
                 artwork.setImagePath(uploadImage(file));
                 artwork.setType("PREORDER");
+                postService.addArtwork(artwork);
                 changedPreOrder = _preOrderService.updatePreOrderCreator(updatedPreOrderDTO, artwork);
             } else {
                 changedPreOrder = _preOrderService.updatePreOrderCreator(updatedPreOrderDTO, null);
@@ -287,6 +292,29 @@ public class PreOrderController {
             String email = userDetails.getUsername();
             User creator = _userService.findByEmail(email);
             String status = "PENDING";
+            if (creator == null) {
+                apiResponse.error("Creator can not be null");
+                return new ResponseEntity<>(apiResponse, HttpStatus.NOT_FOUND);
+            }
+            List<PreOrder> preOrderList = _preOrderService.getAcceptedPreOrderList(creator, status);
+            List<PreOrderDTO> preOrderDTOList = _preOrderMapper.toList(preOrderList);
+            apiResponse.ok(preOrderDTOList);
+            return ResponseEntity.ok(apiResponse);
+        } catch (Exception e) {
+            apiResponse.error(e);
+            return new ResponseEntity<>(apiResponse, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("viewConfirmingPreOrders")
+    public ResponseEntity<ApiResponse<List<PreOrderDTO>>> getConfirmingPreOrderList() {
+        ApiResponse<List<PreOrderDTO>> apiResponse = new ApiResponse<List<PreOrderDTO>>();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        try {
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            String email = userDetails.getUsername();
+            User creator = _userService.findByEmail(email);
+            String status = "Confirming";
             if (creator == null) {
                 apiResponse.error("Creator can not be null");
                 return new ResponseEntity<>(apiResponse, HttpStatus.NOT_FOUND);

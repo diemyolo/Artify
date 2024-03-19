@@ -1,16 +1,15 @@
-import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Card } from "flowbite-react";
 import { Button, Spin, Table } from "antd";
 import { EditOutlined } from '@ant-design/icons';
 import { Link } from "react-router-dom";
-
+import React, { useEffect, useState } from "react";
 
 
 const AdminProfile = () => {
 
     const [user, setUser] = useState("");
-
+    const [isLoading, setIsLoading] = useState(false);
     const token = localStorage.getItem("token");
     useEffect(() => {
         const fetchData = async () => {
@@ -34,6 +33,7 @@ const AdminProfile = () => {
 
     return (
         <div className='h-full bg-gray-100 py-10 px-28'>
+            <Spin spinning={!isLoading} fullscreen />
             <Card className="w-full p-5">
                 <div className="relative">
                     <Link to="/editAdminProfile">
