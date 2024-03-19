@@ -63,7 +63,7 @@ const PostCard = () => {
                       </div>
                     </Avatar>
                   </Link>
-                  <div
+                  {customer.userId !== p.creatorId ? <div
                     onClick={() => handleFollow(p)}
                     className="cursor-pointer sm:flex gap-2 hidden items-center text-white bg-[#2f6a81] px-4 transition-all duration-300 rounded-full my-1"
                   >
@@ -72,8 +72,8 @@ const PostCard = () => {
                       style={{ color: "#fff", fontWeight: "bold" }}
                     />
                     <button type="submit">Follow</button>
-                  </div>
-                </div>
+                  </div>: <div><Link to={`/updatePost?postId=${p.postId}`}>Update Post</Link></div>}
+                </div> 
 
                 <div>
                   <p className="text-sm my-2">{p.description}</p>
