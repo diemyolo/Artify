@@ -1,9 +1,11 @@
 package com.example.artworksharingplatform.service;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.UUID;
 
 import com.example.artworksharingplatform.entity.PreOrder;
+import com.example.artworksharingplatform.entity.User;
 import org.springframework.stereotype.Service;
 
 import com.example.artworksharingplatform.entity.Order;
@@ -28,4 +30,5 @@ public interface TransactionService {
 	public Transaction addTransactionPreOrderCreator(PreOrder order, float totalMoney);
 
 	public Transaction addTransactionPreOrderAudience(PreOrder order, float totalMoney);
+	public List<Transaction> filterByDate(String time, User user) throws Exception;
 }

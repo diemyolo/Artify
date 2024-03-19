@@ -168,23 +168,26 @@ public class PreOrderServiceImpl implements PreOrderService {
             preOrder.setStatus("CANCEL");
             _preOrderRepo.save(preOrder);
             return preOrder;
-
-    public List<PreOrder> getAcceptedPreOrderList(User preOrderCustomer, String status) throws Exception {
-        try {
-            List<PreOrder> preOrders = _preOrderRepo.findByPreOrderAudienceAndStatus(preOrderCustomer, status);
-            return preOrders;
         } catch (Exception e) {
             throw new Exception(e.getMessage());
         }
     }
+        public List<PreOrder> getAcceptedPreOrderList (User preOrderCustomer, String status) throws Exception {
+            try {
+                List<PreOrder> preOrders = _preOrderRepo.findByPreOrderAudienceAndStatus(preOrderCustomer, status);
+                return preOrders;
+            } catch (Exception e) {
+                throw new Exception(e.getMessage());
+            }
+        }
 
-    @Override
-    public List<PreOrder> getProcessingPreOrderList(User preOrderCreator, String status) throws Exception {
-        try {
-            List<PreOrder> preOrders = _preOrderRepo.findByPreOrderCreatorAndStatus(preOrderCreator, status);
-            return preOrders;
-        } catch (Exception e) {
-            throw new Exception(e.getMessage());
+        @Override
+        public List<PreOrder> getProcessingPreOrderList (User preOrderCreator, String status) throws Exception {
+            try {
+                List<PreOrder> preOrders = _preOrderRepo.findByPreOrderCreatorAndStatus(preOrderCreator, status);
+                return preOrders;
+            } catch (Exception e) {
+                throw new Exception(e.getMessage());
+            }
         }
     }
-}
