@@ -26,4 +26,12 @@ public interface PreOrderService {
     PreOrder processingPreOrderAudience(ProcessingRequest request) throws Exception;
 
     PreOrder completePreOrderAudience(UUID preOrderId) throws Exception;
+
+    PreOrder feedbackPreOrder(UUID preOrderId, String feedback) throws Exception;
+
+    PreOrder deleteFeedback(UUID preOrderId) throws Exception;
+
+    PreOrder ratePreOrder(UUID preOrderId, int rate) throws Exception;
+
+    PreOrder deleteRating(UUID preOrderId) throws Exception;
 }
