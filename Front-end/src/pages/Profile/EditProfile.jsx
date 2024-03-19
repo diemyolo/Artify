@@ -265,8 +265,8 @@ const EditProfile = () => {
                 <Button
                     className="absolute top-3 right-3"
                     type="text"
-                    onClick={() => setOpenModal(false)} // Close the modal when clicking the "x" button
-                    icon={<CloseOutlined />} // Display the "x" icon
+                    onClick={() => setOpenModal(false)}
+                    icon={<CloseOutlined />}
                 />
             </Modal>
 
