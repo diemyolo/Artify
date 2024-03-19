@@ -1,5 +1,6 @@
 package com.example.artworksharingplatform.controller;
 
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.example.artworksharingplatform.entity.Role;
 import com.example.artworksharingplatform.entity.User;
 import com.example.artworksharingplatform.mapper.UserMapper;
 import com.example.artworksharingplatform.model.ApiResponse;
@@ -83,7 +85,7 @@ public class UserController {
                 updatedUser.setImagePath(null);
                 if (file != null) {
                     updatedUser.setImagePath(uploadImage(file));
-                }else{
+                } else {
                     updatedUser.setImagePath(imagePath);
                 }
                 updatedUser.setEmailAddress(email);
@@ -165,6 +167,20 @@ public class UserController {
             } else {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(apiResponse);
             }
+        } catch (Exception e) {
+            apiResponse.error(e);
+            return new ResponseEntity<>(apiResponse, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("creatorList")
+    public ResponseEntity<ApiResponse<List<UserDTO>>> viewAllCreators() {
+        ApiResponse<List<UserDTO>> apiResponse = new ApiResponse<List<UserDTO>>();
+        try {
+            Role role = Role.CREATOR;
+            List<User> creatorList = userService.filterByRole(role);
+            apiResponse.ok(userMapper.toList(creatorList));
+            return ResponseEntity.ok(apiResponse);
         } catch (Exception e) {
             apiResponse.error(e);
             return new ResponseEntity<>(apiResponse, HttpStatus.BAD_REQUEST);
