@@ -160,7 +160,32 @@ public class PreOrderServiceImpl implements PreOrderService {
     }
 
     @Override
+    public PreOrder feedbackPreOrder(UUID preOrderId, String feedback) throws Exception {
+        try {
+            PreOrder preOrder = _preOrderRepo.findById(preOrderId)
+                    .orElseThrow(() -> new EntityNotFoundException("PreOrder not found"));
 
+            preOrder.setAudienceFeedback(feedback);
+            return _preOrderRepo.save(preOrder);
+        } catch (Exception e) {
+            throw new Exception(e.getMessage());
+        }
+    }
+
+    @Override
+    public PreOrder deleteFeedback(UUID preOrderId) throws Exception {
+        try {
+            PreOrder preOrder = _preOrderRepo.findById(preOrderId)
+                    .orElseThrow(() -> new EntityNotFoundException("PreOrder not found"));
+
+            preOrder.setAudienceFeedback(null);
+            return _preOrderRepo.save(preOrder);
+          } catch (Exception e) {
+            throw new Exception(e.getMessage());
+        }
+    }
+  
+    @Override
     public PreOrder canclePreOrderAudience(UUID preOrderId) throws Exception {
         try {
             PreOrder preOrder = _preOrderRepo.findById(preOrderId)
@@ -172,6 +197,35 @@ public class PreOrderServiceImpl implements PreOrderService {
             throw new Exception(e.getMessage());
         }
     }
+
+    @Override
+    public PreOrder ratePreOrder(UUID preOrderId, int rate) throws Exception {
+        try {
+            PreOrder preOrder = _preOrderRepo.findById(preOrderId)
+                    .orElseThrow(() -> new EntityNotFoundException("PreOrder not found"));
+
+            preOrder.setAudienceRating(rate);
+            return _preOrderRepo.save(preOrder);
+        } catch (Exception e) {
+            throw new Exception(e.getMessage());
+        }
+    }
+
+    @Override
+    public PreOrder deleteRating(UUID preOrderId) throws Exception {
+        try {
+            PreOrder preOrder = _preOrderRepo.findById(preOrderId)
+                    .orElseThrow(() -> new EntityNotFoundException("PreOrder not found"));
+
+            preOrder.setAudienceRating(0);
+            return _preOrderRepo.save(preOrder);
+        } catch (Exception e) {
+            throw new Exception(e.getMessage());
+        }
+    }
+
+
+        @Override
         public List<PreOrder> getAcceptedPreOrderList (User preOrderCustomer, String status) throws Exception {
             try {
                 List<PreOrder> preOrders = _preOrderRepo.findByPreOrderAudienceAndStatus(preOrderCustomer, status);
