@@ -9,7 +9,7 @@ import NavBar from "../../components/NavBar";
 import {
   UploadOutlined,
   PlusOutlined,
-  LoadingOutlined,
+  LoadingOutlined
 } from "@ant-design/icons";
 import { Button, Upload } from "antd";
 import { message, Steps, theme } from "antd";
@@ -149,7 +149,7 @@ const AddArts = () => {
       <NavBar />
       <div className="bg-gray-100 mx-auto max-w-screen-xl p-4">
         <div className="bg-gray-100 mt-40 min-h-screen">
-          <h1 className="text-3xl text-[#2f6a81] text-center font-bold m-5">
+          <h1 className="text-3xl text-[#2f6a81] text-center font-semibold m-5">
             Add Post
           </h1>
           <Steps
@@ -163,6 +163,7 @@ const AddArts = () => {
           >
             <Avatar size="large" icon={<IoIosPerson />} />
           </div>
+
           <div className="flex bg-slate-200 rounded-md flex-col mx-auto max-w-4xl py-24 sm:py-8 justify-center items-center">
             <Formik
               initialValues={{
@@ -188,7 +189,7 @@ const AddArts = () => {
                       <Field
                         type="text"
                         name="description"
-                        className="bg-slate-200 w-[500px] rounded-lg"
+                        className="bg-slate-200 w-full rounded-lg"
                         autocomplete="off"
                         placeholder="Description..."
                       />
@@ -197,17 +198,17 @@ const AddArts = () => {
                     <FieldArray name="artList">
                       {({ push, remove }) => (
                         <div>
-                          <h3 className="text-3xl text-[#2f6a81] text-center font-semibold mb-5" >Art List</h3>
+                          <h3 className="text-3xl text-[#2f6a81] text-center font-semibold mb-5">Art List</h3>
                           {values.artList.map((artwork, index) => (
-                            <div key={index}>
-                              <div>
-                                <label className="mr-4" htmlFor={`artList.${index}.artName`}>
+                            <div key={index} className="w-full">
+                              <div className="flex justify-between mb-5 mt-10">
+                                <label className="font-semibold" htmlFor={`artList.${index}.artName`}>
                                   Art Name
                                 </label>
                                 <Field
                                   type="text"
                                   name={`artList.${index}.artName`}
-                                  className="rounded-lg w-full border-[#d9d9d9] mb-5"
+                                  className="rounded-lg w-[80%] h-8 border-[#d9d9d9] mb-5"
                                 />
                               </div>
 
@@ -256,14 +257,13 @@ const AddArts = () => {
                                 </Upload>
                               </div>
 
-                              <div>
-                                <label className="mr-4" htmlFor={`artList.${index}.type`}>
+                              <div className="flex justify-between">
+                                <label className="font-semibold" htmlFor={`artList.${index}.type`}>
                                   Type
                                 </label>
                                 <Select
                                   defaultValue="Free"
-                                  className="rounded-lg w-full border-[#d9d9d9] mb-5"
-                                  // style={{ width: 120 }}
+                                  className="rounded-lg w-[80%] border-[#d9d9d9] mb-5"
                                   name={`artList.${index}.type`}
                                   options={[
                                     { value: "Free", label: "Free" },
@@ -277,49 +277,58 @@ const AddArts = () => {
                                     )
                                   }
                                 />
-                                {/* <Field
-                                  type="text"
-                                  name={`artList.${index}.type`}
-                                /> */}
                               </div>
+
                               {values.artList[index].type == "Premium" && (
-                                <div>
+                                <div className="flex justify-between">
                                   <label htmlFor={`artList.${index}.price`}>
                                     Price
                                   </label>
                                   <Field
                                     type="number"
                                     name={`artList.${index}.price`}
+                                    className="rounded-lg w-[80%] border-[#d9d9d9] "
                                   />
                                 </div>
                               )}
 
-                              <div className="cursor-pointer w-[20%] mx-auto mt-5 sm:flex gap-2 hidden items-center justify-center text-white bg-[#2f6a81] px-4 py-2 transition-all duration-300 rounded-full ">
-                                <button
-                                  type="button"
-                                  onClick={() => {
-                                    remove(index);
-                                    handleRemoveArtwork(index);
-                                  }}
-                                >
-                                  Remove
-                                </button>                              
+                              <div className="flex justify-end">
+                                <div className="cursor-pointer w-[20%] sm:flex gap-2 hidden items-center justify-center text-white bg-red-400 px-4 py-1 transition-all duration-300 rounded-full ">
+                                  <button
+                                    type="button"
+                                    onClick={() => {
+                                      remove(index);
+                                      handleRemoveArtwork(index);
+                                    }}
+                                  >
+                                    Remove
+                                  </button>
                                 </div>
+                              </div>
+
                             </div>
                           ))}
-                          <button
-                            type="button"
-                            onClick={() =>
-                              push({
-                                artName: "",
-                                imagePath: "",
-                                price: 0,
-                                type: "",
-                              })
-                            }
+                          <div className="mt-5 cursor-pointer w-[25%] sm:flex gap-2 hidden items-center justify-center text-white bg-[#2f6a81] px-4 py-2 transition-all duration-300 rounded-full my-1 mx-auto"
                           >
-                            Add Artwork
-                          </button>
+                            <PlusOutlined />
+                            <button
+                              type="button"
+                              onClick={() =>
+                                push({
+                                  artName: "",
+                                  imagePath: "",
+                                  price: 0,
+                                  type: "",
+                                })
+                              }
+                            >
+
+                              Add Artwork
+                            </button>
+                          </div>
+
+
+
                         </div>
                       )}
                     </FieldArray>
@@ -432,24 +441,32 @@ const AddArts = () => {
               )}
             </Formik>
           </div>
-          {current < steps.length - 1 && (
-            <div className="flex justify-center mt-5">
+
+
+          <div className="flex justify-center mt-5">
+
+            {current < steps.length - 1 && (
               <Button onClick={() => next()}>Next</Button>
-            </div>
-          )}
-          {current === steps.length - 1 && (
-            <Button
-              type="primary"
-              onClick={() => message.success("Processing complete!")}
-            >
-              Done
-            </Button>
-          )}
-          {current > 0 && (
-            <Button style={{ margin: "0 8px" }} onClick={() => prev()}>
-              Previous
-            </Button>
-          )}
+            )}
+
+
+            {current === steps.length - 1 && (
+              <Button
+                type="primary"
+                onClick={() => message.success("Processing complete!")}
+              >
+                Done
+              </Button>
+            )}
+
+
+            {current > 0 && (
+              <Button style={{ margin: "0 8px" }} onClick={() => prev()}>
+                Previous
+              </Button>
+            )}
+          </div>
+
         </div>
       </div>
       <FooterPart />
