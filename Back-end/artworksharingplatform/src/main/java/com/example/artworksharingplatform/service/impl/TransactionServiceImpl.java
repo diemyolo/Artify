@@ -1,9 +1,12 @@
 package com.example.artworksharingplatform.service.impl;
 
-import java.util.List;
-import java.util.UUID;
-
+import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.*;
+import java.sql.Date;
 import com.example.artworksharingplatform.entity.*;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -87,7 +90,7 @@ public class TransactionServiceImpl implements TransactionService {
 		Transaction transaction = new Transaction();
 		transaction.setTotalMoney(totalMoney);
 		transaction.setUser(admin);
-		transaction.setTransactionDate(order.getPreOrderDate());
+		transaction.setTransactionDate(Timestamp.valueOf(LocalDateTime.now()));
 		return repo.save(transaction);
 	}
 
@@ -105,8 +108,38 @@ public class TransactionServiceImpl implements TransactionService {
 		Transaction transaction = new Transaction();
 		transaction.setTotalMoney(totalMoney);
 		transaction.setUser(order.getPreOrderAudience());
-		transaction.setTransactionDate(order.getPreOrderDate());
+		transaction.setTransactionDate(Timestamp.valueOf(LocalDateTime.now()));
 		return repo.save(transaction);
+	}
+
+	@Override
+	public List<Transaction> filterByDate(Date date, User user) throws Exception {
+		try{
+			// Retrieve all transactions from the repository
+			List<Transaction> allTransactions = repo.findByUser_id(user.getId());
+			LocalDate targetDate = date.toLocalDate();
+			// Filter transactions by the given time
+			List<Transaction> filteredTransactions = new ArrayList<>();
+			for (Transaction transaction : allTransactions) {
+				LocalDateTime transactionDateTime = transaction.getTransactionDate().toLocalDateTime();
+				LocalDate transactionDate = transactionDateTime.toLocalDate();
+				if (transactionDate.equals(targetDate)) {
+					filteredTransactions.add(transaction);
+				}
+			}
+			// Sort filtered transactions by Transaction_time in descending order
+			Collections.sort(filteredTransactions, new Comparator<Transaction>() {
+				@Override
+				public int compare(Transaction t1, Transaction t2) {
+					return t2.getTransactionDate().compareTo(t1.getTransactionDate());
+				}
+			});
+
+			return filteredTransactions;
+
+		}catch (Exception e){
+			throw new Exception(e.getMessage());
+		}
 	}
 
 }

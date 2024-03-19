@@ -19,6 +19,9 @@ public interface PreOrderService {
 
     List<PreOrder> getWaitingPreOrderList(User preOrderCustomer) throws Exception;
 
+    List<PreOrder> getAcceptedPreOrderList(User preOrderCustomer, String status) throws Exception;
+    List<PreOrder> getProcessingPreOrderList(User preOrderCreator, String status) throws Exception;
+    
     int countByPreOrderCreator(User preOrderCreator);
 
     PreOrder updatePreOrderCreator(PreOrderDTO updatedPreOrderDTO, Artworks updatedArtwork) throws Exception;
@@ -26,4 +29,14 @@ public interface PreOrderService {
     PreOrder processingPreOrderAudience(ProcessingRequest request) throws Exception;
 
     PreOrder completePreOrderAudience(UUID preOrderId) throws Exception;
+
+    PreOrder feedbackPreOrder(UUID preOrderId, String feedback) throws Exception;
+
+    PreOrder deleteFeedback(UUID preOrderId) throws Exception;
+
+    PreOrder ratePreOrder(UUID preOrderId, int rate) throws Exception;
+
+    PreOrder deleteRating(UUID preOrderId) throws Exception;
+
+    PreOrder canclePreOrderAudience(UUID preOrderId) throws Exception;
 }

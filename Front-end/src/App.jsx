@@ -17,6 +17,8 @@ import Register from "./pages/Register/Register";
 import RequestHistory from "./pages/Request/RequestHistory";
 import ViewPreOrders from "./pages/ReturnOrderRequest/ViewPreOrders";
 import SinglePost from "./pages/SinglePost/SinglePost";
+import ArtistList from "./pages/Profile/ArtistList";
+import ProcessPreOrder from "./pages/Request/ProcessPreOrder";
 
 const router = createBrowserRouter([
   {
@@ -87,6 +89,10 @@ const router = createBrowserRouter([
     path: "/artistList",
     element: <div><ArtistList /></div>,
   },
+  {
+    path: "/processRequest",
+    element: <div><ProcessPreOrder /></div>,
+  }
 ]);
 
 function App() {
@@ -95,6 +101,6 @@ function App() {
       <RouterProvider router={router} />
     </>
   )
-};
+}
 
 export default App
