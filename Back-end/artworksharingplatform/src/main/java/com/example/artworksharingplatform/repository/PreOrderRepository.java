@@ -13,6 +13,8 @@ public interface PreOrderRepository extends JpaRepository<PreOrder, UUID> {
     List<PreOrder> findByPreOrderCreator(User preOrderCreator);
     List<PreOrder> findByPreOrderAudience(User preOrderCustomer);
 
+    List<PreOrder> findByPreOrderAudienceAndStatus(User preOrderCustomer,String status);
+    List<PreOrder> findByPreOrderCreatorAndStatus(User preOrderCreator,String status);
 
     int countByPreOrderCreator(User preOrderCreator);
 
