@@ -26,4 +26,5 @@ public interface PreOrderService {
     PreOrder processingPreOrderAudience(ProcessingRequest request) throws Exception;
 
     PreOrder completePreOrderAudience(UUID preOrderId) throws Exception;
+    PreOrder canclePreOrderAudience(UUID preOrderId) throws Exception;
 }

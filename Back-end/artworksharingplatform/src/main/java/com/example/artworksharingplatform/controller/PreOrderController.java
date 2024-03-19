@@ -13,14 +13,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.example.artworksharingplatform.entity.Artworks;
@@ -224,6 +217,32 @@ public class PreOrderController {
             PreOrderDTO preOrderDTO = _preOrderMapper.toPreOrderDTO(result);
             apiResponse.ok(preOrderDTO);
             return ResponseEntity.ok(apiResponse);
+        } catch (Exception e) {
+            apiResponse.error(e);
+            return new ResponseEntity<>(apiResponse, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @DeleteMapping("audience/cancel")
+    @PreAuthorize("hasRole('ROLE_AUDIENCE')")
+    public ResponseEntity<ApiResponse<String>> CancelPreOrder(@RequestParam("preorderId") UUID preOrderId) {
+        ApiResponse<String> apiResponse = new ApiResponse<>();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        String email = userDetails.getUsername();
+        User user = _userService.findByEmail(email);
+        String mess= "";
+        try {
+            if(authentication.isAuthenticated()){
+                var result = _preOrderService.canclePreOrderAudience(preOrderId);
+                mess = "Delete PreOrder Successfully";
+                apiResponse.ok(mess);
+            }else{
+                apiResponse.error("Not authenticated");
+                return new ResponseEntity<>(apiResponse, HttpStatus.BAD_REQUEST);
+            }
+            return ResponseEntity.ok(apiResponse);
+
         } catch (Exception e) {
             apiResponse.error(e);
             return new ResponseEntity<>(apiResponse, HttpStatus.BAD_REQUEST);

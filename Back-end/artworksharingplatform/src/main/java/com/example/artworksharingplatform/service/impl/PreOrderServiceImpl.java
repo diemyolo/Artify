@@ -151,4 +151,18 @@ public class PreOrderServiceImpl implements PreOrderService {
             throw new Exception(e.getMessage());
         }
     }
+
+    @Override
+    public PreOrder canclePreOrderAudience(UUID preOrderId) throws Exception {
+        try {
+            PreOrder preOrder = _preOrderRepo.findById(preOrderId)
+                    .orElseThrow(() -> new EntityNotFoundException("PreOrder not found"));
+            preOrder.setStatus("CANCEL");
+            _preOrderRepo.save(preOrder);
+            return preOrder;
+
+        } catch (Exception e) {
+            throw new Exception(e.getMessage());
+        }
+    }
 }
