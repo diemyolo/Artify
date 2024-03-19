@@ -142,7 +142,8 @@ public class AdminController {
     public ResponseEntity<ApiResponse<List<UserDTO>>> viewAllUsers() {
         ApiResponse<List<UserDTO>> apiResponse = new ApiResponse<List<UserDTO>>();
         try {
-            List<UserDTO> userlist = adminService.viewAllUsers();
+            List<User> users = _userService.getUsersList();
+            List<UserDTO> userlist = userMapper.toList(users);
             apiResponse.ok(userlist);
             return ResponseEntity.ok(apiResponse);
         } catch (Exception e) {
@@ -170,6 +171,55 @@ public class AdminController {
             }
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(apiResponse);
+        }
+    }
+
+    @GetMapping("user/search")
+    public ResponseEntity<ApiResponse<List<UserDTO>>> searchUser(@RequestParam String keyword) {
+        ApiResponse<List<UserDTO>> apiResponse = new ApiResponse<List<UserDTO>>();
+
+        try {
+            List<User> users = _userService.searchUserByName(keyword);
+            List<UserDTO> userDTOs = userMapper.toList(users);
+
+            apiResponse.ok(userDTOs);
+            return ResponseEntity.ok(apiResponse);
+        } catch (Exception e) {
+            apiResponse.error(e);
+            return new ResponseEntity<>(apiResponse, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("user/filter")
+    public ResponseEntity<ApiResponse<List<UserDTO>>> filterUserByRole(@RequestParam String roleName) {
+        ApiResponse<List<UserDTO>> apiResponse = new ApiResponse<List<UserDTO>>();
+
+        try {
+            Role role = adminService.getRoleByRoleName(roleName);
+            List<User> users = _userService.filterByRole(role);
+            List<UserDTO> userDTOs = userMapper.toList(users);
+
+            apiResponse.ok(userDTOs);
+            return ResponseEntity.ok(apiResponse);
+        } catch (Exception e) {
+            apiResponse.error(e);
+            return new ResponseEntity<>(apiResponse, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("user/sort")
+    public ResponseEntity<ApiResponse<List<UserDTO>>> sortUser(@RequestParam String sortBy) {
+        ApiResponse<List<UserDTO>> apiResponse = new ApiResponse<List<UserDTO>>();
+
+        try {
+            List<User> users = _userService.sortUserByCreatedDate(sortBy);
+            List<UserDTO> userDTOs = userMapper.toList(users);
+
+            apiResponse.ok(userDTOs);
+            return ResponseEntity.ok(apiResponse);
+        } catch (Exception e) {
+            apiResponse.error(e);
+            return new ResponseEntity<>(apiResponse, HttpStatus.BAD_REQUEST);
         }
     }
 }
