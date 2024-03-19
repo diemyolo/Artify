@@ -1,9 +1,11 @@
 package com.example.artworksharingplatform.service;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 
+import com.example.artworksharingplatform.entity.Role;
 import com.example.artworksharingplatform.entity.User;
 import com.example.artworksharingplatform.model.UserDTO;
 
@@ -27,4 +29,8 @@ public interface UserService {
     boolean checkUserPassword(String email, String passwordToCheck);
 
     User updateUserPassword(String email, String passwordToUpdate);
+
+    List<User> searchUserByName(String name);
+
+    List<User> filterByRole(Role role);
 }

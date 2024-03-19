@@ -1,6 +1,7 @@
 package com.example.artworksharingplatform.service.impl;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -130,30 +131,18 @@ public class PreOrderServiceImpl implements PreOrderService {
     }
 
     @Override
-    public PreOrder completePreOrderAudience(PreOrderDTO preOrderDTO) throws Exception {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        String email = userDetails.getUsername();
-        User userLogg = _userService.findByEmail(email);
+    public PreOrder completePreOrderAudience(UUID preOrderId) throws Exception {
         try {
-
-            PreOrder preOrder = _preOrderRepo.findById(preOrderDTO.getPreOrderId())
+            PreOrder preOrder = _preOrderRepo.findById(preOrderId)
                     .orElseThrow(() -> new EntityNotFoundException("PreOrder not found"));
-
-            User user = _userRepository.findById(preOrder.getPreOrderAudience().getId())
-                    .orElseThrow(() -> new EntityNotFoundException("User not found"));
-            if (!user.equals(userLogg)) {
-                throw new Exception("User can not be different");
-            }
-            // set status to Processing
             preOrder.setStatus("COMPLETED");
             _preOrderRepo.save(preOrder);
-            // transaction
+            // Add Transaction
             var adminTransaction = _transactionService.addTransactionPreOrderAdmin(preOrder,
-                    (preOrderDTO.getPrice() / 0.037f));
+                    (preOrder.getPrice() / 0.037f));
             var creatorTransaction = _transactionService.addTransactionPreOrderCreator(preOrder,
-                    preOrderDTO.getPrice());
-            // Get user E-wallet
+                    preOrder.getPrice());
+            // Update E-wallet
             _eWalletService.updateCreatorWallet(preOrder.getPreOrderCreator().getId(),
                     creatorTransaction.getTotalMoney());
             _eWalletService.updateAdminWallet(adminTransaction.getTotalMoney());

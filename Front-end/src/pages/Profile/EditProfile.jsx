@@ -3,6 +3,7 @@ import axios from "axios";
 import { Card } from "flowbite-react";
 import React, { useEffect, useState } from "react";
 import { MdOutlineModeEdit } from "react-icons/md";
+import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import NavBar from "../../components/NavBar";
 import { Modal } from "flowbite-react";
@@ -15,7 +16,7 @@ const formItemCol = {
 
 const EditProfile = () => {
     const token = localStorage.getItem("token");
-
+    const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(false);
     const [customer, setCustomer] = useState({});
     const [emailAddress, setEmailAddress] = useState("");
@@ -29,11 +30,9 @@ const EditProfile = () => {
     const [openModal, setOpenModal] = useState(false);
 
     console.log(files);
-
     useEffect(() => {
         const fetchData = async () => {
             try {
-                setIsLoading(true);
                 const customerResponse = await axios.get(
                     "http://localhost:8080/api/auth/user/profile",
                     {
@@ -44,6 +43,7 @@ const EditProfile = () => {
                 setUserName(customerResponse.data.payload.userName);
                 setTelephone(customerResponse.data.payload.telephone);
                 setImagePath(customerResponse.data.payload.imagePath);
+                if (customerResponse) setIsLoading(true);
             } catch (error) {
                 console.error("Error fetching data:", error);
             }
@@ -52,6 +52,7 @@ const EditProfile = () => {
     }, []);
 
     const handleEditProfile = () => {
+        setIsLoading(false);
         const myHeaders = {
             "Content-Type": "multipart/form-data",
         };
@@ -75,7 +76,7 @@ const EditProfile = () => {
                 headers: { Authorization: `Bearer ${token}`, myHeaders },
             })
             .then((response) => {
-                console.log(response.data.payload);
+                if (response) setIsLoading(true);
                 if (response.status === 200) {
                     Swal.fire({
                         position: "center",
@@ -85,6 +86,7 @@ const EditProfile = () => {
                         showConfirmButton: false,
                         timer: 1600,
                     });
+                    navigate(`/viewEwallet`);
                 } else {
                     throw new Error(response.statusText);
                 }
@@ -124,6 +126,7 @@ const EditProfile = () => {
 
     console.log(userName);
     console.log(telephone);
+
 
     return (
         <div className="w-full h-full bg-gray-100 ">

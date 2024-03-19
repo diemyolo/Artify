@@ -1,12 +1,13 @@
-import React, { useState, useEffect } from 'react'
-import NavBar from '../../components/NavBar'
-import PostCard from '../../components/PostCard'
+import axios from "axios";
+import React, { useEffect, useState } from 'react';
 import CardProfile from '../../components/CardProfile';
 import ImageList from '../../components/ImageList';
-import FollowList from '../../components/FollowList';
+import NavBar from '../../components/NavBar';
+import PostCard from '../../components/PostCard';
 import RequestArt from '../../components/RequestArt';
 import axios from "axios";
 import FooterPart from '../../components/FooterPart'
+
 
 const ArtistProfile = () => {
   const [activeComponent, setActiveComponent] = useState('post');
@@ -15,7 +16,6 @@ const ArtistProfile = () => {
 
   const params = new URLSearchParams(window.location.search);
   const creatorId = params.get("creatorId");
- 
   const token = localStorage.getItem("token");
 
   useEffect(() => {
@@ -29,7 +29,7 @@ const ArtistProfile = () => {
       setPost(response.data.payload);
 
       const followResponse = await axios.get(
-        `http://localhost:8080/api/auth/get_all_follower?creatorId=${creatorId}`,
+        `http://localhost:8080/api/auth/number_of_follow?creatorId=${creatorId}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -40,7 +40,7 @@ const ArtistProfile = () => {
   }, []);
 
   console.log(post)
-  console.log("ddd", follow)
+  console.log(follow)
 
 
   const handlePostButtonClick = () => {
@@ -65,7 +65,7 @@ const ArtistProfile = () => {
     } else if (activeComponent === 'gallery') {
       return <ImageList />;
     } else if (activeComponent === 'follower') {
-      return <FollowList follow={follow} />;
+      return <PostCard />;
     } else if (activeComponent === 'request') {
       return <RequestArt creatorId={creatorId} />;
     }

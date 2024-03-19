@@ -1,17 +1,14 @@
-import React, { useState, useEffect } from "react";
-import { Avatar, Card } from "flowbite-react";
+import { Spin } from "antd";
+import axios from "axios";
+import { Avatar, Card, Carousel } from "flowbite-react";
+import React, { useEffect, useState } from "react";
+import { AiOutlineUserAdd } from "react-icons/ai";
 import { Link } from "react-router-dom";
 import InputComment from "./InputComment";
-import { useNavigate } from "react-router-dom";
-import { Spin } from "antd";
-import { Carousel } from "flowbite-react";
-import { AiOutlineUserAdd } from "react-icons/ai";
-import axios from "axios";
 
 const PostCard = () => {
   const [post, setPost] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [isFollowed, setIsFollowed] = useState(false);
 
   const token = localStorage.getItem("token");
   console.log(token);
@@ -30,17 +27,15 @@ const PostCard = () => {
   }, []);
 
   const handleFollow = async (p) => {
-    const followResponse = await axios.post(
+    const response = await axios.post(
       `http://localhost:8080/api/auth/follow?creatorMail=${p.emailAddress}`,
       {
         headers: { Authorization: `Bearer ${token}` }
       }
     );
-    console.log(followResponse);
-    setIsFollowed(true);
+    console.log(response);
   };
-
-
+  console.log(post);
   return (
     <>
       <Spin spinning={!isLoading} fullscreen />
@@ -62,16 +57,13 @@ const PostCard = () => {
                 </Link>
                 <div
                   onClick={() => handleFollow(p)}
-                  className={`cursor-pointer sm:flex gap-2 hidden items-center text-white bg-[#2f6a81] px-4 transition-all duration-300 rounded-full my-1 ${isFollowed ? "bg-[#6e6e6e]" : ""
-                    }`} 
+                  className="cursor-pointer sm:flex gap-2 hidden items-center text-white bg-[#2f6a81] px-4 transition-all duration-300 rounded-full my-1"
                 >
                   <AiOutlineUserAdd
                     size={20}
                     style={{ color: "#fff", fontWeight: "bold" }}
                   />
-                  <button type="submit">
-                    {isFollowed ? "Followed" : "Follow"} 
-                  </button>
+                  <button type="submit">Follow</button>
                 </div>
               </div>
 
@@ -81,7 +73,6 @@ const PostCard = () => {
                   <Carousel
                     pauseOnHover
                     className="w-full mx-auto"
-                    infiniteLoop={true}
                   >
                     {p.artList.map((item, index) => (
                       <div key={index}>

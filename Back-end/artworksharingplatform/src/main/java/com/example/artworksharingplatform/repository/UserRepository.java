@@ -1,5 +1,6 @@
 package com.example.artworksharingplatform.repository;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -12,4 +13,8 @@ public interface UserRepository extends JpaRepository<User, UUID> {
     Optional<User> findByEmailAddress(String emailAddress);
 
     User findByRole(Role role);
+
+    List<User> findByNameContainingIgnoreCase(String name);
+
+    List<User> findAllByRole(Role role);
 }

@@ -4,6 +4,7 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -212,24 +214,15 @@ public class PreOrderController {
 
     @PutMapping("audience/complete")
     @PreAuthorize("hasRole('ROLE_AUDIENCE')")
-    public ResponseEntity<ApiResponse<PreOrderDTO>> CompletePreOrder(@RequestBody PreOrderDTO preOrderDto) {
+    public ResponseEntity<ApiResponse<PreOrderDTO>> completePreOrder(@RequestParam("preorderId") UUID preOrderId) {
         ApiResponse<PreOrderDTO> apiResponse = new ApiResponse<PreOrderDTO>();
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        String email = userDetails.getUsername();
-        User user = _userService.findByEmail(email);
         try {
-
-            if (_eWalletService.isEnoughMoney(user.getId(), preOrderDto.getPrice())) {
-                var result = _preOrderService.completePreOrderAudience(preOrderDto);
-                if (result == null) {
-                    throw new Exception("Complete failed");
-                }
-                PreOrderDTO preOrderDTO = _preOrderMapper.toPreOrderDTO(result);
-                apiResponse.ok(preOrderDTO);
-            } else {
-                throw new Exception("Not enough money in EWallet.");
+            PreOrder result = _preOrderService.completePreOrderAudience(preOrderId);
+            if (result == null) {
+                throw new Exception("Complete failed");
             }
+            PreOrderDTO preOrderDTO = _preOrderMapper.toPreOrderDTO(result);
+            apiResponse.ok(preOrderDTO);
             return ResponseEntity.ok(apiResponse);
         } catch (Exception e) {
             apiResponse.error(e);
