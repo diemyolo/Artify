@@ -4,6 +4,7 @@ import {
 import { Button, Spin, Table } from "antd";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { Tag } from 'antd';
 
 const Account = () => {
     const token = localStorage.getItem("token");
@@ -48,6 +49,11 @@ const Account = () => {
             title: 'Status',
             dataIndex: 'status',
             key: 'status',
+            render: (text) => (
+                <Tag color={text === 'ACTIVE' ? 'green' : 'red'}>
+                    {text}
+                </Tag>
+            ),
         },
         {
             title: 'Role',
@@ -66,11 +72,11 @@ const Account = () => {
     ];
 
     return (
-        <>
+        <div className='h-full bg-gray-100'>
             <Spin spinning={!isLoading} fullscreen />
-            <h1>Account Management</h1>
-            <Table dataSource={customerList} columns={columns} rowKey="userId" />
-        </>
+            <h1 className='text-center font-semibold text-3xl px-5'>Account Management</h1>
+            <Table dataSource={customerList} columns={columns} rowKey="userId" className='p-5' />
+        </div>
     );
 };
 
