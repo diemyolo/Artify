@@ -19,6 +19,7 @@ import ViewPreOrders from "./pages/ReturnOrderRequest/ViewPreOrders";
 import SinglePost from "./pages/SinglePost/SinglePost";
 import ArtistList from "./pages/Profile/ArtistList";
 import ProcessPreOrder from "./pages/Request/ProcessPreOrder";
+import EditAdminProfile from "./pages/Admin/Profile/EditAdminProfile";
 import ReturnPreOrder from "./pages/ReturnOrderRequest/ReturnPreOrder";
 import ConfirmPreOrder from "./pages/Request/ConfirmPreOrder";
 
@@ -90,6 +91,10 @@ const router = createBrowserRouter([
   {
     path: "/processRequest",
     element: <div><ProcessPreOrder /></div>,
+  },
+  {
+    path: "/editAdminProfile",
+    element: <div><EditAdminProfile /></div>,
   },
   {
     path: "/returnPreOrderArt",

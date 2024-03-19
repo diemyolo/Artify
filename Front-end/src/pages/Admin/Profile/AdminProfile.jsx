@@ -1,7 +1,8 @@
-import { EditOutlined } from '@ant-design/icons';
-import { Button, Spin } from "antd";
 import axios from "axios";
 import { Card } from "flowbite-react";
+import { Button, Spin, Table } from "antd";
+import { EditOutlined } from '@ant-design/icons';
+import { Link } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 
 
@@ -35,9 +36,11 @@ const AdminProfile = () => {
             <Spin spinning={!isLoading} fullscreen />
             <Card className="w-full p-5">
                 <div className="relative">
-                    <Button icon={<EditOutlined />} onClick={() => handleEdit(record)} className="absolute top-0 right-0">
-                        Edit
-                    </Button>
+                    <Link to="/editAdminProfile">
+                        <Button icon={<EditOutlined />} onClick={() => handleEditProfile(record)} className="absolute top-0 right-0">
+                            Edit Profile
+                        </Button>
+                    </Link>
                     <div className="flex items-center">
                         <img
                             alt="Avatar"
