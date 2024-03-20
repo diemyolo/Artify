@@ -173,11 +173,13 @@ public class PostController {
 			List<Artworks> resultArtworks = postService.convertArtList(postDTO.getArtList(), updatedPost);
 			for (int i = 0; i < files.size(); i++) {
 				MultipartFile file = files.get(i);
-				Artworks artwork = resultArtworks.get(i);
-				Map<String, Object> data = cloudinaryService.upload(file);
-				String url = data.get("url").toString();
-				artwork.setImagePath(url);
-				postService.addArtwork(artwork);
+				if(file != null){
+					Artworks artwork = resultArtworks.get(i);
+					Map<String, Object> data = cloudinaryService.upload(file);
+					String url = data.get("url").toString();
+					artwork.setImagePath(url);
+					postService.addArtwork(artwork);
+				}
 			}
 			if(updatedPost == null){
 				return ResponseEntity.status(HttpStatus.NOT_FOUND).body(apiResponse);
@@ -186,6 +188,7 @@ public class PostController {
 			apiResponse.ok(result);
 			return ResponseEntity.ok(apiResponse);
 		}catch(Exception e){
+			apiResponse.error(e);
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiResponse);
 		}
 	}
