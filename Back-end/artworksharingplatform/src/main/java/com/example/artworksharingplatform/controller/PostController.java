@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -218,7 +219,14 @@ public class PostController {
 		return ResponseEntity.ok(apiResponse);
 	}
 	
-	
+	@DeleteMapping("/deletePost")
+	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_CREATOR')")
+	public ResponseEntity<ApiResponse> deletePost(@RequestParam("postId") UUID postId) {
+		ApiResponse apiResponse = new ApiResponse(); 
+		postService.deletePost(postId);
+		apiResponse.ok("Delete Sucessfully");
+		return ResponseEntity.ok(apiResponse);
+	}
 	
 	
 

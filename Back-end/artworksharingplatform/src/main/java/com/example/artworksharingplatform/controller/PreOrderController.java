@@ -337,6 +337,29 @@ public class PreOrderController {
         }
     }
 
+    @GetMapping("viewCompletedPreOrders")
+    public ResponseEntity<ApiResponse<List<PreOrderDTO>>> getCompletedPreOrderList() {
+        ApiResponse<List<PreOrderDTO>> apiResponse = new ApiResponse<List<PreOrderDTO>>();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        try {
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            String email = userDetails.getUsername();
+            User creator = _userService.findByEmail(email);
+            String status = "Completed";
+            if (creator == null) {
+                apiResponse.error("Creator can not be null");
+                return new ResponseEntity<>(apiResponse, HttpStatus.NOT_FOUND);
+            }
+            List<PreOrder> preOrderList = _preOrderService.getAcceptedPreOrderList(creator, status);
+            List<PreOrderDTO> preOrderDTOList = _preOrderMapper.toList(preOrderList);
+            apiResponse.ok(preOrderDTOList);
+            return ResponseEntity.ok(apiResponse);
+        } catch (Exception e) {
+            apiResponse.error(e);
+            return new ResponseEntity<>(apiResponse, HttpStatus.BAD_REQUEST);
+        }
+    }
+
     
 
     @GetMapping("creator/viewProcessedPreOrders")

@@ -72,7 +72,10 @@ const PostCard = () => {
                       style={{ color: "#fff", fontWeight: "bold" }}
                     />
                     <button type="submit">Follow</button>
-                  </div>: <div><Link to={`/updatePost?postId=${p.postId}`}>Update Post</Link></div>}
+                  </div>: <div>
+                    <Link to={`/updatePost?postId=${p.postId}`}>Update Post</Link>
+                    
+                    </div>}
                 </div> 
 
                 <div>
