@@ -14,5 +14,5 @@ public interface InteractionRepository extends JpaRepository<Interaction, UUID> 
 
     Interaction findByInteractionPostIdAndInteractionAudienceId(UUID postId, UUID userId);
 
-    int countByIsLikedTrue();
+    int countByIsLikedTrueAndInteractionPost_Id(UUID postId);
 }
