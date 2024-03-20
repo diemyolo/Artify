@@ -3,13 +3,12 @@ import {
     EditOutlined,
     PlusOutlined
 } from '@ant-design/icons';
-import { Avatar, Button, Form, Input, Select, Spin, Table, Tag } from "antd";
+import { Avatar, Button, Form, Input, Select, Spin, Switch, Table, Tag } from "antd";
 import axios from "axios";
 import { Card, Modal } from "flowbite-react";
 import React, { useEffect, useState } from "react";
-import Swal from "sweetalert2";
-import { Switch, Space } from 'antd';
 import { AiOutlineSearch } from "react-icons/ai";
+import Swal from "sweetalert2";
 
 const formItemCol = {
     labelCol: { span: 24 },
@@ -27,14 +26,16 @@ const Account = () => {
     const [password, setPassword] = useState("");
     const [telephone, setTelephone] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
-    const [status, setStatus] = useState("");
-    const [roleName, setRoleName] = useState("");
+    const [status, setStatus] = useState("ACTIVE");
+    const [roleName, setRoleName] = useState("CREATOR");
     const [files, setFiles] = useState();
+    const [searchUserName, setSearchUserName] = useState("");
 
-    const fetchData = async () => {
+    const fetchData = async (keyword) => {
+        console.log(searchUserName);
         try {
             const response = await axios.get(
-                `http://localhost:8080/api/auth/admin/user/list`,
+                `http://localhost:8080/api/auth/admin/user/search?keyword=${keyword}`,
                 {
                     headers: { Authorization: `Bearer ${token}` },
                 }
@@ -47,7 +48,7 @@ const Account = () => {
     };
 
     useEffect(() => {
-        fetchData(); // Call fetchData on component mount
+        fetchData(searchUserName);
     }, [token]);
 
     const handleAddUser = () => {
@@ -75,6 +76,7 @@ const Account = () => {
                 formData.append("image", files[0]);
             }
             console.log(files);
+            console.log(addedUser);
             formData.append(
                 "user",
                 new Blob([JSON.stringify(addedUser)], { type: "application/json" })
@@ -95,7 +97,7 @@ const Account = () => {
                             timer: 1600,
                         });
                         setOpenModal(false);
-                        fetchData();
+                        fetchData(searchUserName);
                     } else {
                         throw new Error(response.statusText);
                     }
@@ -169,9 +171,13 @@ const Account = () => {
             title: 'Action',
             key: 'action',
             render: (text, record) => (
-                <Space direction="vertical">
-                    <Switch checkedChildren="Block" unCheckedChildren="Unblock" defaultChecked />
-                </Space>
+                <Switch
+                    checkedChildren={record.status === 'ACTIVE' ? 'ACTIVE' : 'INACTIVE'}
+                    unCheckedChildren={record.status === 'ACTIVE' ? 'ACTIVE' : 'INACTIVE'}
+                    defaultChecked={record.status === 'ACTIVE'}
+                    onClick={(checked) => handleChangeStatus(record, checked)}
+                    className='w-35px h-30px'
+                />
             ),
         },
     ];
@@ -189,7 +195,20 @@ const Account = () => {
             setFiles([selectedFile]);
         }
     };
-    const onSearch = value => console.log(value);
+
+    const handleSearchChange = (event) => {
+        setSearchUserName(event.target.value);
+        fetchData(event.target.value);
+    };
+
+    const handleChangeStatus = (record) => {
+        const statusToChange = record.status === 'ACTIVE' ? 'INACTIVE' : 'ACTIVE';
+        Swal.fire({
+            icon: "warning",
+            title: "Warning",
+            text: `Do you want to ${statusToChange} the account?`,
+        });
+    }
 
 
     return (
@@ -204,7 +223,9 @@ const Account = () => {
                         <input
                             className='bg-transparent lg:w-[400px] appearance-none focus:outline-none border-none'
                             type='search'
-                            placeholder='Search for account...'
+                            placeholder='Search for account user name...'
+                            value={searchUserName}
+                            onChange={handleSearchChange}
                         />
                     </div>
                     <div className="mx-5 cursor-pointer w-[150px] h-12 flex justify-center items-center gap-2 text-white bg-[#2f6a81] transition-all duration-300 rounded-lg ">
@@ -214,7 +235,7 @@ const Account = () => {
                 </div>
 
 
-                <Table dataSource={userList} columns={columns} rowKey="userId" className='p-5' onChange={onChange} />
+                <Table dataSource={userList} columns={columns} rowKey="userId" className='p-5' onChange={onChange} pagination={{ pageSize: 7 }} />
 
                 <Modal
                     show={openModal}
@@ -411,8 +432,8 @@ const Account = () => {
                                                 onChange={(value) => setRoleName(value)}
                                                 defaultValue="AUDIENCE"
                                             >
-                                                <Option value="Creator">Creator</Option>
-                                                <Option value="Customer">Customer</Option>
+                                                <Option value="CREATOR">Creator</Option>
+                                                <Option value="AUDIENCE">Audience</Option>
                                             </Select>
                                         </Form.Item>
 
@@ -441,7 +462,6 @@ const Account = () => {
                     </div>
                 </Modal>
             </div>
-
         </>
     );
 };
