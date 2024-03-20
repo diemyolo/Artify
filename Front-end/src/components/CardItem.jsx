@@ -138,7 +138,7 @@ const CardItem = () => {
                       <div className="space-y-1 dark:text-white">
                         <div className="font-medium">{p.creatorName}</div>
                         <div className="text-sm text-gray-500 dark:text-gray-400">
-                          {p.artList.map((item) => item.createdDate)}
+                          {p.publishDate}
                         </div>
                       </div>
                     </Avatar>

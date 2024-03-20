@@ -8,7 +8,6 @@ import Gallery from "./pages/Gallery/Gallery";
 import Home from "./pages/Home/Home";
 import Login from "./pages/Login/Login";
 import AddArts from "./pages/Post/AddArts";
-import AddPost from "./pages/Post/AddPost";
 import ArtistList from "./pages/Profile/ArtistList";
 import ArtistProfile from "./pages/Profile/ArtistProfile";
 import EditProfile from "./pages/Profile/EditProfile";
@@ -21,6 +20,7 @@ import ViewPreOrders from "./pages/ReturnOrderRequest/ViewPreOrders";
 import SinglePost from "./pages/SinglePost/SinglePost";
 import EditAdminProfile from "./pages/Admin/Profile/EditAdminProfile";
 import UpdatePost from "./pages/Post/UpdatePost";
+import PreviewPost from "./pages/Post/PreviewPost";
 
 const router = createBrowserRouter([
   {
@@ -54,10 +54,6 @@ const router = createBrowserRouter([
   {
     path: "/addSuccess",
     element: <div><AddSuccess /></div>,
-  },
-  {
-    path: "/addPost",
-    element: <div><AddPost /></div>,
   },
   {
     path: "/artistProfile",
@@ -110,6 +106,10 @@ const router = createBrowserRouter([
   {
     path: "/updatePost",
     element: <div><UpdatePost /></div>,
+  },
+  {
+    path: "/previewPost",
+    element: <div><PreviewPost /></div>,
   }
 ]);
 

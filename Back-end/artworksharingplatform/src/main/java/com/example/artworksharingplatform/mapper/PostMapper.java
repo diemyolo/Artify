@@ -13,6 +13,7 @@ public interface PostMapper {
 
 	@Mapping(source = "post.id", target = "postId")
 	@Mapping(source = "post.description", target = "description")
+	@Mapping(source = "post.publishDate", target = "publishDate")
 	@Mapping(source = "creator.name", target = "creatorName")
 	@Mapping(source = "creator.emailAddress", target = "emailAddress")
 	@Mapping(source = "creator.id", target = "creatorId")
