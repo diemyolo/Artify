@@ -24,4 +24,6 @@ public interface PostService {
 	public ArtworkDTO getArtByArtId(UUID artId);
 	public Post updatePost(PostDTO postDTO);
 	public List<PostDTO> getPostsByCreatorId(UUID creatorId);
+	public void deletePost(UUID postId);
+	// public void delete
 } 

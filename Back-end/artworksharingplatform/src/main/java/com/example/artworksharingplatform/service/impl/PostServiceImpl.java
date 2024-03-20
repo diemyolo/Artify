@@ -148,4 +148,10 @@ public class PostServiceImpl implements PostService{
         List<Post> posts =  postRepository.findByCreator_Id(creatorId);
         return postMapper.toList(posts);
     }
+
+    @Override
+    public void deletePost(UUID postId) {
+        Post post = postRepository.findById(postId).orElseThrow(() -> new EntityNotFoundException("Post Not Found"));
+        postRepository.delete(post);
+    }
 }

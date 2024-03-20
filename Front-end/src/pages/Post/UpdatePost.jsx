@@ -14,7 +14,8 @@ import {
 import { Button, Upload } from "antd";
 import { message, Steps, theme } from "antd";
 import { Watermark } from "antd";
-import { Select } from "antd";
+import { Select, Spin } from "antd";
+import Swal from "sweetalert2";
 import FooterPart from "../../components/FooterPart";
 const UpdatePost = () => {
   const params = new URLSearchParams(window.location.search);
@@ -31,6 +32,7 @@ const UpdatePost = () => {
       );
       console.log(result);
       setPost(result.data.payload);
+      if(result.status === 200) setIsLoading(true)
       // const init = {
       //   ...result.data.payload,
       //   artList : result.data.payload.artList.map((art) => ({
@@ -79,6 +81,8 @@ const UpdatePost = () => {
   const [loading, setLoading] = useState(false);
   const [imageUrl, setImageUrl] = useState("");
   const [initValues,setInitValues] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+
   const steps = [
     {
       title: "First",
@@ -126,38 +130,13 @@ const UpdatePost = () => {
     });
   };
 
-  const validationSchema = Yup.object().shape({
-    description: Yup.string().required("Description is required"),
-    artList: Yup.array().of(
-      Yup.object().shape({
-        artName: Yup.string().required("Art name is required"),
-        imagePath: Yup.string().required("Image path is required"),
-        price: Yup.number()
-          .positive("Price must be positive")
-          .required("Price is required"),
-        type: Yup.string().required("Type is required"),
-      })
-    ),
-    interactions: Yup.array().of(
-      Yup.object().shape({
-        name: Yup.string().required("Interaction name is required"),
-        comments: Yup.array().of(
-          Yup.object().shape({
-            comment: Yup.string().required("Comment is required"),
-            userName: Yup.string().required("User name is required"),
-          })
-        ),
-        isLiked: Yup.boolean().required("Is liked is required"),
-      })
-    ),
-  });
   const myHeaders = new Headers();
   myHeaders.append("Authorization", `Bearer ${token}`);
   console.log(token);
 
   const handleSubmit = async (values) => {
     const formData = new FormData();
-
+    setIsLoading(false);
     const fileArray = Array.from(selectedFiles);
     const updatedValue = {
       ...values,
@@ -186,6 +165,17 @@ const UpdatePost = () => {
       }
     );
     console.log(response.data);
+    if(response.status === 200) {
+      Swal.fire({
+        position: "center",
+        icon: "success",
+        title: `Done`,
+        html: "<h3>Update Successfully</h3>",
+        showConfirmButton: false,
+        timer: 1600,
+      });
+      setIsLoading(true);
+    }
   };
 
   const uploadButton = (
@@ -201,8 +191,9 @@ const UpdatePost = () => {
       <div className="bg-gray-100 mx-auto max-w-screen-xl p-4">
         <div className="bg-gray-100 mt-40 min-h-screen">
           <h1 className="text-3xl text-[#2f6a81] text-center font-semibold m-5">
-            Add Post
+            Update Post
           </h1>
+          <Spin fullscreen spinning={!isLoading}/>
           <Steps
             current={current}
             items={items}
@@ -291,9 +282,9 @@ const UpdatePost = () => {
                                       }
                                     }}
                                   >
-                                    {values.artList[index].imagePath ? (
+                                    {values.artList[index].imageUrl ? (
                                       <img
-                                        src={values.artList[index].imagePath} // Sử dụng imageUrl tương ứng với art hiện tại
+                                        src={values.artList[index].imageUrl} // Sử dụng imageUrl tương ứng với art hiện tại
                                         alt="avatar"
                                         style={{ width: "100%" }}
                                       />

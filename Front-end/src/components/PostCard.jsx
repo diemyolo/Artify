@@ -90,6 +90,7 @@ const PostCard = () => {
                 </div> : <div><Link to={`/updatePost?postId=${p.postId}`}>Update Post</Link></div>}
               </div>
 
+
               <div>
                 <p className="text-sm my-2">{p.description}</p>
                 <div className="w-full h-screen max-h-[50vh]">

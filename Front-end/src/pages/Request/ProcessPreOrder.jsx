@@ -34,7 +34,18 @@ const ProcessPreOrder = () => {
       }
     );
     console.log(preOrder, status);
-	console.log(result);
+    console.log(result);
+  };
+
+  const cancelOrder = async () => {
+    const response = await axios.delete(
+      `http://localhost:8080/api/auth/audience/cancel?preorderId=${item.preOrderId}`,
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
+    console.log(response);
+
   };
   return (
     <div className="w-full h-full bg-gray-100">
@@ -44,7 +55,7 @@ const ProcessPreOrder = () => {
         <h1 className="text-center text-3xl font-semibold mb-10 text-[#2f6a81]">
           Get PreOrders Art
         </h1>
-      <Link to="/getPreOrderArt"></Link>
+        <Link to="/getPreOrderArt"></Link>
         <div className="overflow-x-auto">
           <Table striped>
             <Table.Head>
@@ -89,7 +100,7 @@ const ProcessPreOrder = () => {
                     </Table.Cell>
                     <Table.Cell>
                       <a
-                        onClick={() => processOrder(item, "DENIEDPROCESSING")}
+                        onClick={() => cancelOrder(item)}
                         href="#"
                         className="font-medium text-cyan-600 hover:underline dark:text-cyan-500"
                       >
