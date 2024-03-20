@@ -14,6 +14,7 @@ public interface EWalletService {
 	public boolean isEnoughMoney(UUID userId, float price);
 
 	public void updateAdminWallet(float totalMoney);
+
 	public void processingAdminWallet(float totalMoney);
 
 	public void updateCreatorWallet(UUID creatorId, float totalMoney);
