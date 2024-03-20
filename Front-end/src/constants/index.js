@@ -10,9 +10,9 @@ export const navLinks = [
     {
         link: "Artist",
         path: "/artistList",
-    },
-    {
-        link: "About",
-        path: "/about",
     }
+    // {
+    //     link: "About",
+    //     path: "/about",
+    // }
 ]

@@ -61,7 +61,7 @@ const NavBar = () => {
             <img src={logo} className="w-[124px] h-[124px]" alt="Logo" />
           </a>
 
-          <ul className="list-none space-x-12 sm:flex hidden justify-center items-center flex-1 font-semibold">
+          <ul className="list-none space-x-16 sm:flex hidden justify-center items-center flex-1 font-semibold">
             {navLinks.map(({ link, path }) => (
               <Link to={`${path}`} key={path} className="block text-base">
                 {link}

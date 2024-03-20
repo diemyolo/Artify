@@ -145,7 +145,7 @@ export default function Login() {
                 />
               </Form.Item>
 
-              <Form.Item
+              {/* <Form.Item
                 name="remember"
                 valuePropName="checked"
                 {...formItemCol}
@@ -157,7 +157,7 @@ export default function Login() {
                   <Checkbox>Remember me</Checkbox>
                   <p className="font-bold cursor-pointer hover:text-[#2f6a81]">Forgot Password</p>
                 </div>
-              </Form.Item>
+              </Form.Item> */}
 
               <div className="w-full flex flex-col my-4">
                 <button
@@ -170,7 +170,7 @@ export default function Login() {
               </div>
             </Form>
 
-            <div className="w-full py-2 flex items-center justify-center relative">
+            {/* <div className="w-full py-2 flex items-center justify-center relative">
               <div className="w-full h-[1px] bg-black/25"></div>
               <p className="absolute  p-2 text-black/60 bg-[#f5f5f5]">or</p>
             </div>
@@ -186,7 +186,7 @@ export default function Login() {
                 className="my-2"
                 onClick={() => alert("Google button clicked")}
               />
-            </div>
+            </div> */}
           </div>
 
           <div className="w-full flex items-center justify-center">
