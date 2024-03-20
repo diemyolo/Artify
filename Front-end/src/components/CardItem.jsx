@@ -9,6 +9,7 @@ import { Spin } from "antd";
 import { Watermark } from "antd";
 import { saveAs } from "file-saver";
 import axios from "axios";
+import { FaRegHeart, FaHeart, FaRegCommentDots } from "react-icons/fa";
 
 const CardItem = () => {
   const [p, setPost] = useState();
@@ -21,6 +22,9 @@ const CardItem = () => {
       artId: "",
     },
   });
+
+  const [isLike, setIsLike] = useState(false);
+  const [numberOfLikes, setNumberOfLikes] = useState(0);
 
   const params = new URLSearchParams(window.location.search);
   const postId = params.get("postId");
@@ -38,6 +42,7 @@ const CardItem = () => {
     headers: myHeaders,
     redirect: "follow",
   };
+
   useEffect(() => {
     const fetchFData = () => {
       fetch(
@@ -57,7 +62,7 @@ const CardItem = () => {
         .catch((error) => console.error(error));
     };
     fetchFData();
-  }, []);
+  }, [isLike]);
 
   if (p != undefined) {
     console.log(p);
@@ -70,6 +75,8 @@ const CardItem = () => {
     saveAs(`${response.data.payload}`, `${image.artName}.jpg`);
   };
 
+
+
   const makeOrder = async (image) => {
     const updatedOrder = {
       totalPrice: image.price,
@@ -77,6 +84,7 @@ const CardItem = () => {
         artId: image.artId,
       },
     };
+
     const order = await axios.post(
       "http://localhost:8080/api/auth/order/add",
       updatedOrder,
@@ -93,6 +101,26 @@ const CardItem = () => {
       saveAs(`${response.data.payload}`, `${order.data.payload.artwork.artName}.jpg`);
     }
   };
+
+  const handleLike = async () => {
+    const updatedInteraction = { postId: postId};
+    const response = await axios.post(
+      `http://localhost:8080/api/auth/interaction/like`,updatedInteraction,
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
+    if(response) {
+      setIsLike(!isLike)
+    }
+  };
+
+
+
+  const numComments = p?.interactions.reduce(
+    (total, interaction) => total + interaction.comments.length,
+    0
+  );
 
   return (
     <>
@@ -138,7 +166,7 @@ const CardItem = () => {
                   >
                     {p.description}
                   </p>
-                  
+
                   <div className="w-full h-screen max-h-[50vh]">
                     <Carousel className="w-full mx-auto">
                       {p.artList.map((item, index) => (
@@ -156,59 +184,26 @@ const CardItem = () => {
 
                 <div className="mt-5 flex justify-between">
                   <div className="flex justify-between gap-16">
-                    <button className="flex gap-2 items-center">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        strokeWidth={1.5}
-                        stroke="currentColor"
-                        className="w-6 h-6"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z"
-                        />
-                      </svg>
-                      20
+                    <button className="flex gap-2 items-center" onClick={handleLike}>
+                      {isLike === true ? <FaRegHeart
+                        size={20}
+                        style={{ color: "#000", fontWeight: "bold" }}
+                      /> : <FaHeart
+                        size={20}
+                        style={{ color: "red", fontWeight: "bold" }}
+                      />}
+                      {p.numberOfLikes}
                     </button>
-                    <button className="flex gap-2 items-center">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        strokeWidth={1.5}
-                        stroke="currentColor"
-                        className="w-6 h-6"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M8.625 12a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H8.25m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H12m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 0 1-2.555-.337A5.972 5.972 0 0 1 5.41 20.97a5.969 5.969 0 0 1-.474-.065 4.48 4.48 0 0 0 .978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25Z"
-                        />
-                      </svg>
-                      20
-                    </button>
-                  </div>
 
-                  <button className="flex gap-2 items-center">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      strokeWidth={1.5}
-                      stroke="currentColor"
-                      className="w-6 h-6"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M7.217 10.907a2.25 2.25 0 1 0 0 2.186m0-2.186c.18.324.283.696.283 1.093s-.103.77-.283 1.093m0-2.186 9.566-5.314m-9.566 7.5 9.566 5.314m0 0a2.25 2.25 0 1 0 3.935 2.186 2.25 2.25 0 0 0-3.935-2.186Zm0-12.814a2.25 2.25 0 1 0 3.933-2.185 2.25 2.25 0 0 0-3.933 2.185Z"
+                    <button className="flex gap-2 items-center">
+                      <FaRegCommentDots
+                        size={20}
+                        style={{ color: "#000", fontWeight: "bold" }}
                       />
-                    </svg>
-                    20
-                  </button>
+                      {numComments}
+                    </button>
+
+                  </div>
                 </div>
               </div>
 
@@ -227,7 +222,7 @@ const CardItem = () => {
               >
                 <Modal.Body className="flex justify-center items-center">
                   <div>
-                    {selectedImage.type !== "Free" ? (
+                    {selectedImage.type !== "FREE" ? (
                       <Watermark content="Artify" font={{ color: "#ccc" }}>
                         <div style={{ height: 500 }}>
                           <div className="">
@@ -236,7 +231,7 @@ const CardItem = () => {
                               alt="Selected Image"
                               className="w-[700px] h-[480px] mx-auto relative"
                             />
-                            {selectedImage.type !== "Free" && (
+                            {selectedImage.type !== "FREE" && (
                               <div
                                 className="flex items-center justify-center absolute top-0 left-0 w-1/5 rounded-br-md"
                                 style={{ backgroundColor: "#f2f2f2" }}
@@ -248,7 +243,7 @@ const CardItem = () => {
                                 />
                                 <span className="text-[#F4980A] font-bold">
                                   {" "}
-                                  Premium{" "}
+                                  PREMIUM{" "}
                                 </span>
                               </div>
                             )}
@@ -304,7 +299,7 @@ const CardItem = () => {
                           <button type="submit">Follow</button>
                         </div>
 
-                        {selectedImage.type !== "Free" ? (
+                        {selectedImage.type !== "FREE" ? (
                           <div
                             onClick={() => makeOrder(selectedImage)}
                             className="cursor-pointer sm:flex gap-2 hidden items-center text-white bg-[#F4980A] px-4 transition-all duration-300 rounded-full my-1"

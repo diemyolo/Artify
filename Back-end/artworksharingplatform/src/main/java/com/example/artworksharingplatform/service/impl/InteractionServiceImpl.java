@@ -52,7 +52,7 @@ public class InteractionServiceImpl implements InteractionService {
             newInteraction.setInteractionPost(post);
             interactionRepository.save(newInteraction);
 
-            post.setNumberOfLikes(interactionRepository.countByIsLikedTrue());
+            post.setNumberOfLikes(interactionRepository.countByIsLikedTrueAndInteractionPost_Id(postId));
             postRepository.save(post);
 
             return newInteraction;
@@ -62,10 +62,21 @@ public class InteractionServiceImpl implements InteractionService {
 
             Post post = postRepository.findById(postId)
                     .orElseThrow(() -> new EntityNotFoundException("Post not found"));
-            post.setNumberOfLikes(interactionRepository.countByIsLikedTrue());
+            post.setNumberOfLikes(interactionRepository.countByIsLikedTrueAndInteractionPost_Id(postId));
             postRepository.save(post);
 
             return interaction;
+        }
+    }
+
+    @Override
+    public Interaction getInteractionByPostIdAndUserId(UUID postId, UUID userId) throws Exception {
+        try {
+            Interaction interaction = interactionRepository.findByInteractionPostIdAndInteractionAudienceId(postId,
+                    userId);
+            return interaction;
+        } catch (Exception e) {
+            throw new Exception(e.getMessage());
         }
     }
 }
