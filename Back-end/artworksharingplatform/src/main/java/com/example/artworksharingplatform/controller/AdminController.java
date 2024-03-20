@@ -38,8 +38,10 @@ public class AdminController {
 
     @Autowired
     UserService _userService;
+
     @Autowired
     PostService _postService;
+    
     @Autowired
     UserMapper userMapper;
 
