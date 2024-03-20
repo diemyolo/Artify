@@ -1,5 +1,6 @@
 import React from "react";
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
+import EditAdminProfile from "./pages/Admin/Profile/EditAdminProfile";
 import AddMoneyInput from "./pages/EWallet/AddMoneyInput";
 import AddSuccess from "./pages/EWallet/AddSuccess";
 import ReturnWallet from "./pages/EWallet/ReturnWallet";
@@ -9,6 +10,7 @@ import Home from "./pages/Home/Home";
 import Login from "./pages/Login/Login";
 import AddArts from "./pages/Post/AddArts";
 import AddPost from "./pages/Post/AddPost";
+import UpdatePost from "./pages/Post/UpdatePost";
 import ArtistList from "./pages/Profile/ArtistList";
 import ArtistProfile from "./pages/Profile/ArtistProfile";
 import EditProfile from "./pages/Profile/EditProfile";
@@ -19,8 +21,6 @@ import RequestHistory from "./pages/Request/RequestHistory";
 import ReturnPreOrder from "./pages/ReturnOrderRequest/ReturnPreOrder";
 import ViewPreOrders from "./pages/ReturnOrderRequest/ViewPreOrders";
 import SinglePost from "./pages/SinglePost/SinglePost";
-import EditAdminProfile from "./pages/Admin/Profile/EditAdminProfile";
-import UpdatePost from "./pages/Post/UpdatePost";
 
 const router = createBrowserRouter([
   {
