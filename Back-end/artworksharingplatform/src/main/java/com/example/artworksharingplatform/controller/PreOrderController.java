@@ -62,7 +62,7 @@ public class PreOrderController {
     PostService postService;
 
     @PostMapping("audience/PreOrderRequest")
-    @PreAuthorize("hasRole('ROLE_AUDIENCE')")
+    @PreAuthorize("hasRole('ROLE_CREATOR') or hasRole('ROLE_AUDIENCE')")
     public ResponseEntity<?> addPreOder(@RequestBody PreOrderRequest preOrderRequest) {
         ApiResponse<PreOrderDTO> apiResponse = new ApiResponse<PreOrderDTO>();
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -116,6 +116,7 @@ public class PreOrderController {
     }
 
     @GetMapping("viewProcessingPreOrder")
+    @PreAuthorize("hasRole('ROLE_CREATOR') or hasRole('ROLE_AUDIENCE')")
     public ResponseEntity<ApiResponse<List<PreOrderDTO>>> getAudiencePreOrderList() {
         ApiResponse<List<PreOrderDTO>> apiResponse = new ApiResponse<List<PreOrderDTO>>();
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -191,7 +192,7 @@ public class PreOrderController {
     }
 
     @PutMapping("audience/processing")
-    @PreAuthorize("hasRole('ROLE_AUDIENCE')")
+    @PreAuthorize("hasRole('ROLE_CREATOR') or hasRole('ROLE_AUDIENCE')")
     public ResponseEntity<ApiResponse<PreOrderDTO>> ProcessingPreOrder(@RequestBody ProcessingRequest request) {
         ApiResponse<PreOrderDTO> apiResponse = new ApiResponse<PreOrderDTO>();
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -218,7 +219,7 @@ public class PreOrderController {
     }
 
     @PutMapping("audience/complete")
-    @PreAuthorize("hasRole('ROLE_AUDIENCE')")
+    @PreAuthorize("hasRole('ROLE_CREATOR') or hasRole('ROLE_AUDIENCE')")
     public ResponseEntity<ApiResponse<PreOrderDTO>> completePreOrder(@RequestBody PreOrderDTO preOrderDTO) {
         ApiResponse<PreOrderDTO> apiResponse = new ApiResponse<PreOrderDTO>();
         try {
@@ -236,7 +237,7 @@ public class PreOrderController {
     }
 
     @DeleteMapping("audience/cancel")
-    @PreAuthorize("hasRole('ROLE_AUDIENCE')")
+    @PreAuthorize("hasRole('ROLE_CREATOR') or hasRole('ROLE_AUDIENCE')")
     public ResponseEntity<ApiResponse<String>> CancelPreOrder(@RequestParam("preorderId") UUID preOrderId) {
         ApiResponse<String> apiResponse = new ApiResponse<>();
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -269,6 +270,7 @@ public class PreOrderController {
     }
 
     @GetMapping("viewAcceptedPreOrders")
+    @PreAuthorize("hasRole('ROLE_CREATOR') or hasRole('ROLE_AUDIENCE')")
     public ResponseEntity<ApiResponse<List<PreOrderDTO>>> getAcceptedPreOrderList() {
         ApiResponse<List<PreOrderDTO>> apiResponse = new ApiResponse<List<PreOrderDTO>>();
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -292,6 +294,7 @@ public class PreOrderController {
     }
 
     @GetMapping("viewPendingPreOrders")
+    @PreAuthorize("hasRole('ROLE_CREATOR') or hasRole('ROLE_AUDIENCE')")
     public ResponseEntity<ApiResponse<List<PreOrderDTO>>> getPendingPreOrderList() {
         ApiResponse<List<PreOrderDTO>> apiResponse = new ApiResponse<List<PreOrderDTO>>();
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -315,6 +318,7 @@ public class PreOrderController {
     }
 
     @GetMapping("viewConfirmingPreOrders")
+    @PreAuthorize("hasRole('ROLE_CREATOR') or hasRole('ROLE_AUDIENCE')")
     public ResponseEntity<ApiResponse<List<PreOrderDTO>>> getConfirmingPreOrderList() {
         ApiResponse<List<PreOrderDTO>> apiResponse = new ApiResponse<List<PreOrderDTO>>();
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -338,6 +342,7 @@ public class PreOrderController {
     }
 
     @GetMapping("viewCompletedPreOrders")
+    @PreAuthorize("hasRole('ROLE_CREATOR') or hasRole('ROLE_AUDIENCE')")
     public ResponseEntity<ApiResponse<List<PreOrderDTO>>> getCompletedPreOrderList() {
         ApiResponse<List<PreOrderDTO>> apiResponse = new ApiResponse<List<PreOrderDTO>>();
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -359,8 +364,6 @@ public class PreOrderController {
             return new ResponseEntity<>(apiResponse, HttpStatus.BAD_REQUEST);
         }
     }
-
-    
 
     @GetMapping("creator/viewProcessedPreOrders")
     @PreAuthorize("hasRole('ROLE_CREATOR')")
