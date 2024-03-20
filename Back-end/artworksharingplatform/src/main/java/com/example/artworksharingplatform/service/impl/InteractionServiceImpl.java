@@ -68,4 +68,15 @@ public class InteractionServiceImpl implements InteractionService {
             return interaction;
         }
     }
+
+    @Override
+    public Interaction getInteractionByPostIdAndUserId(UUID postId, UUID userId) throws Exception {
+        try {
+            Interaction interaction = interactionRepository.findByInteractionPostIdAndInteractionAudienceId(postId,
+                    userId);
+            return interaction;
+        } catch (Exception e) {
+            throw new Exception(e.getMessage());
+        }
+    }
 }
