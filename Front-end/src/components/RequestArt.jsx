@@ -11,7 +11,6 @@ const RequestArt = ({ creatorId }) => {
 
   const handleKeyPress = async (event) => {
     event.preventDefault();
-
     if (requirementText.trim() === "") {
       Swal.fire({
         position: "center",
@@ -50,7 +49,7 @@ const RequestArt = ({ creatorId }) => {
   };
 
   return (
-    <div className="w-full">
+    <div className="w-full py-10">
       <div className="flex flex-col justify-center w-[50%] mx-auto">
         <div className="mb-2 block">
           <Label htmlFor="requirement" value="Your Request" />

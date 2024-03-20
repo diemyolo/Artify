@@ -84,7 +84,7 @@ export default function Login() {
         </div>
       </div>
 
-      <div className="w-1/2 h-full flex flex-col p-20 justify-between items-center">
+      <div className="w-1/2 h-full flex flex-col p-20 justify-center items-center">
         <div className="w-full flex flex-col max-w-[500px]">
           <div className="w-full flex flex-col mb-10 items-center">
             <h3 className="text-5xl text-[#060606] font-bold mb-4">
@@ -109,7 +109,7 @@ export default function Login() {
               onSubmit={handleLogin}
             >
               <Form.Item
-                className="mx-0 px-0 w-full "
+                className="mx-0 px-0 w-full pt-5"
                 name="email"
                 rules={[
                   {
@@ -124,7 +124,7 @@ export default function Login() {
                 ]}
               >
                 <Input
-                  className="w-full px-4 py-2.5 rounded-lg border-[#d9d9d9]"
+                  className="w-full px-5 py-2.5 rounded-lg border-[#d9d9d9]"
                   name="email"
                   placeholder="Enter your email"
                   value={email}
@@ -133,11 +133,11 @@ export default function Login() {
               </Form.Item>
 
               <Form.Item
-                className="mx-0 px-0 w-full pt-2.5"
+                className="mx-0 px-0 w-full pt-5"
                 name="password"
               >
                 <Input.Password
-                  className="w-full px-4 py-2.5"
+                  className="w-full px-5 py-2.5"
                   placeholder="Enter your password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
@@ -159,9 +159,9 @@ export default function Login() {
                 </div>
               </Form.Item> */}
 
-              <div className="w-full flex flex-col my-4">
+              <div className="w-full flex flex-col my-5">
                 <button
-                  className="w-full bg-[#2f6a81] text-white my-2 font-semibold rounded-md p-4 text-center flex items-center justify-center focus:outline-none hover:bg-gray-100 hover:text-[#2f6a81] hover:border-[#2f6a81] hover:border-2 mt-3 transition-all duration-300 "
+                  className="w-full bg-[#2f6a81] border-2 text-white text- my-2 font-semibold rounded-md p-3 text-center flex items-center justify-center focus:outline-none hover:bg-gray-100 hover:text-[#2f6a81] hover:border-[#2f6a81] hover:border-2 mt-3 transition-all duration-300 "
                   type="submit"
                   onClick={handleLogin}
                 >
