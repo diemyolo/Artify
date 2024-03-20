@@ -120,12 +120,12 @@ const AddMoneyInput = () => {
             >
               Charge
             </Button>
-            <Button
+            {/* <Button
              
               className="w-[395px] bg-[#2f6a81] text-white"
             >
               Charge OCN
-            </Button>
+            </Button> */}
           </div>
         </div>
       </div>

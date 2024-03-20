@@ -90,7 +90,7 @@ const ViewEwallet = () => {
   const stats = [
     { id: 1, name: "Number of transactions", value: transactions.length },
     { id: 2, name: "Account Balance", value: `${eWallet.totalAmount} VND` },
-    { id: 3, name: "New users annually", value: "46,000" },
+    // { id: 3, name: "New users annually", value: "46,000" },
   ];
   const hoverStyle = {
     backgroundColor: "#2f6a81", // Màu nền khi hover
@@ -117,11 +117,11 @@ const ViewEwallet = () => {
               >
                 <div className="flex p-2 items-center">
                   <Avatar size="large" src={customer.imagePath} />
-                  <p className="ml-2 text-base">{customer.userName}</p>
+                  <p className="ml-4 text-base capitalize">{customer.userName}</p>
                 </div>
                 <div className="flex p-2 items-center">
-                  <IoMdSettings className="w-5 h-5 cursor-pointer" />
-                  <p className="ml-2 text-base">Settings</p>
+                  {/* <IoMdSettings className="w-5 h-5 cursor-pointer" />
+                  <p className="ml-2 text-base">Settings</p> */}
 
                   {customer.roleName == "CREATOR" && (
                     <Link
@@ -135,9 +135,9 @@ const ViewEwallet = () => {
               </div>
             </div>
 
-            <div className="mx-auto max-w-4xl py-24 sm:px-6 sm:py-8 lg:px-8 text-white bg-[#2f6a81] py-24 sm:py-32">
+            <div className="mx-auto max-w-4xl  sm:px-6  lg:px-8 text-white bg-[#2f6a81] py-10 sm:py-10">
               <div className="mx-auto max-w-7xl px-6 lg:px-8">
-                <dl className="grid grid-cols-1 gap-x-8 gap-y-16 text-white text-center lg:grid-cols-3">
+                <dl className="grid grid-cols-2 gap-x-8 gap-y-16 text-white text-center lg:grid-cols-2">
                   {stats.map((stat) => (
                     <div
                       key={stat.id}
@@ -168,7 +168,7 @@ const ViewEwallet = () => {
               </Link>
             </div>
 
-            <div className="flex mx-auto max-w-4xl py-20 sm:py-8 justify-between">
+            <div className="flex mx-auto max-w-4xl py-16 sm:py-4 justify-between">
               <div
                 className="divide-y divide-gray-100 bg-white mt-5 py-2 px-8 shadow-md shadow-gray-300 rounded-md mb-5 mr-5"
                 style={{ width: "300px", height: "300px" }}
