@@ -3,9 +3,9 @@ import axios from "axios";
 import { Avatar, Card, Carousel } from "flowbite-react";
 import React, { useEffect, useState } from "react";
 import { AiOutlineUserAdd } from "react-icons/ai";
+import { FaHeart, FaRegCommentDots, FaRegHeart } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import InputComment from "./InputComment";
-import { FaRegHeart, FaHeart,FaRegCommentDots  } from "react-icons/fa";
 
 const PostCard = () => {
   const [post, setPost] = useState([]);
@@ -27,6 +27,7 @@ const PostCard = () => {
       );
       setPost(response.data.payload);
       setP(response.data.payload);
+      console.log(response.data.payload);
 
       const customerResponse = await axios.get(
         "http://localhost:8080/api/auth/user/profile",
@@ -51,14 +52,39 @@ const PostCard = () => {
   };
   console.log(post);
 
-  const handleLike = () => {
-    setIsLike(!isLike)
-  }
+  const handleLike = async (p) => {
+    const response = await axios.post(
+      `http://localhost:8080/api/auth/interaction/like?postId=${p.postId}`,
+      null,
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
+    if (response.status === 200) {
+      setIsLike(!isLike)
+    }
+  };
 
-  // const numComments = p?.interactions.reduce(
-  //   (total, interaction) => total + interaction.comments.length,
-  //   0
-  // );
+  const isLiked = async (p) => {
+    try {
+      const response = await axios.get(
+        `http://localhost:8080/api/auth/interaction/view?postId=${p.postId}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      console.log(response.data.payload);
+      if (response.data.payload === null) {
+        return false;
+      } else {
+        console.log(response.data.payload.isLiked)
+        return response.data.payload.isLiked;
+      }
+    } catch (error) {
+      console.error('Error fetching:', error);
+      return false;
+    }
+  };
 
   return (
     <>
@@ -113,14 +139,18 @@ const PostCard = () => {
 
               <div className="mt-1 flex justify-between">
                 <div className="flex justify-between gap-16">
-                  <button className="flex gap-2 items-center" onClick={handleLike}>
-                    {isLike === true ? <FaRegHeart
-                      size={20}
-                      style={{ color: "#000", fontWeight: "bold" }}
-                    /> : <FaHeart
-                      size={20}
-                      style={{ color: "red", fontWeight: "bold" }}
-                    />}
+                  <button className="flex gap-2 items-center" onClick={() => handleLike(p)}>
+                    {isLiked(p) === true ? (
+                      <FaHeart
+                        size={20}
+                        style={{ color: "red", fontWeight: "bold" }}
+                      />
+                    ) : (
+                      <FaRegHeart
+                        size={20}
+                        style={{ color: "#000", fontWeight: "bold" }}
+                      />
+                    )}
                     {p.numberOfLikes}
                   </button>
 

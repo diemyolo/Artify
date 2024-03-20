@@ -8,6 +8,7 @@ import { FaHeart, FaRegCommentDots, FaRegHeart } from "react-icons/fa";
 import { MdOutlineFileDownload } from "react-icons/md";
 import { Link } from "react-router-dom";
 import CommentBar from "./CommentBar";
+import moment from 'moment';
 
 const CardItem = () => {
   const [p, setPost] = useState();
@@ -60,7 +61,27 @@ const CardItem = () => {
         })
         .catch((error) => console.error(error));
     };
+    const fetchIsLikedData = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:8080/api/auth/interaction/view?postId=${postId}`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
+        console.log(response.data.payload);
+        if (response.data.payload === null) {
+          setIsLike(false);
+        } else {
+          setIsLike(response.data.payload.isLiked);
+        }
+        console.log(isLike);
+      } catch (error) {
+        console.error('Error fetching:', error);
+      }
+    };
     fetchFData();
+    fetchIsLikedData();
   }, [isLike]);
 
   if (p != undefined) {
@@ -83,7 +104,7 @@ const CardItem = () => {
         artId: image.artId,
       },
     };
-
+    console.log(updatedOrder);
     const order = await axios.post(
       "http://localhost:8080/api/auth/order/add",
       updatedOrder,
@@ -102,8 +123,11 @@ const CardItem = () => {
   };
 
   const handleLike = async () => {
+    console.log(postId);
+    console.log(token);
     const response = await axios.post(
       `http://localhost:8080/api/auth/interaction/like?postId=${postId}`,
+      null,
       {
         headers: { Authorization: `Bearer ${token}` },
       }
@@ -181,12 +205,12 @@ const CardItem = () => {
                 <div className="mt-5 flex justify-between">
                   <div className="flex justify-between gap-16">
                     <button className="flex gap-2 items-center" onClick={handleLike}>
-                      {isLike === true ? <FaRegHeart
-                        size={20}
-                        style={{ color: "#000", fontWeight: "bold" }}
-                      /> : <FaHeart
+                      {isLike === true ? <FaHeart
                         size={20}
                         style={{ color: "red", fontWeight: "bold" }}
+                      /> : <FaRegHeart
+                        size={20}
+                        style={{ color: "#000", fontWeight: "bold" }}
                       />}
                       {p.numberOfLikes}
                     </button>
@@ -233,8 +257,8 @@ const CardItem = () => {
                                 style={{ backgroundColor: "#f2f2f2" }}
                               >
                                 <img
-                                  src="https://cdn-icons-png.freepik.com/256/1319/1319983.png"
-                                  className="w-[50px] mr-2"
+                                  src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/Simple_crown_icon.svg/1024px-Simple_crown_icon.svg.png"
+                                  className="w-[40px] mr-2"
                                   alt="Left Top Image"
                                 />
                                 <span className="text-[#F4980A] font-bold">
@@ -264,30 +288,15 @@ const CardItem = () => {
                           <div className="space-y-1 dark:text-white">
                             <div className="font-medium">{p.creatorName}</div>
                             <div className="text-sm text-gray-500 dark:text-gray-400">
-                              {p.artList.map((item) => item.createdDate)}
+                              {moment(p.publishDate).format('DD/MM/YYYY')}
                             </div>
                           </div>
                         </Avatar>
                       </Link>
                       <div className="flex gap-4">
-                        <div className="cursor-pointer sm:flex gap-2 hidden items-center text-white bg-[#2f6a81] px-4 transition-all duration-300 rounded-full my-1">
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            strokeWidth={1.5}
-                            stroke="currentColor"
-                            className="w-6 h-6"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z"
-                            />
-                          </svg>
-                          <button type="submit">Like</button>
-                        </div>
-                        <div className="cursor-pointer sm:flex gap-2 hidden items-center text-white bg-[#2f6a81] px-4 transition-all duration-300 rounded-full my-1">
+
+
+                        <div className="cursor-pointer sm:flex gap-2 hidden items-center text-white bg-[#2f6a81] px-4 transition-all duration-300 rounded-full my-1  ">
                           <AiOutlineUserAdd
                             size={20}
                             style={{ color: "#fff", fontWeight: "bold" }}
@@ -296,16 +305,25 @@ const CardItem = () => {
                         </div>
 
                         {selectedImage.type.toUpperCase() !== "FREE" ? (
-                          <div
-                            onClick={() => makeOrder(selectedImage)}
-                            className="cursor-pointer sm:flex gap-2 hidden items-center text-white bg-[#F4980A] px-4 transition-all duration-300 rounded-full my-1"
-                          >
-                            <MdOutlineFileDownload
-                              size={20}
-                              style={{ color: "#fff", fontWeight: "bold" }}
-                            />
-                            <button type="submit">Download</button>
+                          <div className="flex gap-4">
+                            <div
+                              onClick={() => makeOrder(selectedImage)}
+                              className="cursor-pointer sm:flex gap-2 hidden items-center text-white bg-[#F4980A] px-4 transition-all duration-300 rounded-full my-1"
+                            >
+                              <MdOutlineFileDownload
+                                size={20}
+                                style={{ color: "#fff", fontWeight: "bold" }}
+                              />
+                              <button type="submit">Download</button>
+                            </div>
+                            <div className="sm:flex gap-2 hidden items-center font-semibold text-[#2f6a81] border-2 border-[#2f6a81] bg-[#fff] px-4 transition-all duration-300 rounded-full my-1">
+                              <span>
+                                Price:
+                              </span>
+                              {p.artList.map((item) => item.price)} VND
+                            </div>
                           </div>
+
                         ) : (
                           <div
                             onClick={() => downloadArt(selectedImage)}
