@@ -75,6 +75,7 @@ const CardItem = () => {
         } else {
           setIsLike(response.data.payload.isLiked);
         }
+        console.log(isLike);
       } catch (error) {
         console.error('Error fetching:', error);
       }
@@ -103,7 +104,7 @@ const CardItem = () => {
         artId: image.artId,
       },
     };
-
+    console.log(updatedOrder);
     const order = await axios.post(
       "http://localhost:8080/api/auth/order/add",
       updatedOrder,
@@ -122,8 +123,11 @@ const CardItem = () => {
   };
 
   const handleLike = async () => {
+    console.log(postId);
+    console.log(token);
     const response = await axios.post(
       `http://localhost:8080/api/auth/interaction/like?postId=${postId}`,
+      null,
       {
         headers: { Authorization: `Bearer ${token}` },
       }
@@ -201,12 +205,12 @@ const CardItem = () => {
                 <div className="mt-5 flex justify-between">
                   <div className="flex justify-between gap-16">
                     <button className="flex gap-2 items-center" onClick={handleLike}>
-                      {isLike === true ? <FaRegHeart
-                        size={20}
-                        style={{ color: "#000", fontWeight: "bold" }}
-                      /> : <FaHeart
+                      {isLike === true ? <FaHeart
                         size={20}
                         style={{ color: "red", fontWeight: "bold" }}
+                      /> : <FaRegHeart
+                        size={20}
+                        style={{ color: "#000", fontWeight: "bold" }}
                       />}
                       {p.numberOfLikes}
                     </button>
