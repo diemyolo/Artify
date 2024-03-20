@@ -164,7 +164,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<User> getListRequest() throws Exception {
         try {
-            List<User> list = userRepository.findByStatus("READY");
+            List<User> list = userRepository.findByStatus("REQUESTING");
             return list;
         } catch (Exception e) {
             throw new Exception(e.getMessage());
