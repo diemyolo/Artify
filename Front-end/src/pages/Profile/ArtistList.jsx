@@ -7,7 +7,7 @@ const ArtistList = () => {
     return (
         <div>
             <NavBar />
-            <div className='h-screen py-28 mt-10 bg-gray-100'>
+            <div className='h-full py-28 mt-10 bg-gray-100'>
                 <CardArtist />
             </div>
             <FooterPart />

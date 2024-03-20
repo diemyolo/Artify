@@ -48,12 +48,10 @@ const Gallery = () => {
     return (
         <div>
             <NavBar />
-            <div className='h-screen py-28 mt-5 bg-gray-100'>
-                <h1 className='text-center text-4xl font-semibold my-8'>Begin an exploration through a gallery showcasing artisan creativity</h1>
+            <div className='h-full py-28 mt-5 bg-gray-100'>
+                <h1 className='text-center text-3xl font-semibold mb-10'>Begin an exploration through a gallery showcasing artisan creativity</h1>
                 <ImageList />
             </div>
-
-
            <FooterPart />
         </div>
     );

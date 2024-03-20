@@ -21,11 +21,14 @@ const CommentBar = ({ postId }) => {
     };
     fetchData();
   }, []);
-  console.log(commentList);
+
+
+  const numComments = commentList.length;
+
   return (
     <div className="flex flex-col items-start justify-between w-full h-full ">
-      <div className="flex flex-col items-start gap-10 mb-2">
-        <h1 className="text-lg font-semibold text-[#2f6a81]">Comments (20)</h1>
+      <div className="w-full flex flex-col items-start gap-10 mb-2">
+        <h1 className="text-lg font-semibold text-[#2f6a81]">Comments ({numComments})</h1>
         <div
           className="flex flex-col w-full gap-8 overflow-y-scroll pr-8"
           style={{ maxHeight: "300px" }}
@@ -37,8 +40,6 @@ const CommentBar = ({ postId }) => {
                 billyGreenOne={login}
                 timezone={item.comment}
                 name={item.userName}
-                image=""
-                imageOne=""
                 className="flex flex-row justify-center w-full"
               />
             ))}

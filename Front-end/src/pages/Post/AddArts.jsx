@@ -23,6 +23,7 @@ const AddArts = () => {
   const [current, setCurrent] = useState(0);
   const [loading, setLoading] = useState(false);
   const [imageUrl, setImageUrl] = useState("");
+  
   const steps = [
     {
       title: "First",
@@ -37,6 +38,7 @@ const AddArts = () => {
       content: "Last-content",
     },
   ];
+
   const next = () => {
     setCurrent(current + 1);
   };
@@ -44,16 +46,19 @@ const AddArts = () => {
   const prev = () => {
     setCurrent(current - 1);
   };
+
   const items = steps.map((item) => ({ key: item.title, title: item.title }));
   const handleBeforeUpload = (file) => {
     setSelectedFiles([file]);
     return true;
   };
+
   const getBase64 = (img, callback) => {
     const reader = new FileReader();
     reader.addEventListener("load", () => callback(reader.result));
     reader.readAsDataURL(img);
   };
+
   const handleFileChange = (info) => {
     if (info.file.status === "uploading") {
       setLoading(true);
@@ -66,6 +71,7 @@ const AddArts = () => {
       });
     }
   };
+
   console.log(imageUrl);
   const handleRemoveArtwork = (index) => {
     setSelectedFiles((prevFiles) => {
@@ -144,6 +150,7 @@ const AddArts = () => {
       <div style={{ marginTop: 8 }}>Upload</div>
     </button>
   );
+
   return (
     <div>
       <NavBar />
