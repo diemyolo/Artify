@@ -228,6 +228,13 @@ public class PostController {
 		return ResponseEntity.ok(apiResponse);
 	}
 	
+	@DeleteMapping("/deleArtInPost")
+	public ResponseEntity<ApiResponse> deleteArt(@RequestParam("artId") UUID artId) throws Exception{
+		ApiResponse apiResponse = new ApiResponse(); 
+		postService.deleteArtwork(artId);
+		apiResponse.ok("Delete Sucessfully");
+		return ResponseEntity.ok(apiResponse);
+	}
 	
 
 

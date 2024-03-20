@@ -218,7 +218,7 @@ const CardItem = () => {
               >
                 <Modal.Body className="flex justify-center items-center">
                   <div>
-                    {selectedImage.type !== "FREE" ? (
+                    {selectedImage.type.toUpperCase() !== "FREE" ? (
                       <Watermark content="Artify" font={{ color: "#ccc" }}>
                         <div style={{ height: 500 }}>
                           <div className="">
@@ -227,7 +227,7 @@ const CardItem = () => {
                               alt="Selected Image"
                               className="w-[700px] h-[480px] mx-auto relative"
                             />
-                            {selectedImage.type !== "FREE" && (
+                            {selectedImage.type.toUpperCase() !== "FREE" && (
                               <div
                                 className="flex items-center justify-center absolute top-0 left-0 w-1/5 rounded-br-md"
                                 style={{ backgroundColor: "#f2f2f2" }}
@@ -295,7 +295,7 @@ const CardItem = () => {
                           <button type="submit">Follow</button>
                         </div>
 
-                        {selectedImage.type !== "FREE" ? (
+                        {selectedImage.type.toUpperCase() !== "FREE" ? (
                           <div
                             onClick={() => makeOrder(selectedImage)}
                             className="cursor-pointer sm:flex gap-2 hidden items-center text-white bg-[#F4980A] px-4 transition-all duration-300 rounded-full my-1"

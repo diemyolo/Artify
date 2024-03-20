@@ -185,6 +185,8 @@ const UpdatePost = () => {
     </button>
   );
 
+  
+
   return (
     <div>
       <NavBar />
@@ -255,6 +257,7 @@ const UpdatePost = () => {
                                     name="avatar"
                                     listType="picture-card"
                                     className="avatar-uploader mb-5"
+                                    required={true}
                                     showUploadList={false}
                                     beforeUpload={(file) => {
                                       setFieldValue(
@@ -293,7 +296,7 @@ const UpdatePost = () => {
                                     )}
                                   </Upload>
                                 </div>
-
+                              {values.artList[index].imageUrl ? <div></div> : <div>Please add file</div>}
                                 <div className="flex justify-between">
                                   <label
                                     className="font-semibold"

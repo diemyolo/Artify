@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Formik, Form, Field, FieldArray } from "formik";
+import { Formik, Form, Field, FieldArray, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { Avatar, Card, Footer } from "flowbite-react";
 import { Carousel } from "flowbite-react";
@@ -13,9 +13,11 @@ import {
 } from "@ant-design/icons";
 import { Button, Upload } from "antd";
 import { message, Steps, theme } from "antd";
-import { Watermark } from "antd";
+import { Watermark,Spin } from "antd";
 import { Select } from "antd";
+import { useNavigate } from "react-router-dom";
 import FooterPart from '../../components/FooterPart'
+import Swal from "sweetalert2";
 
 
 const AddArts = () => {
@@ -23,7 +25,9 @@ const AddArts = () => {
   const [current, setCurrent] = useState(0);
   const [loading, setLoading] = useState(false);
   const [imageUrl, setImageUrl] = useState("");
-  
+  const [isLoading, setIsLoading] = useState(false);
+
+  const navigate = useNavigate();
   const steps = [
     {
       title: "First",
@@ -54,7 +58,7 @@ const AddArts = () => {
     reader.addEventListener("load", () => callback(reader.result));
     reader.readAsDataURL(img);
   };
-
+  const [fileSelectedMessage, setFileSelectedMessage] = useState("");
   const handleFileChange = (info) => {
     if (info.file.status === "uploading") {
       setLoading(true);
@@ -65,6 +69,11 @@ const AddArts = () => {
         setLoading(false);
         setImageUrl(url);
       });
+    }
+    if (info.fileList.length > 0) {
+      setFileSelectedMessage(`File selected: ${info.fileList[0].name}`);
+    } else {
+      setFileSelectedMessage("");
     }
   };
 
@@ -87,18 +96,6 @@ const AddArts = () => {
           .positive("Price must be positive")
           .required("Price is required"),
         type: Yup.string().required("Type is required"),
-      })
-    ),
-    interactions: Yup.array().of(
-      Yup.object().shape({
-        name: Yup.string().required("Interaction name is required"),
-        comments: Yup.array().of(
-          Yup.object().shape({
-            comment: Yup.string().required("Comment is required"),
-            userName: Yup.string().required("User name is required"),
-          })
-        ),
-        isLiked: Yup.boolean().required("Is liked is required"),
       })
     ),
   });
@@ -138,6 +135,18 @@ const AddArts = () => {
       }
     );
     console.log(response.data);
+    if(response.status === 200) {
+      Swal.fire({
+        position: "center",
+        icon: "success",
+        title: `Done`,
+        html: "<h3>Update Successfully</h3>",
+        showConfirmButton: false,
+        timer: 1600,
+      });
+      navigate(`/previewPost?postId=${response.data.payload.postId}`)
+      setIsLoading(true);
+    }
   };
 
   const uploadButton = (
@@ -155,6 +164,7 @@ const AddArts = () => {
           <h1 className="text-3xl text-[#2f6a81] text-center font-semibold m-5">
             Add Post
           </h1>
+          <Spin fullscreen spinning={isLoading}/>
           <Steps
             current={current}
             items={items}
@@ -182,7 +192,7 @@ const AddArts = () => {
                   },
                 ],
               }}
-              // validationSchema={validationSchema}
+              validationSchema={validationSchema}
               onSubmit={handleSubmit}
             >
               {({ values, setFieldValue }) => (
@@ -195,6 +205,11 @@ const AddArts = () => {
                         className="bg-slate-200 w-full rounded-lg"
                         autocomplete="off"
                         placeholder="Description..."
+                      />
+                      <ErrorMessage
+                        name="description"
+                        component="div"
+                        className="text-red-500"
                       />
                     </div>
                   ) : current == 1 ? (
@@ -214,7 +229,11 @@ const AddArts = () => {
                                   className="rounded-lg w-[80%] h-8 border-[#d9d9d9] mb-5"
                                 />
                               </div>
-
+                              <ErrorMessage
+                                name={`artList.${index}.artName`}
+                                component="div"
+                                className="text-red-500"
+                              />
                               <div>
                                 <Upload
                                   action="https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188"
@@ -258,6 +277,7 @@ const AddArts = () => {
                                     uploadButton
                                   )}
                                 </Upload>
+                                {values.artList[index].imageFile ? <div></div> : <div>Please add file</div>}
                               </div>
 
                               <div className="flex justify-between">
@@ -321,7 +341,7 @@ const AddArts = () => {
                                   artName: "",
                                   imagePath: "",
                                   price: 0,
-                                  type: "",
+                                  type: "Free",
                                 })
                               }
                             >
@@ -450,16 +470,6 @@ const AddArts = () => {
 
             {current < steps.length - 1 && (
               <Button onClick={() => next()}>Next</Button>
-            )}
-
-
-            {current === steps.length - 1 && (
-              <Button
-                type="primary"
-                onClick={() => message.success("Processing complete!")}
-              >
-                Done
-              </Button>
             )}
 
 

@@ -37,7 +37,7 @@ const ProcessPreOrder = () => {
     console.log(result);
   };
 
-  const cancelOrder = async () => {
+  const cancelOrder = async (item) => {
     const response = await axios.delete(
       `http://localhost:8080/api/auth/audience/cancel?preorderId=${item.preOrderId}`,
       {
@@ -45,7 +45,6 @@ const ProcessPreOrder = () => {
       }
     );
     console.log(response);
-
   };
   return (
     <div className="w-full h-full bg-gray-100">
