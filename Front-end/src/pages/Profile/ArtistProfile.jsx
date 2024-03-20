@@ -6,6 +6,7 @@ import ImageList from '../../components/ImageList';
 import NavBar from '../../components/NavBar';
 import PostCard from '../../components/PostCard';
 import RequestArt from '../../components/RequestArt';
+import FollowList from '../../components/FollowList';
 
 
 const ArtistProfile = () => {
@@ -28,7 +29,7 @@ const ArtistProfile = () => {
       setPost(response.data.payload);
 
       const followResponse = await axios.get(
-        `http://localhost:8080/api/auth/number_of_follow?creatorId=${creatorId}`,
+        `http://localhost:8080/api/auth/get_all_follower?creatorId=${creatorId}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -64,7 +65,7 @@ const ArtistProfile = () => {
     } else if (activeComponent === 'gallery') {
       return <ImageList />;
     } else if (activeComponent === 'follower') {
-      return <PostCard />;
+      return <FollowList follow={follow} />;
     } else if (activeComponent === 'request') {
       return <RequestArt creatorId={creatorId} />;
     }
