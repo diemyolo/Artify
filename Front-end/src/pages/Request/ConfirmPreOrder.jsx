@@ -7,7 +7,7 @@ import { Formik, Form, Field } from "formik";
 import FooterPart from "../../components/FooterPart";
 import { saveAs } from "file-saver";
 import { MdOutlineFileDownload } from "react-icons/md";
-import { Rating } from "flowbite-react";
+import { Rate } from "antd";
 
 const ConfirmPreOrder = () => {
   const token = localStorage.getItem("token");
@@ -33,27 +33,18 @@ const ConfirmPreOrder = () => {
     saveAs(`${response.data.payload}`, `${image.artName}.jpg`);
   };
   console.log(requestList);
-  const processOrder = async (preOrder, status) => {
-    let valueBody = {
-      preOrderID: preOrder.preOrderId,
-    };
-    const result = await axios.put(
-      "http://localhost:8080/api/auth/audience/complete",
-      valueBody,
-      {
-        headers: { Authorization: `Bearer ${token}` },
-      }
-    );
-    console.log(preOrder, status);
-    console.log(result);
-  };
 
+  const [rating, setRating] = useState(0);
+
+  const handleRatingChange = (value) => {
+    setRating(value);
+  };
   const openCompleteOrder = (item) => {
     setOpenModal(true);
     setSelectedOrder(item);
   };
 
-  const handleConfirm = async (values)=> {
+  const handleConfirm = async (values) => {
     const result = await axios.put(
       "http://localhost:8080/api/auth/audience/complete",
       values,
@@ -62,8 +53,8 @@ const ConfirmPreOrder = () => {
       }
     );
     console.log(result);
-
-  }
+    console.log(values);
+  };
 
   return (
     <div className="w-full h-full bg-gray-100">
@@ -154,20 +145,25 @@ const ConfirmPreOrder = () => {
                 audienceRating: 0,
                 audienceFeedback: "",
               }}
-
               onSubmit={handleConfirm}
             >
-              <Form>
-              <Rating>
-                <Rating.Star />
-                <Rating.Star />
-                <Rating.Star />
-                <Rating.Star />
-                <Rating.Star filled={false} />
-              </Rating>
-              <button type="submit">Confirm</button>
-              </Form>
-              
+              {({ values, setFieldValue }) => (
+                <Form>
+                  <Rate
+                    name="audienceRating"
+                    value={values.audienceRating}
+                    onChange={(value) => setFieldValue("audienceRating", value)}
+                  />
+                  <Field
+                    type="text"
+                    name="audienceFeedback"
+                    className="bg-slate-200 w-full rounded-lg"
+                    autocomplete="off"
+                    placeholder="Feedback..."
+                  />
+                  <button type="submit">Confirm</button>
+                </Form>
+              )}
             </Formik>
           </Modal.Body>
         </Modal>
