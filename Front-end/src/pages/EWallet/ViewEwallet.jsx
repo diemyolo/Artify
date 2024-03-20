@@ -13,7 +13,7 @@ import { Pagination } from "antd";
 import { MdEmail } from "react-icons/md";
 import { BsFillTelephoneFill } from "react-icons/bs";
 import { MdOutlineModeEdit } from "react-icons/md";
-import FooterPart from '../../components/FooterPart'
+import FooterPart from "../../components/FooterPart";
 
 const ViewEwallet = () => {
   const navigate = useNavigate();
@@ -93,9 +93,9 @@ const ViewEwallet = () => {
     { id: 3, name: "New users annually", value: "46,000" },
   ];
   const hoverStyle = {
-    backgroundColor: '#2f6a81', // Màu nền khi hover
-    borderColor: '#2f6a81', // Màu viền khi hover
-    color: '#ffffff', // Màu chữ khi hover
+    backgroundColor: "#2f6a81", // Màu nền khi hover
+    borderColor: "#2f6a81", // Màu viền khi hover
+    color: "#ffffff", // Màu chữ khi hover
   };
 
   return (
@@ -123,9 +123,14 @@ const ViewEwallet = () => {
                   <IoMdSettings className="w-5 h-5 cursor-pointer" />
                   <p className="ml-2 text-base">Settings</p>
 
-                {customer.roleName == "CREATOR" &&  <Link to={`/viewMyPosts?creatorId=${customer.userId}`} className="font-semibold lg:flex items-center hover:text-[#2f6a81]">
+                  {customer.roleName == "CREATOR" && (
+                    <Link
+                      to={`/viewMyPosts?creatorId=${customer.userId}`}
+                      className="font-semibold lg:flex items-center hover:text-[#2f6a81]"
+                    >
                       View your posts
-                    </Link>} 
+                    </Link>
+                  )}
                 </div>
               </div>
             </div>
@@ -169,18 +174,25 @@ const ViewEwallet = () => {
                 style={{ width: "300px", height: "300px" }}
               >
                 <div style={{ width: "240px", height: "300px" }}>
-                  <div className="font-semibold text-2xl text-center m-5">Profile</div>
+                  <div className="font-semibold text-2xl text-center m-5">
+                    Profile
+                  </div>
                   <div className="flex my-8 items-center">
-                    <MdEmail size={20} className="flex-none rounded-full bg-gray-50 mr-10" />
+                    <MdEmail
+                      size={20}
+                      className="flex-none rounded-full bg-gray-50 mr-10"
+                    />
                     <div>{customer.emailAddress}</div>
                   </div>
                   <div className="flex my-8 items-center">
-                    <BsFillTelephoneFill size={20} className="flex-none rounded-full bg-gray-50 mr-10" />
+                    <BsFillTelephoneFill
+                      size={20}
+                      className="flex-none rounded-full bg-gray-50 mr-10"
+                    />
                     <div>{customer.telephone}</div>
                   </div>
                   <Link to="/editProfile">
-                    <div
-                      className="cursor-pointer sm:flex gap-2 hidden items-center justify-center text-white bg-[#2f6a81] px-4 py-2 transition-all duration-300 rounded-full my-1">
+                    <div className="cursor-pointer sm:flex gap-2 hidden items-center justify-center text-white bg-[#2f6a81] px-4 py-2 transition-all duration-300 rounded-full my-1">
                       <MdOutlineModeEdit
                         size={20}
                         style={{ color: "#fff", fontWeight: "bold" }}
@@ -190,7 +202,6 @@ const ViewEwallet = () => {
                   </Link>
                 </div>
               </div>
-
 
               <div className="flex flex-col items-center justify-start">
                 <ul
@@ -202,35 +213,35 @@ const ViewEwallet = () => {
 
                   {transactions.length > 0
                     ? currentTransactions.map((transaction) => (
-                      <li
-                        key={transaction.id}
-                        className="flex justify-between gap-x-6 py-5"
-                      >
-                        <div className="flex min-w-0 gap-x-4">
-                          <IoWallet className="h-8 w-8 flex-none rounded-full bg-gray-50" />
-                          <div className="min-w-0 flex-auto">
-                            <p className="text-sm font-semibold leading-6 text-gray-900">
-                              {transaction.name}
+                        <li
+                          key={transaction.id}
+                          className="flex justify-between gap-x-6 py-5"
+                        >
+                          <div className="flex min-w-0 gap-x-4">
+                            <IoWallet className="h-8 w-8 flex-none rounded-full bg-gray-50" />
+                            <div className="min-w-0 flex-auto">
+                              <p className="text-sm font-semibold leading-6 text-gray-900">
+                                {transaction.name}
+                              </p>
+                              <p className="mt-1 truncate text-xs leading-5 text-gray-500">
+                                {transaction.email}
+                              </p>
+                            </div>
+                          </div>
+                          <div className="hidden shrink-0 sm:flex sm:flex-col sm:items-end">
+                            <p className="text-sm leading-6 text-gray-900">
+                              + {transaction.totalMoney}
                             </p>
-                            <p className="mt-1 truncate text-xs leading-5 text-gray-500">
-                              {transaction.email}
+
+                            <p className="mt-1 text-xs leading-5 text-gray-500">
+                              At{" "}
+                              <time dateTime={transaction.lastSeenDateTime}>
+                                {transaction.transactionDate}
+                              </time>
                             </p>
                           </div>
-                        </div>
-                        <div className="hidden shrink-0 sm:flex sm:flex-col sm:items-end">
-                          <p className="text-sm leading-6 text-gray-900">
-                            + {transaction.totalMoney}
-                          </p>
-
-                          <p className="mt-1 text-xs leading-5 text-gray-500">
-                            At{" "}
-                            <time dateTime={transaction.lastSeenDateTime}>
-                              {transaction.transactionDate}
-                            </time>
-                          </p>
-                        </div>
-                      </li>
-                    ))
+                        </li>
+                      ))
                     : null}
                 </ul>
                 <Pagination

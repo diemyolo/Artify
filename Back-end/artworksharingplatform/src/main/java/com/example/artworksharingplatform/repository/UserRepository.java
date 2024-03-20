@@ -25,4 +25,5 @@ public interface UserRepository extends JpaRepository<User, UUID> {
     List<User> findByRoleNotOrderByCreatedDateDesc(Role role);
 
     List<User> findByRoleNot(Role role);
+    List<User> findByStatus(String status);
 }

@@ -145,6 +145,8 @@ public class PreOrderServiceImpl implements PreOrderService {
         try {
             PreOrder preOrder = _preOrderRepo.findById(preOrderDTO.getPreOrderId())
                     .orElseThrow(() -> new EntityNotFoundException("PreOrder not found"));
+            preOrder.setAudienceFeedback(preOrderDTO.getAudienceFeedback());
+            preOrder.setAudienceRating(preOrderDTO.getAudienceRating());
             preOrder.setStatus("COMPLETED");
             _preOrderRepo.save(preOrder);
             // Add Transaction

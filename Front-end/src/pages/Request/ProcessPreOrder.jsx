@@ -40,8 +40,9 @@ const ProcessPreOrder = () => {
     <div className="w-full h-full bg-gray-100">
       <NavBar />
       <div className="h-full p-28 mt-5">
+        <Link to="/getPreOrderArt">Confirm your arts</Link>
         <h1 className="text-center text-3xl font-semibold mb-10 text-[#2f6a81]">
-          Get Pre Orders Art
+          Get PreOrders Art
         </h1>
       <Link to="/getPreOrderArt"></Link>
         <div className="overflow-x-auto">

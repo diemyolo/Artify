@@ -37,4 +37,5 @@ public interface UserService {
     List<User> sortUserByCreatedDate(String sortBy);
 
     List<User> getUsersList();
+    List<User> getListRequest() throws Exception;
 }

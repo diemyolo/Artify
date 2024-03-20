@@ -38,8 +38,10 @@ public class AdminController {
 
     @Autowired
     UserService _userService;
+
     @Autowired
     PostService _postService;
+    
     @Autowired
     UserMapper userMapper;
 
@@ -213,6 +215,24 @@ public class AdminController {
 
         try {
             List<User> users = _userService.sortUserByCreatedDate(sortBy);
+            List<UserDTO> userDTOs = userMapper.toList(users);
+
+            apiResponse.ok(userDTOs);
+            return ResponseEntity.ok(apiResponse);
+        } catch (Exception e) {
+            apiResponse.error(e);
+            return new ResponseEntity<>(apiResponse, HttpStatus.BAD_REQUEST);
+        }
+    }
+    @GetMapping("view_audience_request")
+    public ResponseEntity<ApiResponse<List<UserDTO>>> viewAllRequest() {
+        ApiResponse<List<UserDTO>> apiResponse = new ApiResponse<List<UserDTO>>();
+
+        try {
+            List<User> users = _userService.getListRequest();
+            if (users == null){
+                throw new Exception("list is null");
+            }
             List<UserDTO> userDTOs = userMapper.toList(users);
 
             apiResponse.ok(userDTOs);
