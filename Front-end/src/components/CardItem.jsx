@@ -1,15 +1,13 @@
-import React, { useState, useEffect } from "react";
-import { Avatar, Card, Modal } from "flowbite-react";
+import { Spin, Watermark } from "antd";
+import axios from "axios";
+import { saveAs } from "file-saver";
+import { Avatar, Card, Carousel, Modal } from "flowbite-react";
+import React, { useEffect, useState } from "react";
+import { AiOutlineUserAdd } from "react-icons/ai";
+import { FaHeart, FaRegCommentDots, FaRegHeart } from "react-icons/fa";
+import { MdOutlineFileDownload } from "react-icons/md";
 import { Link } from "react-router-dom";
 import CommentBar from "./CommentBar";
-import { MdOutlineFileDownload } from "react-icons/md";
-import { AiOutlineUserAdd } from "react-icons/ai";
-import { Carousel } from "flowbite-react";
-import { Spin } from "antd";
-import { Watermark } from "antd";
-import { saveAs } from "file-saver";
-import axios from "axios";
-import { FaRegHeart, FaHeart, FaRegCommentDots } from "react-icons/fa";
 
 const CardItem = () => {
   const [p, setPost] = useState();
@@ -58,6 +56,7 @@ const CardItem = () => {
         .then((result) => {
           console.log(result.payload);
           setPost(result.payload);
+          setNumberOfLikes(result.payload.numberOfLikes);
         })
         .catch((error) => console.error(error));
     };
@@ -103,19 +102,16 @@ const CardItem = () => {
   };
 
   const handleLike = async () => {
-    const updatedInteraction = { postId: postId};
     const response = await axios.post(
-      `http://localhost:8080/api/auth/interaction/like`,updatedInteraction,
+      `http://localhost:8080/api/auth/interaction/like?postId=${postId}`,
       {
         headers: { Authorization: `Bearer ${token}` },
       }
     );
-    if(response) {
+    if (response.status === 200) {
       setIsLike(!isLike)
     }
   };
-
-
 
   const numComments = p?.interactions.reduce(
     (total, interaction) => total + interaction.comments.length,
