@@ -53,8 +53,8 @@ const ImageList = () => {
 
 
     return (
-        <div className='pb-10'>
-            <div className="grid grid-cols-3 gap-16 sm:grid-cols-3 px-8 md:px-16 lg:px-28">
+        <div className='pb-10 h-full'>
+            <div className="h-full grid grid-cols-3 gap-16 sm:grid-cols-3 px-8 md:px-16 lg:px-28">
                 {post?.length > 0 ?
                     gallery.map((p, postIndex) => (
                         <div key={postIndex} className="">
@@ -76,7 +76,29 @@ const ImageList = () => {
                 <Modal dismissible className='mt-10 px-72' size={1} show={openModal} onClose={() => setOpenModal(false)}>
                     <Modal.Body className='flex justify-center items-center'>
                         <div>
-                            <Watermark content="Artify" font={{ color: '#ccc' }}>
+                            {selectedImage.type !== "FREE" ? (
+                                <Watermark content="Artify" font={{ color: '#ccc' }}>
+                                    <div style={{ height: 500 }}>
+                                        <div className="">
+                                            <img
+                                                src={selectedImage.imagePath}
+                                                alt="Selected Image"
+                                                className="w-[700px] h-[480px] mx-auto relative"
+                                            />
+                                            {selectedImage.type !== "FREE" && (
+                                                <div className='flex items-center justify-center absolute top-0 left-0 w-1/5 rounded-br-md' style={{ backgroundColor: '#f2f2f2' }}>
+                                                    <img
+                                                        src="https://cdn-icons-png.freepik.com/256/1319/1319983.png"
+                                                        className="w-[50px] mr-2"
+                                                        alt="Left Top Image"
+                                                    />
+                                                    <span className="text-[#F4980A] font-bold"> Premium </span>
+                                                </div>
+                                            )}
+                                        </div>
+                                    </div>
+                                </Watermark>
+                            ) : (
                                 <div style={{ height: 500 }}>
                                     <div className="">
                                         <img
@@ -84,19 +106,9 @@ const ImageList = () => {
                                             alt="Selected Image"
                                             className="w-[700px] h-[480px] mx-auto relative"
                                         />
-                                        {selectedImage.type !== "Free" && (
-                                            <div className='flex items-center justify-center absolute top-0 left-0 w-1/5 rounded-br-md' style={{ backgroundColor: '#f2f2f2' }}>
-                                                <img
-                                                    src="https://cdn-icons-png.freepik.com/256/1319/1319983.png"
-                                                    className="w-[50px] mr-2"
-                                                    alt="Left Top Image"
-                                                />
-                                                <span className="text-[#F4980A] font-bold"> Premium </span>
-                                            </div>
-                                        )}
                                     </div>
                                 </div>
-                            </Watermark>
+                            )}
 
                             <div className="flex justify-between gap-3 w-[700px]">
                                 <Link href="">
@@ -121,7 +133,7 @@ const ImageList = () => {
                                         <button type='submit'>Follow</button>
                                     </div>
 
-                                    {(selectedImage.type !== "Free") ? (
+                                    {(selectedImage.type !== "FREE") ? (
                                         <div className='cursor-pointer sm:flex gap-2 hidden items-center text-white bg-[#F4980A] px-4 transition-all duration-300 rounded-full my-1'>
                                             <MdOutlineFileDownload size={20} style={{ color: '#fff', fontWeight: 'bold' }} />
                                             <button type="submit">Download</button>
