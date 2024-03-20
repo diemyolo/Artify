@@ -362,10 +362,11 @@ const UpdatePost = () => {
                                 type="button"
                                 onClick={() =>
                                   push({
+                                    artId: "",
                                     artName: "",
                                     imagePath: "",
                                     price: 0,
-                                    type: "",
+                                    type: "Free",
                                   })
                                 }
                               >
