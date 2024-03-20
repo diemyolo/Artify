@@ -60,7 +60,26 @@ const CardItem = () => {
         })
         .catch((error) => console.error(error));
     };
+    const fetchIsLikedData = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:8080/api/auth/interaction/view?postId=${postId}`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
+        console.log(response.data.payload);
+        if (response.data.payload === null) {
+          setIsLike(false);
+        } else {
+          setIsLike(response.data.payload.isLiked);
+        }
+      } catch (error) {
+        console.error('Error fetching:', error);
+      }
+    };
     fetchFData();
+    fetchIsLikedData();
   }, [isLike]);
 
   if (p != undefined) {
