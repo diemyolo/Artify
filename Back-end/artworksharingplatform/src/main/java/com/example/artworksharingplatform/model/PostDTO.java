@@ -1,9 +1,9 @@
 package com.example.artworksharingplatform.model;
 
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
-import com.example.artworksharingplatform.entity.Interaction;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -18,4 +18,5 @@ public class PostDTO {
 	private int numberOfLikes;
 	private List<ArtworkDTO> artList;
 	private List<InteractionDTO> interactions;
+	public Date publishDate;
 }

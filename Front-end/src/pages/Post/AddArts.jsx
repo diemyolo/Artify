@@ -32,11 +32,7 @@ const AddArts = () => {
     {
       title: "Second",
       content: "Second-content",
-    },
-    {
-      title: "Last",
-      content: "Last-content",
-    },
+    }
   ];
 
   const next = () => {

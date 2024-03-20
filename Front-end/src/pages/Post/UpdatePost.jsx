@@ -6,6 +6,7 @@ import { Carousel } from "flowbite-react";
 import { IoIosPerson } from "react-icons/io";
 import axios from "axios";
 import NavBar from "../../components/NavBar";
+import { useNavigate } from "react-router-dom";
 import {
   UploadOutlined,
   PlusOutlined,
@@ -17,11 +18,13 @@ import { Watermark } from "antd";
 import { Select, Spin } from "antd";
 import Swal from "sweetalert2";
 import FooterPart from "../../components/FooterPart";
+
 const UpdatePost = () => {
   const params = new URLSearchParams(window.location.search);
   const postId = params.get("postId");
   const [post, setPost] = useState(null);
   const token = localStorage.getItem("token");
+  const navigate = useNavigate();
   useEffect(() => {
     const fetchData = async () => {
       const result = await axios.get(
@@ -91,11 +94,7 @@ const UpdatePost = () => {
     {
       title: "Second",
       content: "Second-content",
-    },
-    {
-      title: "Last",
-      content: "Last-content",
-    },
+    }
   ];
   const next = () => {
     setCurrent(current + 1);
@@ -174,6 +173,7 @@ const UpdatePost = () => {
         showConfirmButton: false,
         timer: 1600,
       });
+      navigate(`/previewPost?postId=${response.data.payload.postId}`)
       setIsLoading(true);
     }
   };
