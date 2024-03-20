@@ -2,11 +2,16 @@ import React, { useState, useEffect } from 'react'
 import { Avatar, Card } from "flowbite-react";
 import { AiOutlineUserAdd } from "react-icons/ai";
 import axios from "axios";
+import ModalComponent from './ModalComponent';
+import RequestArt from './RequestArt';
+
 
 const CardArtist = () => {
 
     const [artist, setArtist] = useState([]);
     const token = localStorage.getItem("token");
+    const [isModalOpen, setIsModalOpen] = useState(false); 
+    const [selectedCreatorId, setSelectedCreatorId] = useState(null); 
 
     useEffect(() => {
         const fetchData = async () => {
@@ -22,8 +27,13 @@ const CardArtist = () => {
         };
         fetchData();
     }, []);
-
     console.log("a", artist)
+
+    const handleRequestClick = (creatorId) => {
+        setSelectedCreatorId(creatorId);
+        setIsModalOpen(true);
+    };
+
     return (
         <div className='h-full'>
             <div className="h-full grid grid-cols-3 gap-28 sm:grid-cols-3 px-20 md:px-20 lg:px-40">
@@ -49,15 +59,17 @@ const CardArtist = () => {
                                             size={20}
                                             className="hover:text-[#2f6a81]"
                                         />
-                                        <button type="button">Request</button>
+                                        <button type="button" onClick={() => handleRequestClick(item.creatorId)}>Request</button>
                                     </div>
                                 </div>
                             </div>
                         </Card>
                     ))}
-
-
             </div>
+
+            <ModalComponent isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
+                <RequestArt creatorId={selectedCreatorId} />
+            </ModalComponent>
         </div>
     )
 }
