@@ -15,7 +15,7 @@ const PostCard = () => {
   const token = localStorage.getItem("token");
   const [isLike, setIsLike] = useState(false);
   const [numberOfLikes, setNumberOfLikes] = useState(0);
-
+ 
 
   useEffect(() => {
     const fetchData = async () => {
@@ -43,7 +43,7 @@ const PostCard = () => {
 
   const handleFollow = async (p) => {
     const response = await axios.post(
-      `http://localhost:8080/api/auth/follow?creatorMail=${p.emailAddress}`,
+      `http://localhost:8080/api/auth/follow?creatorId=${p.creatorId}`,null,
       {
         headers: { Authorization: `Bearer ${token}` },
       }
@@ -101,6 +101,7 @@ const PostCard = () => {
                   <Avatar rounded>
                     <div className="space-y-1 dark:text-white">
                       <div className="font-medium">{p.creatorName}</div>
+                      <div className="text-sm text-gray-500 dark:text-gray-400">{p.publishDate}</div>
                     </div>
                   </Avatar>
                 </Link>
@@ -162,7 +163,7 @@ const PostCard = () => {
                   </button>
                 </div>
               </div>
-              <InputComment />
+              <InputComment postId={p.postId}/>
             </Card>
           ))
           : null}

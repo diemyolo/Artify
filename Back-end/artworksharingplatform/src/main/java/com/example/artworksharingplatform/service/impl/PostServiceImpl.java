@@ -53,8 +53,7 @@ public class PostServiceImpl implements PostService{
     @Override
     public void deleteArtwork(UUID id) throws Exception {
         try {
-            postRepository.deleteById(id);
-
+            artworkRepository.deleteById(id);
         } catch (Exception e) {
             throw new Exception(e.getMessage());
         }
@@ -154,4 +153,5 @@ public class PostServiceImpl implements PostService{
         Post post = postRepository.findById(postId).orElseThrow(() -> new EntityNotFoundException("Post Not Found"));
         postRepository.delete(post);
     }
+
 }
