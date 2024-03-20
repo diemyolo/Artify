@@ -372,6 +372,7 @@ const EditProfile = () => {
                     className="w-full px-4 rounded-lg"
                     name="username"
                     placeholder={userName}
+                    value={userName}
                     onChange={(e) => setUserName(e.target.value)}
                   />
                 </Form.Item>
