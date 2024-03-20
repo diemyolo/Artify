@@ -20,8 +20,6 @@ import RequestHistory from "./pages/Request/RequestHistory";
 import ReturnPreOrder from "./pages/ReturnOrderRequest/ReturnPreOrder";
 import ViewPreOrders from "./pages/ReturnOrderRequest/ViewPreOrders";
 import SinglePost from "./pages/SinglePost/SinglePost";
-import EditAdminProfile from "./pages/Admin/Profile/EditAdminProfile";
-import UpdatePost from "./pages/Post/UpdatePost";
 import PreviewPost from "./pages/Post/PreviewPost";
 
 
