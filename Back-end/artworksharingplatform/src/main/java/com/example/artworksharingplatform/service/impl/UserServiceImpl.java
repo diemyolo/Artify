@@ -160,4 +160,14 @@ public class UserServiceImpl implements UserService {
         List<User> users = userRepository.findByRoleNot(role);
         return users;
     }
+
+    @Override
+    public List<User> getListRequest() throws Exception {
+        try {
+            List<User> list = userRepository.findByStatus("READY");
+            return list;
+        } catch (Exception e) {
+            throw new Exception(e.getMessage());
+        }
+    }
 }
