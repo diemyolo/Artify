@@ -41,7 +41,7 @@ public class AdminController {
 
     @Autowired
     PostService _postService;
-    
+
     @Autowired
     UserMapper userMapper;
 
@@ -55,16 +55,15 @@ public class AdminController {
     CloudinaryService cloudinaryService;
 
     @PostMapping("BecomeCreator")
-    public ResponseEntity<ApiResponse<User>> BecomeCreator(@RequestHeader("AudienceEmail") String Email) {
+    public ResponseEntity<ApiResponse<UserDTO>> BecomeCreator(@RequestParam String Email) {
 
-        ApiResponse<User> apiResponse = new ApiResponse<>();
+        ApiResponse<UserDTO> apiResponse = new ApiResponse<>();
         try {
             User userInfo = _userService.findByEmail(Email);
             userInfo.setStatus("ACTIVE");
             userInfo.setRole(Role.CREATOR);
             User user = _userRepository.save(userInfo);
-            apiResponse.ok(user);
-
+            apiResponse.ok(userMapper.toUserDTO(user));
             return ResponseEntity.ok(apiResponse);
 
         } catch (Exception e) {
@@ -224,13 +223,14 @@ public class AdminController {
             return new ResponseEntity<>(apiResponse, HttpStatus.BAD_REQUEST);
         }
     }
+
     @GetMapping("view_audience_request")
     public ResponseEntity<ApiResponse<List<UserDTO>>> viewAllRequest() {
         ApiResponse<List<UserDTO>> apiResponse = new ApiResponse<List<UserDTO>>();
 
         try {
             List<User> users = _userService.getListRequest();
-            if (users == null){
+            if (users == null) {
                 throw new Exception("list is null");
             }
             List<UserDTO> userDTOs = userMapper.toList(users);
