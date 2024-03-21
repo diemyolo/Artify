@@ -114,7 +114,7 @@ public class TransactionServiceImpl implements TransactionService {
 
 	@Override
 	public List<Transaction> filterByDate(Date date, User user) throws Exception {
-		try{
+		try {
 			// Retrieve all transactions from the repository
 			List<Transaction> allTransactions = repo.findByUser_id(user.getId());
 			LocalDate targetDate = date.toLocalDate();
@@ -137,9 +137,13 @@ public class TransactionServiceImpl implements TransactionService {
 
 			return filteredTransactions;
 
-		}catch (Exception e){
+		} catch (Exception e) {
 			throw new Exception(e.getMessage());
 		}
 	}
 
+	@Override
+	public List<Transaction> getAllTransactions() {
+		return repo.findAll();
+	}
 }

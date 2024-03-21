@@ -10,6 +10,7 @@ import com.example.artworksharingplatform.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -61,6 +62,23 @@ public class TransactionController {
 
         try {
             List<Transaction> transactions = _transactionService.getTransactionsByUserId(user.getId());
+            List<TransactionDTO> transactionDTOs = _mapper.toList(transactions);
+
+            apiResponse.ok(transactionDTOs);
+            return ResponseEntity.ok(apiResponse);
+        } catch (Exception e) {
+            apiResponse.error(e);
+            return new ResponseEntity<>(apiResponse, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("/viewAll")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public ResponseEntity<ApiResponse<List<TransactionDTO>>> viewAllTransactions() {
+        ApiResponse<List<TransactionDTO>> apiResponse = new ApiResponse<List<TransactionDTO>>();
+
+        try {
+            List<Transaction> transactions = _transactionService.getAllTransactions();
             List<TransactionDTO> transactionDTOs = _mapper.toList(transactions);
 
             apiResponse.ok(transactionDTOs);
