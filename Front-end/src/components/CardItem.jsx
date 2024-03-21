@@ -124,7 +124,7 @@ const CardItem = () => {
           position: "center",
           icon: "error",
           title: "Oops...",
-          html: "<h3>Something went wrong!</h3>",
+          html: "<h3>Please charge more money!</h3>",
           showConfirmButton: false,
           timer: 1600,
       });
