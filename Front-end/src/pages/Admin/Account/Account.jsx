@@ -134,8 +134,8 @@ const Account = () => {
             dataIndex: 'status',
             key: 'status',
             render: (text) => (
-                <Tag color={text === 'ACTIVE' ? 'green' : 'red'}>
-                    {text}
+                <Tag color={(text === 'ACTIVE' || text === 'REQUESTING') ? 'green' : 'red'}>
+                    {(text === 'ACTIVE' || text === 'REQUESTING') ? 'ACTIVE' : 'INACTIVE'}
                 </Tag>
             ),
             filters: [
@@ -195,7 +195,7 @@ const Account = () => {
             setFiles([selectedFile]);
         }
     };
-    
+
 
 
     const handleSearchChange = (event) => {

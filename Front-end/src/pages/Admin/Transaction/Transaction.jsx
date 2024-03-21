@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
+import { Spin, Table } from "antd";
 import axios from "axios";
-import { Avatar, Button, Form, Input, Select, Spin, Table, Tag } from "antd";
+import React, { useEffect, useState } from "react";
 
 const Transaction = () => {
     const token = localStorage.getItem("token");
@@ -11,7 +11,7 @@ const Transaction = () => {
         const fetchData = async () => {
             try {
                 const response = await axios.get(
-                    `http://localhost:8080/api/auth/viewList`,
+                    `http://localhost:8080/api/auth/viewAll`,
                     {
                         headers: { Authorization: `Bearer ${token}` },
                     }

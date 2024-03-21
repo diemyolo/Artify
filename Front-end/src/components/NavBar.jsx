@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from "react";
-import { navLinks } from "../constants";
-import logo from "../assets/logo.png";
-import { Link } from "react-router-dom";
-import { AiOutlineSearch } from "react-icons/ai";
-import { Dropdown } from "flowbite-react";
 import axios from "axios";
+import { Dropdown } from "flowbite-react";
+import React, { useEffect, useState } from "react";
+import { AiOutlineSearch } from "react-icons/ai";
+import { Link } from "react-router-dom";
+import Swal from "sweetalert2";
+import logo from "../assets/logo.png";
+import { navLinks } from "../constants";
 
 const NavBar = () => {
   const [isSticky, setIsSticky] = useState(false);
@@ -52,6 +53,46 @@ const NavBar = () => {
   useEffect(() => {
     setIsLoggedIn(token != null);
   }, [token]);
+
+  const handleRequestToBecomeCreator = () => {
+    Swal.fire({
+      icon: "success",
+      title: "Confirmation",
+      text: "Do you want to request to become a creator?",
+      showCancelButton: true,
+      confirmButtonText: "Yes, I do",
+      cancelButtonText: "Cancel",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axios
+          .post(`http://localhost:8080/api/auth/requestBecomeCreator?Email=${customer.emailAddress}`, null, {
+            headers: { Authorization: `Bearer ${token}` },
+          })
+          .then((response) => {
+            if (response.status === 200) {
+              Swal.fire({
+                position: "center",
+                icon: "success",
+                title: `Done`,
+                html: "<h3>Send Successfully</h3>",
+                showConfirmButton: false,
+                timer: 1600,
+              });
+            } else {
+              throw new Error(response.statusText);
+            }
+          })
+          .catch((error) => {
+            Swal.fire({
+              icon: "error",
+              title: "Oops...",
+              text: "Something went wrong!",
+              footer: '<a href="/">Try again!</a>',
+            });
+          });
+      }
+    });
+  };
 
   return (
     <header className="w-full bg-gray-100 fixed top-0 left-0 right-0">
@@ -114,20 +155,30 @@ const NavBar = () => {
                       Get your pre-orders
                     </Link>
                   </Dropdown.Item>
-                  {customer.roleName == "CREATOR" && (
-                    <>
+                  {customer.roleName == "AUDIENCE" && (
                     <Dropdown.Item>
                       <Link
-                        to="/viewPreordersByCreator"
+                        onClick={handleRequestToBecomeCreator}
                         className="font-semibold lg:flex items-center hover:text-[#2f6a81]"
                       >
-                        View your request orders
+                        Request To Become Creator
                       </Link>
                     </Dropdown.Item>
+                  )}
+                  {customer.roleName == "CREATOR" && (
+                    <>
+                      <Dropdown.Item>
+                        <Link
+                          to="/viewPreordersByCreator"
+                          className="font-semibold lg:flex items-center hover:text-[#2f6a81]"
+                        >
+                          View your request orders
+                        </Link>
+                      </Dropdown.Item>
 
-                    <Dropdown.Item>
-                    
-                  </Dropdown.Item>
+                      <Dropdown.Item>
+
+                      </Dropdown.Item>
                     </>
                   )}
                   <Dropdown.Divider />
