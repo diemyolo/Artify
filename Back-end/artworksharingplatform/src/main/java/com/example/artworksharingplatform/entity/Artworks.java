@@ -56,10 +56,6 @@ public class Artworks {
 	@JoinColumn(name = "PostID")
 	private Post posts;
 
-	@ManyToOne
-	@JoinColumn(name = "WatermarkID")
-	private Watermark watermark;
-
 	@OneToOne(mappedBy = "preOrderArtwork", cascade = CascadeType.ALL)
 	private PreOrder preOrder;
 }
