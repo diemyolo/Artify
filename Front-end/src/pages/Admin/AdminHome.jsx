@@ -78,41 +78,34 @@ const AdminHome = () => {
                         items={[
                             {
                                 key: '1',
-                                icon: <AreaChartOutlined />,
-                                label: 'Dashboards',
-                                style: { fontSize: '1rem', width: '80%', marginLeft: 'auto', marginRight: 'auto', marginBottom: '30px' },
-                                onClick: () => handleDashBoardClick()
-                            },
-                            {
-                                key: '2',
                                 icon: <ProfileOutlined />,
                                 label: 'Accounts',
                                 style: { fontSize: '1rem', width: '80%', marginLeft: 'auto', marginRight: 'auto', marginBottom: '30px' },
                                 onClick: () => handleAccountClick()
                             },
                             {
-                                key: '3',
+                                key: '2',
                                 icon: <TransactionOutlined />,
                                 label: 'Transactions',
                                 style: { fontSize: '1rem', width: '80%', marginLeft: 'auto', marginRight: 'auto', marginBottom: '30px' },
                                 onClick: () => handleTransactionClick()
                             },
                             {
-                                key: '4',
+                                key: '3',
                                 icon: <SendOutlined />,
                                 label: 'Creator Requests',
                                 style: { fontSize: '1rem', width: '80%', marginLeft: 'auto', marginRight: 'auto', marginBottom: '30px' },
                                 onClick: () => handleRequestClick()
                             },
                             {
-                                key: '5',
+                                key: '4',
                                 icon: <UserOutlined />,
                                 label: 'Profile',
                                 style: { fontSize: '1rem', width: '80%', marginLeft: 'auto', marginRight: 'auto', marginBottom: '30px' },
                                 onClick: () => handleProfileClick()
                             },
                             {
-                                key: '6',
+                                key: '5',
                                 icon: <LogoutOutlined />,
                                 label: 'Log Out',
                                 style: { fontSize: '1rem', width: '80%', marginLeft: 'auto', marginRight: 'auto', marginBottom: '30px' },

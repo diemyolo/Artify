@@ -9,6 +9,8 @@ import moment from 'moment';
 const RequestHistory = () => {
   const token = localStorage.getItem("token");
   const [requestList, setRequestList] = useState([]);
+
+
   useEffect(() => {
     const fetchData = async () => {
       const response = await axios.get(
@@ -22,6 +24,17 @@ const RequestHistory = () => {
     };
     fetchData();
   }, []);
+
+
+  const cancelRequest = async (item) => {
+    const response = await axios.delete(
+      `http://localhost:8080/api/auth/audience/cancel?preorderId=${item.preOrderId}`,
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
+    console.log(response);
+  };
 
   return (
     <div className="w-full h-full bg-gray-100">
@@ -65,6 +78,7 @@ const RequestHistory = () => {
                   <Table.Cell>{item.audienceRating}</Table.Cell>
                   <Table.Cell>
                     <a
+                      onClick={() => cancelRequest(item)}
                       href="#"
                       className="font-medium text-cyan-600 hover:underline dark:text-cyan-500"
                     >
