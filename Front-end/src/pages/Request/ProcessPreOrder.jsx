@@ -4,8 +4,8 @@ import { Table } from "flowbite-react";
 import axios from "axios";
 import FooterPart from "../../components/FooterPart";
 import { Link } from "react-router-dom";
-
-
+import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
 const ProcessPreOrder = () => {
   const token = localStorage.getItem("token");
   const [requestList, setRequestList] = useState([]);
@@ -29,15 +29,28 @@ const ProcessPreOrder = () => {
       price: preOrder.price,
       status: status,
     };
-    const result = await axios.put(
-      "http://localhost:8080/api/auth/audience/processing",
-      valueBody,
-      {
-        headers: { Authorization: `Bearer ${token}` },
-      }
-    );
-    console.log(preOrder, status);
-    console.log(result);
+    try{
+      const result = await axios.put(
+        "http://localhost:8080/api/auth/audience/processing",
+        valueBody,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      console.log(preOrder, status);
+      console.log(result);
+    }catch (error) {
+      Swal.fire({
+          position: "center",
+          icon: "error",
+          title: "Oops...",
+          html: "<h3>Something went wrong!</h3>",
+          showConfirmButton: false,
+          timer: 1600,
+      });
+      navigate("/viewEwallet");
+  }
+    
   };
 
   const cancelOrder = async (item) => {

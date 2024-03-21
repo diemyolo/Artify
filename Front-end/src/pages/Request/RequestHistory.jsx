@@ -10,18 +10,27 @@ const RequestHistory = () => {
   const token = localStorage.getItem("token");
   const [requestList, setRequestList] = useState([]);
 
-
+  const fetchData = async () => {
+    const response = await axios.get(
+      "http://localhost:8080/api/auth/viewPendingPreOrders",
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
+    console.log(response);
+    setRequestList(response.data.payload);
+  };
   useEffect(() => {
-    const fetchData = async () => {
-      const response = await axios.get(
-        "http://localhost:8080/api/auth/viewPendingPreOrders",
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
-      console.log(response);
-      setRequestList(response.data.payload);
-    };
+    // const fetchData = async () => {
+    //   const response = await axios.get(
+    //     "http://localhost:8080/api/auth/viewPendingPreOrders",
+    //     {
+    //       headers: { Authorization: `Bearer ${token}` },
+    //     }
+    //   );
+    //   console.log(response);
+    //   setRequestList(response.data.payload);
+    // };
     fetchData();
   }, []);
 
@@ -33,6 +42,7 @@ const RequestHistory = () => {
         headers: { Authorization: `Bearer ${token}` },
       }
     );
+    fetchData();
     console.log(response);
   };
 
