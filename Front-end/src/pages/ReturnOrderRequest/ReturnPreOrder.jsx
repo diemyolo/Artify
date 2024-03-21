@@ -16,13 +16,20 @@ const ReturnPreOrder = () => {
   const [files, setFiles] = useState();
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+
   const handleAvatarChange = (event) => {
     const selectedFile = event.target.files[0];
     if (selectedFile) {
       setFiles([selectedFile]);
     }
   };
+
+
   useEffect(() => {
+    fetchData();
+  }, []);
+
+  // useEffect(() => {
     const fetchData = async () => {
       const result = await axios.get(
         "http://localhost:8080/api/auth/creator/viewProcessedPreOrders",
@@ -34,7 +41,7 @@ const ReturnPreOrder = () => {
       if (result) setIsLoading(true);
     };
     fetchData();
-  }, []);
+  // }, []);
 
   const handleOpenAccept = () => {
     setOpenModal(true);
@@ -57,6 +64,7 @@ const ReturnPreOrder = () => {
         headers: { Authorization: `Bearer ${token}` },
       }
     );
+
     console.log(files);
     console.log(result);
     if (result.status === 200) {
@@ -71,6 +79,8 @@ const ReturnPreOrder = () => {
       navigate("/returnPreOrderArt");
     }
   };
+
+
   return (
     <div className="w-full h-full bg-gray-100">
       <Spin spinning={!isLoading} fullscreen />
