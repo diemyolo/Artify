@@ -1,6 +1,7 @@
 import { Spin, Watermark } from "antd";
 import axios from "axios";
 import { saveAs } from "file-saver";
+import { useNavigate } from "react-router-dom";
 import { Avatar, Card, Carousel, Modal } from "flowbite-react";
 import React, { useEffect, useState } from "react";
 import { AiOutlineUserAdd } from "react-icons/ai";
@@ -9,7 +10,7 @@ import { MdOutlineFileDownload } from "react-icons/md";
 import { Link } from "react-router-dom";
 import CommentBar from "./CommentBar";
 import moment from 'moment';
-
+import Swal from "sweetalert2";
 const CardItem = () => {
   const [p, setPost] = useState();
   const [openModal, setOpenModal] = useState(false);
@@ -21,7 +22,7 @@ const CardItem = () => {
       artId: "",
     },
   });
-
+  const navigate = useNavigate();
   const [isLike, setIsLike] = useState(false);
   const [numberOfLikes, setNumberOfLikes] = useState(0);
 
@@ -105,21 +106,31 @@ const CardItem = () => {
       },
     };
     console.log(updatedOrder);
-    const order = await axios.post(
-      "http://localhost:8080/api/auth/order/add",
-      updatedOrder,
-      {
-        headers: { Authorization: `Bearer ${token}` },
-      }
-    );
-
-    console.log(order);
-    if (order) {
+    try {
+      const order = await axios.post(
+          "http://localhost:8080/api/auth/order/add",
+          updatedOrder,
+          {
+              headers: { Authorization: `Bearer ${token}` },
+          }
+      );
+      console.log(order);
       const response = await axios.get(
-        `http://localhost:8080/api/auth/downloadArt?artId=${order.data.payload.artwork.artId}`
+          `http://localhost:8080/api/auth/downloadArt?artId=${order.data.payload.artwork.artId}`
       );
       saveAs(`${response.data.payload}`, `${order.data.payload.artwork.artName}.jpg`);
-    }
+  } catch (error) {
+      Swal.fire({
+          position: "center",
+          icon: "error",
+          title: "Oops...",
+          html: "<h3>Something went wrong!</h3>",
+          showConfirmButton: false,
+          timer: 1600,
+      });
+      navigate("/viewEwallet");
+  }
+
   };
 
   const handleLike = async () => {
