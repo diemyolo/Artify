@@ -10,8 +10,12 @@ const RequestHistory = () => {
   const token = localStorage.getItem("token");
   const [requestList, setRequestList] = useState([]);
 
-
   useEffect(() => {
+    fetchData();
+  }, []);
+
+
+  // useEffect(() => {
     const fetchData = async () => {
       const response = await axios.get(
         "http://localhost:8080/api/auth/viewPendingPreOrders",
@@ -22,19 +26,27 @@ const RequestHistory = () => {
       console.log(response);
       setRequestList(response.data.payload);
     };
-    fetchData();
-  }, []);
+    // fetchData();
+  // }, []);
 
 
   const cancelRequest = async (item) => {
-    const response = await axios.delete(
-      `http://localhost:8080/api/auth/audience/cancel?preorderId=${item.preOrderId}`,
-      {
-        headers: { Authorization: `Bearer ${token}` },
-      }
-    );
-    console.log(response);
+    try {
+      await axios.delete(
+        `http://localhost:8080/api/auth/audience/cancel?preorderId=${item.preOrderId}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      const updatedList = requestList.filter(
+        (request) => request.preOrderId !== item.preOrderId
+      );
+      setRequestList(updatedList);
+    } catch (error) {
+      console.error("Error cancelling request: ", error);
+    }
   };
+
 
   return (
     <div className="w-full h-full bg-gray-100">
