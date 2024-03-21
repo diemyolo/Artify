@@ -219,7 +219,7 @@ public class PostController {
 		return ResponseEntity.ok(apiResponse);
 	}
 	
-	@DeleteMapping("/deletePost")
+	@DeleteMapping("deletePost")
 	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_CREATOR')")
 	public ResponseEntity<ApiResponse> deletePost(@RequestParam("postId") UUID postId) {
 		ApiResponse apiResponse = new ApiResponse(); 
@@ -228,7 +228,7 @@ public class PostController {
 		return ResponseEntity.ok(apiResponse);
 	}
 	
-	@DeleteMapping("/deleArtInPost")
+	@DeleteMapping("deleArtInPost")
 	public ResponseEntity<ApiResponse> deleteArt(@RequestParam("artId") UUID artId) throws Exception{
 		ApiResponse apiResponse = new ApiResponse(); 
 		postService.deleteArtwork(artId);

@@ -12,7 +12,7 @@ import {
   PlusOutlined,
   LoadingOutlined,
 } from "@ant-design/icons";
-import { Button, Upload } from "antd";
+import { Button, Upload, Modal } from "antd";
 import { message, Steps, theme } from "antd";
 import { Watermark } from "antd";
 import { Select, Spin } from "antd";
@@ -35,12 +35,12 @@ const UpdatePost = () => {
       );
       console.log(result);
       setPost(result.data.payload);
-      if(result.status === 200) setIsLoading(true)
+      if (result.status === 200) setIsLoading(true);
       // const init = {
       //   ...result.data.payload,
       //   artList : result.data.payload.artList.map((art) => ({
       //     ...art,
-      //     imageFile: null, 
+      //     imageFile: null,
       //     imageUrl: "",
       //   })),
       // }
@@ -53,10 +53,10 @@ const UpdatePost = () => {
             // Nếu có imagePath, tải hình ảnh và chuyển đổi thành File
             if (art.imagePath) {
               const imageResponse = await axios.get(art.imagePath, {
-                responseType: 'blob', // Đảm bảo nhận blob từ response
+                responseType: "blob", // Đảm bảo nhận blob từ response
               });
-              const file = new File([imageResponse.data], 'artwork.jpg', {
-                type: imageResponse.headers['content-type'],
+              const file = new File([imageResponse.data], "artwork.jpg", {
+                type: imageResponse.headers["content-type"],
               });
               return {
                 ...art,
@@ -68,7 +68,7 @@ const UpdatePost = () => {
               return {
                 ...art,
                 imageFile: null,
-                imageUrl: '',
+                imageUrl: "",
               };
             }
           })
@@ -83,9 +83,9 @@ const UpdatePost = () => {
   const [current, setCurrent] = useState(0);
   const [loading, setLoading] = useState(false);
   const [imageUrl, setImageUrl] = useState("");
-  const [initValues,setInitValues] = useState(null);
+  const [initValues, setInitValues] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-
+  const [showConfirmationModal, setShowConfirmationModal] = useState(false);
   const steps = [
     {
       title: "First",
@@ -94,7 +94,7 @@ const UpdatePost = () => {
     {
       title: "Second",
       content: "Second-content",
-    }
+    },
   ];
   const next = () => {
     setCurrent(current + 1);
@@ -139,7 +139,11 @@ const UpdatePost = () => {
     const fileArray = Array.from(selectedFiles);
     const updatedValue = {
       ...values,
-      artList: values.artList.map((art) => ({ ...art, imageUrl: null, imageFile : null })),
+      artList: values.artList.map((art) => ({
+        ...art,
+        imageUrl: null,
+        imageFile: null,
+      })),
     };
     values.artList.forEach((art) => {
       if (art.imageFile) {
@@ -164,7 +168,7 @@ const UpdatePost = () => {
       }
     );
     console.log(response.data);
-    if(response.status === 200) {
+    if (response.status === 200) {
       Swal.fire({
         position: "center",
         icon: "success",
@@ -173,7 +177,7 @@ const UpdatePost = () => {
         showConfirmButton: false,
         timer: 1600,
       });
-      navigate(`/previewPost?postId=${response.data.payload.postId}`)
+      navigate(`/previewPost?postId=${response.data.payload.postId}`);
       setIsLoading(true);
     }
   };
@@ -185,7 +189,13 @@ const UpdatePost = () => {
     </button>
   );
 
-  
+  const removeArtInPost = async (item) => {
+    console.log(item);
+    const result = await axios.delete(`http://localhost:8080/api/auth/deleArtInPost?artId=${item}`, null, {
+      headers: { Authorization: `Bearer ${token}` }
+    })
+    console.log(result);
+  };
 
   return (
     <div>
@@ -195,7 +205,7 @@ const UpdatePost = () => {
           <h1 className="text-3xl text-[#2f6a81] text-center font-semibold m-5">
             Update Post
           </h1>
-          <Spin fullscreen spinning={!isLoading}/>
+          <Spin fullscreen spinning={!isLoading} />
           <Steps
             current={current}
             items={items}
@@ -211,7 +221,9 @@ const UpdatePost = () => {
           <div className="flex bg-slate-200 rounded-md flex-col mx-auto max-w-4xl py-24 sm:py-8 justify-center items-center">
             {initValues !== null && (
               <Formik
-                initialValues={initValues !== undefined ? initValues : undefined}
+                initialValues={
+                  initValues !== undefined ? initValues : undefined
+                }
                 // validationSchema={validationSchema}
                 onSubmit={handleSubmit}
               >
@@ -296,7 +308,11 @@ const UpdatePost = () => {
                                     )}
                                   </Upload>
                                 </div>
-                              {values.artList[index].imageUrl ? <div></div> : <div>Please add file</div>}
+                                {values.artList[index].imageUrl ? (
+                                  <div></div>
+                                ) : (
+                                  <div>Please add file</div>
+                                )}
                                 <div className="flex justify-between">
                                   <label
                                     className="font-semibold"
@@ -340,8 +356,17 @@ const UpdatePost = () => {
                                     <button
                                       type="button"
                                       onClick={() => {
-                                        remove(index);
-                                        handleRemoveArtwork(index);
+                                        if (
+                                          values.artList[index].artId !== ""
+                                        ) {
+                                          removeArtInPost(
+                                            values.artList[index].artId
+                                          );setFieldValue
+                                          remove(index);
+                                        } else {
+                                          remove(index);
+                                          handleRemoveArtwork(index);
+                                        }
                                       }}
                                     >
                                       Remove
@@ -349,6 +374,7 @@ const UpdatePost = () => {
                                   </div>
                                 </div>
                               </div>
+                              
                             ))}
                             <div className="mt-5 cursor-pointer w-[25%] sm:flex gap-2 hidden items-center justify-center text-white bg-[#2f6a81] px-4 py-2 transition-all duration-300 rounded-full my-1 mx-auto">
                               <PlusOutlined />
@@ -366,8 +392,11 @@ const UpdatePost = () => {
                               >
                                 Add Artwork
                               </button>
+
                             </div>
+                            
                           </div>
+                          
                         )}
                       </FieldArray>
                     ) : (
