@@ -1,7 +1,6 @@
 import axios from "axios";
 import { Dropdown } from "flowbite-react";
 import React, { useEffect, useState } from "react";
-import { AiOutlineSearch } from "react-icons/ai";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 import logo from "../assets/logo.png";
@@ -110,17 +109,7 @@ const NavBar = () => {
             ))}
           </ul>
 
-          <div className="bg-gray-200 rounded-full sm:flex hidden items-center px-4 lg:w-[350px] ">
-            <AiOutlineSearch
-              className="cursor-pointer"
-              size={25}
-              style={{ color: "#2f6a81", fontWeight: "bold" }}
-            />
-            <input
-              className="bg-transparent p-3 lg:w-[400px] appearance-none focus:outline-none border-none"
-              type="search"
-              placeholder="Search for art..."
-            />
+          <div className="bg-gray-200 rounded-full sm:flex hidden items-center px-4 lg:w-[750px] ">
           </div>
 
           <div className="lg:flex items-center bg-[#2f6a81] rounded-lg">
