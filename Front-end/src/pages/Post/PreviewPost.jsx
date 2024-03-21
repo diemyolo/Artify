@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Avatar, Card, Modal } from "flowbite-react";
+import { Avatar, Button, Card, Modal } from "flowbite-react";
 import { Link } from "react-router-dom";
 import CommentBar from "../../components/CommentBar";
 import { MdOutlineFileDownload } from "react-icons/md";
@@ -56,7 +56,7 @@ const PreviewPost = () => {
       <div className="bg-gray-100 mx-auto max-w-screen-xl p-4">
         <div className="bg-gray-100 mt-40 min-h-screen">
           <h1 className="text-3xl text-[#2f6a81] text-center font-semibold m-5">
-            Preview Post
+            View Post
           </h1>
           <div className="flex flex-col justify-center items-center">
             {p != null || p != undefined ? (
@@ -155,7 +155,7 @@ const PreviewPost = () => {
                   >
                     <Modal.Body className="flex justify-center items-center">
                       <div>
-                        {selectedImage.type !== "FREE" ? (
+                        {selectedImage.type.toUpperCase() !== "FREE" ? (
                           <Watermark content="Artify" font={{ color: "#ccc" }}>
                             <div style={{ height: 500 }}>
                               <div className="">
@@ -164,7 +164,7 @@ const PreviewPost = () => {
                                   alt="Selected Image"
                                   className="w-[700px] h-[480px] mx-auto relative"
                                 />
-                                {selectedImage.type !== "FREE" && (
+                                {selectedImage.type.toUpperCase() !== "FREE" && (
                                   <div
                                     className="flex items-center justify-center absolute top-0 left-0 w-1/5 rounded-br-md"
                                     style={{ backgroundColor: "#f2f2f2" }}
@@ -234,7 +234,7 @@ const PreviewPost = () => {
                               <button type="submit">Follow</button>
                             </div>
 
-                            {selectedImage.type !== "FREE" ? (
+                            {selectedImage.type.toUpperCase() !== "FREE" ? (
                               <div className="cursor-pointer sm:flex gap-2 hidden items-center text-white bg-[#F4980A] px-4 transition-all duration-300 rounded-full my-1">
                                 <MdOutlineFileDownload
                                   size={20}
@@ -257,7 +257,12 @@ const PreviewPost = () => {
                     </Modal.Body>
                   </Modal>
                 )}
+                <Link to="/">
+                 <Button>Back to home</Button>
+                </Link>
+               
               </Card>
+              
             ) : (
               <Spin spinning={!isLoading} fullscreen />
             )}

@@ -26,6 +26,9 @@ const ViewEwallet = () => {
   const [thisPage, setThisPage] = useState(1);
   const [eWallet, setEWallet] = useState({});
   const token = localStorage.getItem("token");
+  // const formattedNumber = (number) => {
+  //   return number.toLocaleString('en-US', { style: 'decimal' });
+  // };
   const itemPerPage = 4;
 
   useEffect(() => {
@@ -92,12 +95,6 @@ const ViewEwallet = () => {
     { id: 2, name: "Account Balance", value: `${eWallet.totalAmount} VND` },
     // { id: 3, name: "New users annually", value: "46,000" },
   ];
-  const hoverStyle = {
-    backgroundColor: "#2f6a81", // Màu nền khi hover
-    borderColor: "#2f6a81", // Màu viền khi hover
-    color: "#ffffff", // Màu chữ khi hover
-  };
-
   return (
     <div className="">
       <Spin spinning={!isLoading} fullscreen />
@@ -238,7 +235,7 @@ const ViewEwallet = () => {
                           </div>
                           <div className="hidden shrink-0 sm:flex sm:flex-col sm:items-end">
                             <p className="text-sm leading-6 text-gray-900">
-                              + {transaction.totalMoney}
+                             {transaction.totalMoney > 0 ? `+ ${transaction.totalMoney}` : transaction.totalMoney }
                             </p>
 
                             <p className="mt-1 text-xs leading-5 text-gray-500">
